@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Medas\StorageManager\Databases\Pdo\Exceptions;
+
+use Medas\Core\Exceptions\BaseException;
+use Medas\EntityManager\Attributes\Interfaces\Type;
+
+class UnhandledTypeException extends BaseException
+{
+    public function __construct(Type $type)
+    {
+        parent::__construct($type);
+    }
+
+    public function pattern(): string
+    {
+        return 'unhandled type %s';
+    }
+}

@@ -1,0 +1,99 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Medas\StorageManager\Databases\Pdo\Queries;
+
+use Medas\StorageManager\Databases\Pdo\Database;
+use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
+use Medas\StorageManager\Databases\Pdo\Structure\Changes;
+use Medas\StorageManager\Databases\Pdo\Table;
+use Medas\StorageManager\Interfaces\Store;
+
+class BaseSqlQueryBuilder implements QueryBuilder
+{
+    private string $query;
+    private array $arguments;
+
+    public function __construct(private Database $database)
+    {
+    }
+
+    /** @param Table[] $tables */
+    public function select(array $tables, array $filters): Query
+    {
+        $this->arguments = [];
+        $this->query = 'select * from ';
+
+        foreach ($tables as $table) {
+            $this->query .= $table->name . ',';
+        }
+
+        $this->query = substr($this->query, 0, -1);
+
+        if ($filters) {
+            $this->query .= ' where ';
+            $this->appendParameters($filters);
+        }
+
+        return new Query($this->query, $this->arguments, $this->database);
+    }
+
+    private function appendParameters(array $filters, string $separator = 'and'): void
+    {
+        foreach ($filters as $field => $value) {
+            $this->query .= $field . '=? ' . $separator . ' ';
+            $this->arguments[] = $value;
+        }
+
+        $this->query = substr($this->query, 0, -2 - strlen($separator));
+    }
+
+    public function update(Store $table, array $updates, array $conditions): Query
+    {
+        $this->arguments = [];
+
+        $this->query = 'update ' . $table->name . ' set ';
+        $this->appendParameters($updates);
+
+        $this->query .= ' where ';
+        $this->appendParameters($conditions);
+
+        return new Query($this->query, $this->arguments, $this->database);
+    }
+
+    public function create(Store $table, array $values): Query
+    {
+        $this->arguments = [];
+
+        $this->query = 'insert into ' . $table->name . ' set ';
+        $this->appendParameters($values);
+
+        return new Query($this->query, $this->arguments, $this->database);
+    }
+
+    public function showCreate(Table $table): Query
+    {
+        return new Query('show create table ' . $table->name, [], $this->database);
+    }
+
+    public function createTable(Blueprint $blueprint): Query
+    {
+        return (new CreateTableBuilder($blueprint))->create($this->database);
+    }
+
+    public function alterTable(Changes $changes): Query
+    {
+        return (new AlterTableBuilder($changes))->create($this->database);
+    }
+
+    public function quote(string $identifier): string
+    {
+        return '"' . $identifier . '"';
+    }
+
+    public function dropTable(string $name): Query
+    {
+        return new Query('DROP TABLE IF EXISTS ' . $name, [], $this->database);
+    }
+}

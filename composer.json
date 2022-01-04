@@ -1,0 +1,28 @@
+{
+    "name": "morphp/medas-storage-manager",
+    "description": "Medas storage manager",
+    "authors": [
+        {
+            "name": "Patrick Morpey",
+            "email": "patrick@morphp.nl"
+        }
+    ],
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "morphp/medas-service-manager": "@dev",
+        "morphp/medas-entity-manager": "dev-dev",
+        "ext-pdo": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Medas\\StorageManager\\": "src/",
+            "Medas\\Test\\": "tests/"
+        }
+    }
+}
+
