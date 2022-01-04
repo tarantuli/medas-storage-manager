@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo\Structure;
 
-use Medas\StorageManager\Databases\Pdo\Structure\Blueprint\Field;
-use Medas\StorageManager\Databases\Pdo\Structure\Blueprint\Index;
-
 class Blueprint
 {
     public string $name;
-    /** @var \Medas\StorageManager\Databases\Pdo\Structure\Blueprint\Field[] */
+
+    /** @var Blueprint\Field[] */
     public array $fields = [];
-    /** @var Index[] */
+
+    /** @var Blueprint\Index[] */
     public array $indexes = [];
 
-    public function addField(Field $field): void
+    public function addField(Blueprint\Field $field): void
     {
         $this->fields[$field->name] = $field;
     }
 
-    public function addIndex(Index $index): void
+    public function addIndex(Blueprint\Index $index): void
     {
         $this->indexes[$index->name] = $index;
     }
 
-    public function field(string $name): Field
+    public function field(string $name): Blueprint\Field
     {
         return $this->fields([$name])[0];
     }

@@ -18,7 +18,7 @@ class UnitOfWork
     /** @var Action[] */
     public array $updates = [];
 
-    /** @var \Medas\StorageManager\Interfaces\Action[] */
+    /** @var Action[] */
     public array $additionalActions = [];
 
     public function __construct()

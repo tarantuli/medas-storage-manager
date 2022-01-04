@@ -11,7 +11,9 @@ class StorageManagerPackage extends BasePackage
 {
     public function dependencies(): array
     {
-        return $this->dependenciesByClass([EntityManagerPackage::class]);
+        return $this->dependenciesByClass([
+            EntityManagerPackage::class,
+        ]);
     }
 
     public function sourceDirectory(): string

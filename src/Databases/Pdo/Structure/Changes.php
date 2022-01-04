@@ -9,7 +9,7 @@ use Medas\StorageManager\Databases\Pdo\Structure\Blueprint\Index;
 
 class Changes
 {
-    /** @var \Medas\StorageManager\Databases\Pdo\Structure\Blueprint\Field[] */
+    /** @var Field[] */
     public array $addFields = [];
     /** @var Field[] */
     public array $changeFields = [];

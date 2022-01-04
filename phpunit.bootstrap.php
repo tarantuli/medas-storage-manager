@@ -6,6 +6,7 @@ use Medas\ConfigManager\ConfigManager;
 use Medas\ServiceManager\ServiceManager;
 use Medas\StorageManager\Databases\Pdo\Database;
 use Medas\StorageManager\Entities\Fetcher;
+use Medas\StorageManager\Entities\Flusher;
 use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\StorageManagerPackage;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
@@ -24,6 +25,7 @@ $cache->clear();
 $sm->bindService($cache, CacheInterface::class);
 
 $sm->bindService($sm->resolve(Fetcher::class), \Medas\EntityManager\Entities\Fetcher::class);
+$sm->bindService($sm->resolve(Flusher::class), \Medas\EntityManager\Entities\Flusher::class);
 
 /** @var StorageManager $storageManager */
 $storageManager = $sm->resolve(StorageManager::class);
