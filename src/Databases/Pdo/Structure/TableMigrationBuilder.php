@@ -36,9 +36,13 @@ class TableMigrationBuilder implements MigrationBuilder
         }
 
         $queryClass = Query::class;
+        $query = trim($query->query);
+        $argumentsAndDatabase = $this->database->name() === 'default'
+            ? ''
+            : sprintf(', [], storage("%s")', $this->database->name());
 
         $migrateMethod->body .= <<<PHP
-            \$unitOfWork->addAction(new \\$queryClass("$query->query", [], storage("{$this->database->name()}")));
+            \$unitOfWork->addAction(new \\$queryClass("$query"$argumentsAndDatabase));
         PHP;
 
     }

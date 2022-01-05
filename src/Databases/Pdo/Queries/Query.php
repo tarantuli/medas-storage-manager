@@ -11,11 +11,11 @@ class Query extends BaseAction
 {
     public function __construct(
         public string $query,
-        public array  $arguments,
-        Storage       $storage
+        public array  $arguments = [],
+        Storage       $storage = null
     )
     {
-        $this->storage = $storage;
+        $this->storage = $storage ?: storage();
     }
 
     public function execute(): void
