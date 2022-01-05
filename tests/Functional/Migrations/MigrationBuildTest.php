@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional\Migrations;
 
+use Medas\StorageManager\Databases\Pdo\Queries\Query;
 use Medas\StorageManager\Migrations\MigrationBuildManager;
 use Medas\StorageManager\Migrations\MigrationManager;
 use Medas\Test\BaseTest;
@@ -28,12 +29,17 @@ class MigrationBuildTest extends BaseTest
     public function testExecuteMigration(): void
     {
         $newStoreName = 'new_stored_entities';
+        $existingStoreName = 'stored_entities';
         $directory = __DIR__ . DIRECTORY_SEPARATOR . 'migrations';
         $fileName = $directory . DIRECTORY_SEPARATOR . 'migration.php';
 
-        // Prepare database by deleting the table if it exists
+        // Fetch the store; this object should remain working despite the table being deleted and recreated
         $store = storage()->store($newStoreName);
+
+        // Prepare database by deleting the table if it exists
         storage()->deleteStore($newStoreName);
+        // Alter the existing store
+        (new Query("alter table $existingStoreName modify column name varchar(255) null"))->execute();
 
         // Prepare the migration test directory
         if (!file_exists($directory)) {
@@ -51,6 +57,7 @@ class MigrationBuildTest extends BaseTest
         $record = $store->fetchRecord([]);
         self::assertNull($record);
 
+        // Remove the test directory
         unlink($fileName);
         rmdir($directory);
     }
