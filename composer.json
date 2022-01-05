@@ -13,6 +13,7 @@
     "require": {
         "morphp/medas-service-manager": "dev-dev",
         "morphp/medas-entity-manager": "dev-dev",
+        "morphp/medas-file-builder": "dev-dev",
         "ext-pdo": "*"
     },
     "require-dev": {

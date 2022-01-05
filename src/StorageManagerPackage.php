@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager;
 
 use Medas\EntityManager\EntityManagerPackage;
+use Medas\FileBuilder\FileBuilderPackage;
 use Medas\ServiceManager\BasePackage;
 
 class StorageManagerPackage extends BasePackage
@@ -13,6 +14,7 @@ class StorageManagerPackage extends BasePackage
     {
         return $this->dependenciesByClass([
             EntityManagerPackage::class,
+            FileBuilderPackage::class
         ]);
     }
 

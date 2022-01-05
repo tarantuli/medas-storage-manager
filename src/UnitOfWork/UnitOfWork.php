@@ -4,43 +4,36 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\UnitOfWork;
 
-use Medas\StorageManager\Interfaces\Action;
 use Medas\StorageManager\Interfaces\Storage;
 
 class UnitOfWork
 {
     /** @var Storage[]|\SplObjectStorage */
-    public array|\SplObjectStorage $storages;
+    private array|\SplObjectStorage $storages;
 
     /** @var Action[] */
-    public array $creates = [];
-
-    /** @var Action[] */
-    public array $updates = [];
-
-    /** @var Action[] */
-    public array $additionalActions = [];
+    private array $actions = [];
 
     public function __construct()
     {
         $this->storages = new \SplObjectStorage();
     }
 
-    public function addUpdate(Action $update): void
+    public function addAction(Action $action): void
     {
-        $this->storages->attach($update->storage());
-        $this->updates[] = $update;
+        $this->storages->attach($action->storage());
+        $this->actions[] = $action;
+        usort($this->actions, fn(Action $a, Action $b) => $a->type()->priority() <=> $b->type()->priority());
     }
 
-    public function addCreate(Action $create): void
+    public function storages(): \SplObjectStorage
     {
-        $this->storages->attach($create->storage());
-        $this->creates[] = $create;
+        return $this->storages;
     }
 
-    public function addAction(Action $create): void
+    /** @return Action[] */
+    public function actions(): array
     {
-        $this->storages->attach($create->storage());
-        $this->additionalActions[] = $create;
+        return $this->actions;
     }
 }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Databases\Pdo;
 
 use Medas\StorageManager\Databases\Pdo\Exceptions\PdoDatabaseException;
-use Medas\StorageManager\Interfaces\Action;
 use Medas\StorageManager\Interfaces\Store;
+use Medas\StorageManager\UnitOfWork\Action;
 
 class Table implements Store
 {
