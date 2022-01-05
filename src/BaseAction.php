@@ -17,14 +17,7 @@ abstract class BaseAction implements Action
         return $this->storage;
     }
 
-    public function setStorage(Storage $database): self
-    {
-        $this->storage = $database;
-
-        return $this;
-    }
-
-    public function onComplete(): ?\Closure
+    public function onComplete(): \Closure|null
     {
         return $this->onComplete;
     }

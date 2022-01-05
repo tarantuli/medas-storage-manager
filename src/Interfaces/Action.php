@@ -10,5 +10,7 @@ interface Action
 
     public function storage(): Storage;
 
-    public function onComplete(): ?\Closure;
+    public function onComplete(): \Closure|null;
+
+    public function setOnComplete(\Closure|null $onComplete): self;
 }
