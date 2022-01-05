@@ -11,7 +11,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "morphp/medas-service-manager": "@dev",
+        "morphp/medas-service-manager": "dev-dev",
         "morphp/medas-entity-manager": "dev-dev",
         "ext-pdo": "*"
     },
