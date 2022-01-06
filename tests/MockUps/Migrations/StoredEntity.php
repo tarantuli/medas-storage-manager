@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\MockUps;
+namespace Medas\Test\MockUps\Migrations;
 
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsNullable, IsUnique};
 use Medas\EntityManager\Types as Type;
 
-#[Entity(store: 'new_stored_entities')]
-class NewStoredEntity
+#[Entity(store: 'stored_entities')]
+class StoredEntity
 {
     #[Id]
     #[IsGeneratedValue]

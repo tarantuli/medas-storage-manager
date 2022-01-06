@@ -14,7 +14,7 @@ class MigrationBuildTest extends BaseTest
     {
         $migration = $this->createMigrationClassContent();
 
-        self::assertStringContainsString('class Migrations', $migration);
+        self::assertStringContainsString('class Migration', $migration);
     }
 
     private function createMigrationClassContent(): string

@@ -61,6 +61,10 @@ class MigrationManager
             return null;
         }
 
+        if (!file_exists($class->getFileName())) {
+            return null;
+        }
+
         if (!$class->implementsInterface(Migration::class)) {
             return null;
         }

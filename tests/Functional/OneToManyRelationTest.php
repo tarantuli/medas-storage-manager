@@ -13,7 +13,7 @@ class OneToManyRelationTest extends BaseTest
     {
         $migration = $this->createMigrationClassContent();
 
-        self::assertStringContainsString('class Migrations', $migration);
+        self::assertStringContainsString('class Migration', $migration);
     }
 
     private function createMigrationClassContent(): string
@@ -31,6 +31,7 @@ class OneToManyRelationTest extends BaseTest
         storage()->deleteStore('groups');
 
         // Execute the migration
+        echo __LINE__, "\n";
         $migration = $this->createMigrationClassContent();
         $this->executeMigration($migration);
 

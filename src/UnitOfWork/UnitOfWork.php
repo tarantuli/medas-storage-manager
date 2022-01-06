@@ -23,7 +23,6 @@ class UnitOfWork
     {
         $this->storages->attach($action->storage());
         $this->actions[] = $action;
-        usort($this->actions, fn(Action $a, Action $b) => $a->type()->priority() <=> $b->type()->priority());
     }
 
     public function storages(): \SplObjectStorage
@@ -34,6 +33,13 @@ class UnitOfWork
     /** @return Action[] */
     public function actions(): array
     {
+        $this->sortByPriority();
+
         return $this->actions;
+    }
+
+    private function sortByPriority(): void
+    {
+        usort($this->actions, fn(Action $a, Action $b) => $a->type()->priority() <=> $b->type()->priority());
     }
 }

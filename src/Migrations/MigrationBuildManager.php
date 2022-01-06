@@ -39,7 +39,10 @@ class MigrationBuildManager
 
     private function initializeClass(): void
     {
-        $this->migrationClass = new PhpClassDefinition('Migration' . date('YmdHis'), 'Medas\\Migrations');
+        $now = \DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''))
+            ->format('YmdHisu');
+
+        $this->migrationClass = new PhpClassDefinition('Migration' . $now, 'Medas\\Migrations');
         $this->migrationClass->implements[] = Migration::class;
     }
 
