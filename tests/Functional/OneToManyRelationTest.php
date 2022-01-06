@@ -31,7 +31,6 @@ class OneToManyRelationTest extends BaseTest
         storage()->deleteStore('groups');
 
         // Execute the migration
-        echo __LINE__, "\n";
         $migration = $this->createMigrationClassContent();
         $this->executeMigration($migration);
 
