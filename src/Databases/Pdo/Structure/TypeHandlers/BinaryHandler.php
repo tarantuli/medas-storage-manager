@@ -10,9 +10,9 @@ use Medas\EntityManager\Types\Integer;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class BinaryHandler implements TypeHandler
+class BinaryHandler extends BaseHandler
 {
-    public function fieldType(Property $property): string
+    public function fieldDefinition(Property $property): string
     {
         /** @var Binary $type */
         $type = $property->type;

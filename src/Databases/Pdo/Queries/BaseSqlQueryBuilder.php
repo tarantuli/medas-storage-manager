@@ -23,23 +23,23 @@ class BaseSqlQueryBuilder implements QueryBuilder
     public function select(array $tables, array $filters): Query
     {
         $this->arguments = [];
-        $this->query = 'select * from ';
+        $this->query = 'SELECT * FROM ';
 
         foreach ($tables as $table) {
-            $this->query .= $table->name . ',';
+            $this->query .= $this->database->quote($table->name) . ',';
         }
 
         $this->query = substr($this->query, 0, -1);
 
         if ($filters) {
-            $this->query .= ' where ';
+            $this->query .= ' WHERE ';
             $this->appendParameters($filters);
         }
 
         return new Query($this->query, $this->arguments, $this->database);
     }
 
-    private function appendParameters(array $filters, string $separator = 'and'): void
+    private function appendParameters(array $filters, string $separator = 'AND'): void
     {
         foreach ($filters as $field => $value) {
             $this->query .= $field . '=? ' . $separator . ' ';
@@ -53,10 +53,10 @@ class BaseSqlQueryBuilder implements QueryBuilder
     {
         $this->arguments = [];
 
-        $this->query = 'update ' . $table->name . ' set ';
+        $this->query = 'UPDATE ' . $table->name . ' SET ';
         $this->appendParameters($updates);
 
-        $this->query .= ' where ';
+        $this->query .= ' WHERE ';
         $this->appendParameters($conditions);
 
         return new Query($this->query, $this->arguments, $this->database);
@@ -66,7 +66,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
     {
         $this->arguments = [];
 
-        $this->query = 'insert into ' . $table->name . ' set ';
+        $this->query = 'INSERT INTO ' . $table->name . ' SET ';
         $this->appendParameters($values);
 
         return new Query($this->query, $this->arguments, $this->database);
@@ -74,7 +74,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
 
     public function showCreate(Table $table): Query
     {
-        return new Query('show create table ' . $table->name, [], $this->database);
+        return new Query('SHOW CREATE TABLE ' . $this->database->quote($table->name), [], $this->database);
     }
 
     public function createTable(Blueprint $blueprint): Query
@@ -94,6 +94,6 @@ class BaseSqlQueryBuilder implements QueryBuilder
 
     public function dropTable(string $name): Query
     {
-        return new Query('DROP TABLE IF EXISTS ' . $name, [], $this->database);
+        return new Query('DROP TABLE IF EXISTS ' . $this->quote($name), [], $this->database);
     }
 }

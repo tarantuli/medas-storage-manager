@@ -8,12 +8,14 @@ use Medas\EntityManager\Attributes\Interfaces\Type;
 use Medas\EntityManager\Types\Binary;
 use Medas\EntityManager\Types\DateTime;
 use Medas\EntityManager\Types\Integer;
+use Medas\EntityManager\Types\Relation;
 use Medas\EntityManager\Types\Text;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Databases\Pdo\Exceptions\UnhandledTypeException;
 use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\BinaryHandler;
 use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\DateTimeHandler;
 use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\IntegerHandler;
+use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\RelationHandler;
 use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\TextHandler;
 use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\TypeHandler;
 
@@ -24,6 +26,7 @@ class TypeHandlerFactory
         private BinaryHandler   $binaryHandler,
         private DateTimeHandler $dateTimeHandler,
         private IntegerHandler  $integerHandler,
+        private RelationHandler $relationHandler,
         private TextHandler     $textHandler,
     )
     {
@@ -35,6 +38,7 @@ class TypeHandlerFactory
             Binary::class => $this->binaryHandler,
             DateTime::class => $this->dateTimeHandler,
             Integer::class => $this->integerHandler,
+            Relation::class => $this->relationHandler,
             Text::class => $this->textHandler,
             default => throw new UnhandledTypeException($type),
         };

@@ -10,9 +10,9 @@ use Medas\EntityManager\Types\Text;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class TextHandler implements TypeHandler
+class TextHandler extends BaseHandler
 {
-    public function fieldType(Property $property): string
+    public function fieldDefinition(Property $property): string
     {
         /** @var Text $type */
         $type = $property->type;

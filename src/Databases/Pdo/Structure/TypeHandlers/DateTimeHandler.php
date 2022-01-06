@@ -9,9 +9,9 @@ use Medas\EntityManager\Types\DateTime;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class DateTimeHandler implements TypeHandler
+class DateTimeHandler extends BaseHandler
 {
-    public function fieldType(Property $property): string
+    public function fieldDefinition(Property $property): string
     {
         /** @var DateTime $type */
         return 'datetime';

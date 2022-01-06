@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\Test\Functional;
 
 use Medas\Test\BaseTest;
-use Medas\Test\MockUps\StoredEntity;
+use Medas\Test\MockUps\Migrations\StoredEntity;
 
 class EntityPersisterTest extends BaseTest
 {

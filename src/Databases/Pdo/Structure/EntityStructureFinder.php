@@ -29,6 +29,7 @@ class EntityStructureFinder
         $this->findFields($metaData, $blueprint);
         $this->findPrimaryKey($metaData, $blueprint);
         $this->findKeys($metaData, $blueprint);
+        $this->findForeignKeys($metaData, $blueprint);
 
         return $blueprint;
     }
@@ -50,7 +51,7 @@ class EntityStructureFinder
     private function determineDefinition(MetaData\Property $property): string
     {
         $handler = $this->typeHandlerFactory->for($property->type);
-        $definition = $handler->fieldType($property);
+        $definition = $handler->fieldDefinition($property);
 
         if ($property->isGeneratedValue) {
             $definition .= ' NOT NULL AUTO_INCREMENT';
@@ -97,6 +98,16 @@ class EntityStructureFinder
             $index->fields[] = $blueprint->field($property->name);
             $index->isUnique = true;
             $blueprint->addIndex($index);
+        }
+    }
+
+    private function findForeignKeys(MetaData $metaData, Blueprint $blueprint): void
+    {
+        foreach ($metaData->properties as $property) {
+            $handler = $this->typeHandlerFactory->for($property->type);
+            if ($foreignKey = $handler->foreignKey($property)) {
+                $blueprint->addForeignKey($foreignKey);
+            }
         }
     }
 }

@@ -7,9 +7,10 @@ namespace Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers;
 use Medas\EntityManager\MetaData\Property;
 use Medas\StorageManager\Databases\Pdo\Structure\Blueprint\ForeignKey;
 
-interface TypeHandler
+abstract class BaseHandler implements TypeHandler
 {
-    public function fieldDefinition(Property $property): string;
-
-    public function foreignKey(Property $property): ForeignKey|null;
+    public function foreignKey(Property $property): ForeignKey|null
+    {
+        return null;
+    }
 }

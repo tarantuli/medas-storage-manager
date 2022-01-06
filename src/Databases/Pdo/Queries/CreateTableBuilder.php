@@ -10,6 +10,7 @@ use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
 class CreateTableBuilder
 {
     private string $query;
+    private Database $database;
 
     public function __construct(
         private Blueprint $blueprint,
@@ -19,10 +20,12 @@ class CreateTableBuilder
 
     public function create(Database $database): Query
     {
+        $this->database = $database;
         $this->query = sprintf("CREATE TABLE %s (\n", $database->quote($this->blueprint->name));
 
-        $this->addFields($database);
-        $this->addKeys($database);
+        $this->addFields();
+        $this->addKeys();
+        $this->addForeignKeys();
 
         $this->query = substr($this->query, 0, -2);
         $this->query .= "\n)\n";
@@ -30,14 +33,14 @@ class CreateTableBuilder
         return new Query($this->query, [], $database);
     }
 
-    private function addFields(Database $database): void
+    private function addFields(): void
     {
         foreach ($this->blueprint->fields as $field) {
-            $this->query .= sprintf(" %s %s,\n", $database->quote($field->name), $field->definition);
+            $this->query .= sprintf(" %s %s,\n", $this->database->quote($field->name), $field->definition);
         }
     }
 
-    private function addKeys(Database $database)
+    private function addKeys(): void
     {
         foreach ($this->blueprint->indexes as $index) {
             if ($index->name === 'PRIMARY') {
@@ -47,14 +50,24 @@ class CreateTableBuilder
                 if ($index->isUnique) {
                     $this->query .= " UNIQUE";
                 }
-                $this->query .= " KEY " . $database->quote($index->name) . ' (';
+                $this->query .= " KEY " . $this->database->quote($index->name) . ' (';
             }
 
             foreach ($index->fields as $field) {
-                $this->query .= $database->quote($field->name) . ',';
+                $this->query .= $this->database->quote($field->name) . ',';
             }
 
             $this->query = substr($this->query, 0, -1) . "),\n";
+        }
+    }
+
+    private function addForeignKeys(): void
+    {
+        foreach ($this->blueprint->foreignKeys as $name => $foreignKey) {
+            $this->query .= " CONSTRAINT " . $this->database->quote($name) . "\n"
+                . "   FOREIGN KEY (" . $this->database->quote($foreignKey->field) . ")\n"
+                . "   REFERENCES " . $this->database->quote($foreignKey->foreignEntity)
+                . " (" . $this->database->quote($foreignKey->foreignField) . "),\n";
         }
     }
 }

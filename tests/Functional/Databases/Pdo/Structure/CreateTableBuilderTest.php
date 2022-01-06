@@ -6,7 +6,7 @@ namespace Medas\Test\Functional\Databases\Pdo\Structure;
 
 use Medas\StorageManager\Databases\Pdo\Structure\EntityStructureFinder;
 use Medas\Test\BaseTest;
-use Medas\Test\MockUps\StoredEntity;
+use Medas\Test\MockUps\Migrations\StoredEntity;
 
 class CreateTableBuilderTest extends BaseTest
 {
