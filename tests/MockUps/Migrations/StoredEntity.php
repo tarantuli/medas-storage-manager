@@ -4,23 +4,19 @@ declare(strict_types=1);
 
 namespace Medas\Test\MockUps\Migrations;
 
-use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsNullable, IsUnique};
-use Medas\EntityManager\Types as Type;
+use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsNullable, IsUnique, Property};
+use Medas\EntityManager\Types\DateTime;
 
 #[Entity(store: 'stored_entities')]
 class StoredEntity
 {
-    #[Id]
-    #[IsGeneratedValue]
-    #[Type\Integer]
+    #[Id, IsGeneratedValue]
     private int $id;
 
-    #[Type\Text]
-    #[IsUnique]
+    #[Property, IsUnique]
     public string $name;
 
-    #[Type\DateTime]
-    #[IsNullable]
+    #[Property, IsNullable, DateTime]
     public ?\DateTime $createdAt;
 
     public function id(): int|null

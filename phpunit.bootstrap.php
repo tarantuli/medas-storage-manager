@@ -12,8 +12,10 @@ use Medas\StorageManager\StorageManagerPackage;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Contracts\Cache\CacheInterface;
 
+chdir(__DIR__);
+
 $sm = ServiceManager::get();
-$sm->addPackage(new StorageManagerPackage());
+$sm->addPackage(StorageManagerPackage::instance());
 
 /** @var ConfigManager $config */
 $config = $sm->resolve(ConfigManager::class);

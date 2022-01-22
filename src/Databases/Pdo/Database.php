@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Databases\Pdo;
 
 use Medas\ServiceManager\Attributes\ConfigValue;
+use Medas\StorageManager\ConfigOptions\PdoDns;
+use Medas\StorageManager\ConfigOptions\PdoPassword;
+use Medas\StorageManager\ConfigOptions\PdoUsername;
 use Medas\StorageManager\Databases\Pdo\Exceptions\DriverNotImplementedException;
 use Medas\StorageManager\Databases\Pdo\Exceptions\PdoDatabaseException;
 use Medas\StorageManager\Databases\Pdo\Queries\BaseSqlQueryBuilder;
@@ -26,9 +29,9 @@ class Database implements Storage
     private TableMigrationBuilder $migrationBuilder;
 
     public function __construct(
-        #[ConfigValue('db.pdo.dns')] private string $dns,
-        #[ConfigValue('db.pdo.username')] private string $username,
-        #[ConfigValue('db.pdo.password')] private string $password,
+        #[ConfigValue(PdoDns::class)] private string $dns,
+        #[ConfigValue(PdoUsername::class)] private string $username,
+        #[ConfigValue(PdoPassword::class)] private string $password,
     )
     {
         $this->initializePdo();

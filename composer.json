@@ -17,6 +17,7 @@
         "ext-pdo": "*"
     },
     "require-dev": {
+        "morphp/medas-console": "dev-dev",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {

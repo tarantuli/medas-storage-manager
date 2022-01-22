@@ -22,7 +22,7 @@ class MigrationBuildTest extends BaseTest
         $buildManager = service(MigrationBuildManager::class);
         $directory = realpath(__DIR__ . '/../../MockUps/Migrations');
 
-        return $buildManager->createMigration($directory);
+        return $buildManager->createMigrationClass($directory);
     }
 
     public function testExecuteMigration(): void

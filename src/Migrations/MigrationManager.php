@@ -12,6 +12,8 @@ use Medas\StorageManager\UnitOfWork\UnitOfWorkExecutor;
 #[Service]
 class MigrationManager
 {
+    private array $migrations;
+
     public function __construct(
         private DirectoryManager   $directoryManager,
         private UnitOfWorkExecutor $unitOfWorkExecutor,
@@ -21,6 +23,8 @@ class MigrationManager
 
     public function migrate(string $directory): void
     {
+        $directory = realpath($directory);
+
         $this->directoryManager->loadPhpFiles($directory);
         $this->processEntities($directory);
     }
@@ -28,9 +32,9 @@ class MigrationManager
     private function processEntities(string $directory)
     {
         $unitOfWork = new UnitOfWork();
-        $migrations = $this->findMigrations($directory);
+        $this->migrations = $this->findMigrations($directory);
 
-        foreach ($migrations as $migration) {
+        foreach ($this->migrations as $migration) {
             $migration->migrate($unitOfWork);
         }
 
@@ -57,7 +61,11 @@ class MigrationManager
     {
         $class = new \ReflectionClass($className);
 
-        if (!$class->getFileName() || !str_starts_with($class->getFileName(), $directory)) {
+        if (!$class->getFileName()) {
+            return null;
+        }
+
+        if (!str_starts_with($class->getFileName(), $directory)) {
             return null;
         }
 
@@ -70,5 +78,10 @@ class MigrationManager
         }
 
         return new $className();
+    }
+
+    public function processedMigrations(): array
+    {
+        return $this->migrations;
     }
 }

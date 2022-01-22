@@ -16,6 +16,7 @@ use Medas\StorageManager\UnitOfWork\UnitOfWork;
 #[Service]
 class MigrationBuildManager
 {
+    private string $className;
     private PhpClassDefinition $migrationClass;
     private MethodDefinition $migrateMethod;
     private MethodDefinition $undoMethod;
@@ -27,7 +28,14 @@ class MigrationBuildManager
     {
     }
 
-    public function createMigration(string $directory): string
+    public function createMigration(string $sourceDirectory, string $migrationsDirectory): void
+    {
+        $classCode = $this->createMigrationClass($sourceDirectory);
+        $this->directoryManager->create($migrationsDirectory);
+        file_put_contents($migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php', $classCode);
+    }
+
+    public function createMigrationClass(string $directory): string
     {
         $this->initializeClass();
         $this->initializeMethods();
@@ -41,8 +49,9 @@ class MigrationBuildManager
     {
         $now = \DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''))
             ->format('YmdHisu');
+        $this->className = 'Migration' . $now;
 
-        $this->migrationClass = new PhpClassDefinition('Migration' . $now, 'Medas\\Migrations');
+        $this->migrationClass = new PhpClassDefinition($this->className, 'Medas\\Migrations');
         $this->migrationClass->implements[] = Migration::class;
     }
 

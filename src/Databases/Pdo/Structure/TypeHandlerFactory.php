@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo\Structure;
 
-use Medas\EntityManager\Attributes\Interfaces\Type;
-use Medas\EntityManager\Types\Binary;
-use Medas\EntityManager\Types\DateTime;
-use Medas\EntityManager\Types\Integer;
-use Medas\EntityManager\Types\Relation;
-use Medas\EntityManager\Types\Text;
+use Medas\EntityManager\Types\Type;
+use Medas\EntityManager\Types\{Binary, DateTime, Integer, Relation, Text};
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Databases\Pdo\Exceptions\UnhandledTypeException;
-use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\BinaryHandler;
-use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\DateTimeHandler;
-use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\IntegerHandler;
-use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\RelationHandler;
-use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\TextHandler;
-use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\TypeHandler;
+use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\{BinaryHandler,
+    DateTimeHandler,
+    IntegerHandler,
+    RelationHandler,
+    TextHandler,
+    TypeHandler
+};
 
 #[Service]
 class TypeHandlerFactory
