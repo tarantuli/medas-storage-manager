@@ -30,10 +30,7 @@ class MigrationBuildManager
 
     public function createMigration(string $sourceDirectory, string $migrationsDirectory): void
     {
-        $sourceDirectory = realpath($sourceDirectory);
-        $migrationsDirectory = realpath($migrationsDirectory);
-
-        $classCode = $this->createMigrationClass($sourceDirectory);
+        $classCode = $this->createMigrationClass(realpath($sourceDirectory));
         $this->directoryManager->create($migrationsDirectory);
         file_put_contents($migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php', $classCode);
     }
