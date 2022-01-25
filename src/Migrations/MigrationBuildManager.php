@@ -100,14 +100,9 @@ class MigrationBuildManager
             return null;
         }
 
-        $atttributes = $class->getAttributes(Entity::class);
-
-        if (!$atttributes) {
+        if (!$entity = attribute(Entity::class, $class)) {
             return null;
         }
-
-        /** @var Entity $entity */
-        $entity = $atttributes[0]->newInstance();
 
         if ($entity->storage === null && $entity->store === null) {
             return null;

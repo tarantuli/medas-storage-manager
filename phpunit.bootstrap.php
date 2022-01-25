@@ -29,6 +29,5 @@ $sm->bindService($cache, CacheInterface::class);
 $sm->bindService($sm->resolve(Fetcher::class), \Medas\EntityManager\Entities\Fetcher::class);
 $sm->bindService($sm->resolve(Flusher::class), \Medas\EntityManager\Entities\Flusher::class);
 
-/** @var StorageManager $storageManager */
 $storageManager = $sm->resolve(StorageManager::class);
 $storageManager->add($sm->instantiate(Database::class));
