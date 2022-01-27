@@ -12,6 +12,8 @@ interface Store
 
     public function fetchRecord(array $filters): StoreRecord|null;
 
+    public function fetchAll(array $filters): array|null;
+
     public function prepareCreate(array $values): Action;
 
     public function prepareUpdate(array $updates, array $conditions): Action;

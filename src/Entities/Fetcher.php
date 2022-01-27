@@ -44,8 +44,13 @@ class Fetcher implements FechterInterface
         return storage($metaData->entity->storage)->store($metaData->entity->store);
     }
 
-    public function fetchRecord(MetaData $metaData, array $conditions): StoreRecord|null
+    public function fetchRecord(MetaData $metaData, array $conditions): array
     {
-        return $this->getStore($metaData)->fetchRecord($conditions);
+        return $this->getStore($metaData)->fetchRecord($conditions)->data();
+    }
+
+    public function fetchAll(MetaData $metaData, array $conditions): array
+    {
+        return $this->getStore($metaData)->fetchAll($conditions);
     }
 }
