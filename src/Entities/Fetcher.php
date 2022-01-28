@@ -27,10 +27,10 @@ class Fetcher implements FechterInterface
     {
         $record = $this->getRecord($metaData, $entity);
 
-        return $record->get($property->name);
+        return $record?->get($property->name);
     }
 
-    private function getRecord(MetaData $metaData, object $entity): StoreRecord
+    private function getRecord(MetaData $metaData, object $entity): ?StoreRecord
     {
         if (!isset($this->records[$entity])) {
             $this->records[$entity] = $this->getStore($metaData)->fetchRecord($this->valueGetter->get($entity, $metaData->idProperties));
