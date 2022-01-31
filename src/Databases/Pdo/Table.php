@@ -19,7 +19,7 @@ class Table implements Store
 
     public function name(): string
     {
-        return $this->name;
+        return $this->database->name() . '.' . $this->name;
     }
 
     public function storage(): Database
@@ -35,16 +35,16 @@ class Table implements Store
         return is_array($data) ? new Record($data) : null;
     }
 
+    public function prepareGet(array $filters): Action
+    {
+        return $this->database->queryBuilder()->select([$this], $filters);
+    }
+
     public function fetchAll(array $filters): array|null
     {
         $this->database->execute($this->prepareGet($filters));
 
         return $this->database->lastStatement()->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    public function prepareGet(array $filters): Action
-    {
-        return $this->database->queryBuilder()->select([$this], $filters);
     }
 
     public function prepareCreate(array $values): Action
