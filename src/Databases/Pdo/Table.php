@@ -19,7 +19,7 @@ class Table implements Store
 
     public function name(): string
     {
-        return $this->database->name() . '.' . $this->name;
+        return $this->database->name() . ':' . $this->name;
     }
 
     public function storage(): Database
