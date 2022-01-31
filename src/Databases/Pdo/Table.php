@@ -17,6 +17,11 @@ class Table implements Store
     {
     }
 
+    public function name(): string
+    {
+        return $this->name;
+    }
+
     public function storage(): Database
     {
         return $this->database;

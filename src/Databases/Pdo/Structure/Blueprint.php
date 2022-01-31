@@ -46,9 +46,9 @@ class Blueprint
         )));
     }
 
-    public function field(string $name): Blueprint\Field
+    public function field(string $name): Blueprint\Field|null
     {
-        return $this->fields([$name])[0];
+        return isset($this->fields([$name])[0]) ? $this->fields([$name])[0] : null;
     }
 
     public function fields(array $names): array

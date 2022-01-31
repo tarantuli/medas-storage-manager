@@ -8,6 +8,7 @@ use Medas\EntityManager\Entities\Fetcher as FechterInterface;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHavePropertyException;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\Interfaces\StoreRecord;
 
@@ -27,7 +28,12 @@ class Fetcher implements FechterInterface
     {
         $record = $this->getRecord($metaData, $entity);
 
-        return $record?->get($property->name);
+        try {
+            return $record?->get($property->name);
+        }
+        catch (\Exception) {
+            throw new StoreDoesNotHavePropertyException($this->getStore($metaData), $property->name);
+        }
     }
 
     private function getRecord(MetaData $metaData, object $entity): ?StoreRecord

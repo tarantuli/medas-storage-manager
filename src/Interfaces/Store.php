@@ -8,6 +8,8 @@ use Medas\StorageManager\UnitOfWork\Action;
 
 interface Store
 {
+    public function name(): string;
+
     public function storage(): Storage;
 
     public function fetchRecord(array $filters): StoreRecord|null;
