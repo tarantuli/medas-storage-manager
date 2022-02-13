@@ -19,7 +19,7 @@ class Flusher implements FlusherInterface
     {
     }
 
-    public function flush(array $entities, \SplObjectStorage $savedStates): bool
+    public function flush(array $entities, \SplObjectStorage $savedStates): void
     {
         $unitOfWork = new UnitOfWork();
 
@@ -31,6 +31,6 @@ class Flusher implements FlusherInterface
             );
         }
 
-        return $this->unitOfWorkExecutor->execute($unitOfWork);
+        $this->unitOfWorkExecutor->execute($unitOfWork);
     }
 }

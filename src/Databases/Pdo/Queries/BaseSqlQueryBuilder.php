@@ -54,7 +54,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
         $this->arguments = [];
 
         $this->query = 'UPDATE ' . $table->name . ' SET ';
-        $this->appendParameters($updates);
+        $this->appendParameters($updates, ', ');
 
         $this->query .= ' WHERE ';
         $this->appendParameters($conditions);
@@ -67,7 +67,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
         $this->arguments = [];
 
         $this->query = 'INSERT INTO ' . $table->name . ' SET ';
-        $this->appendParameters($values);
+        $this->appendParameters($values, ', ');
 
         return new Query($this->query, $this->arguments, $this->database);
     }

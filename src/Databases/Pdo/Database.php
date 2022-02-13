@@ -84,9 +84,8 @@ class Database implements Storage
 
     public function execute(Query $query): void
     {
-        $this->lastStatement = $this->pdo->prepare($query->query);
-
         try {
+            $this->lastStatement = $this->pdo->prepare($query->query);
             $this->lastStatement->execute($query->arguments);
         }
         catch (\PDOException $e) {

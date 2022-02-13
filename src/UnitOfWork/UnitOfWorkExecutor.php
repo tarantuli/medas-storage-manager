@@ -9,7 +9,7 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class UnitOfWorkExecutor
 {
-    public function execute(UnitOfWork $unitOfWork): bool
+    public function execute(UnitOfWork $unitOfWork): void
     {
         foreach ($unitOfWork->storages() as $storage) {
             $storage->beginTransaction();
@@ -20,18 +20,16 @@ class UnitOfWorkExecutor
                 $action->execute();
             }
         }
-        catch (\Exception) {
+        catch (\Exception $exception) {
             foreach ($unitOfWork->storages() as $storage) {
                 $storage->rollbackTransaction();
             }
 
-            return false;
+            throw $exception;
         }
 
         foreach ($unitOfWork->storages() as $storage) {
             $storage->commitTransaction();
         }
-
-        return true;
     }
 }

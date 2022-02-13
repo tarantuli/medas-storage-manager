@@ -21,4 +21,6 @@ interface Store
     public function prepareUpdate(array $updates, array $conditions): Action;
 
     public function prepareGet(array $filters): Action;
+
+    public function exists(): bool;
 }

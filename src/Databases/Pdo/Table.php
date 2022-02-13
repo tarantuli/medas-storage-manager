@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Databases\Pdo;
 
 use Medas\StorageManager\Databases\Pdo\Exceptions\PdoDatabaseException;
+use Medas\StorageManager\Databases\Pdo\Queries\Query;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\UnitOfWork\Action;
 
@@ -19,7 +20,7 @@ class Table implements Store
 
     public function name(): string
     {
-        return $this->database->name() . ':' . $this->name;
+        return $this->name;
     }
 
     public function storage(): Database
@@ -68,5 +69,11 @@ class Table implements Store
         catch (PdoDatabaseException) {
             return null;
         }
+    }
+
+    public function exists(): bool
+    {
+        $this->database->execute(new Query('show tables like "' . $this->name . '"'));
+        return (bool) $this->database->lastStatement()->fetchAll();
     }
 }
