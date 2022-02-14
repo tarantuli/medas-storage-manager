@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo\Structure;
 
-use Medas\EntityManager\Types\Type;
 use Medas\EntityManager\Types\{Binary, DateTime, Integer, Relation, Text};
+use Medas\EntityManager\Types\Type;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Databases\Pdo\Exceptions\UnhandledTypeException;
 use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\{BinaryHandler,
@@ -31,12 +31,12 @@ class TypeHandlerFactory
 
     public function for(Type $type): TypeHandler
     {
-        return match ($type::class) {
-            Binary::class => $this->binaryHandler,
-            DateTime::class => $this->dateTimeHandler,
-            Integer::class => $this->integerHandler,
-            Relation::class => $this->relationHandler,
-            Text::class => $this->textHandler,
+        return match (true) {
+            $type instanceof Binary => $this->binaryHandler,
+            $type instanceof DateTime => $this->dateTimeHandler,
+            $type instanceof Integer => $this->integerHandler,
+            $type instanceof Relation => $this->relationHandler,
+            $type instanceof Text => $this->textHandler,
             default => throw new UnhandledTypeException($type),
         };
     }
