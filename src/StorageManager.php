@@ -15,7 +15,6 @@ class StorageManager
     private string $default;
 
     public function __construct(
-        private GlobalFunctionsDefiner $globalFunctionsDefiner,
     )
     {
     }
