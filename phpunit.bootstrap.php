@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Medas\Cache\FilesystemCache;
 use Medas\ConfigManager\ConfigManager;
 use Medas\ServiceManager\ServiceManager;
 use Medas\StorageManager\Databases\Pdo\Database;
@@ -14,10 +13,6 @@ use Medas\StorageManager\StorageManagerPackage;
 chdir(__DIR__);
 
 $sm = ServiceManager::get();
-
-$cache = new FilesystemCache(__DIR__ . '/var/cache');
-$cache->clear();
-$sm->setCache($cache);
 
 $sm->addPackage(StorageManagerPackage::instance());
 
