@@ -42,7 +42,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
     private function appendParameters(array $filters, string $separator = 'AND'): void
     {
         foreach ($filters as $field => $value) {
-            $this->query .= $field . '=? ' . $separator . ' ';
+            $this->query .= $this->quote($field) . '=? ' . $separator . ' ';
             $this->arguments[] = $value;
         }
 
