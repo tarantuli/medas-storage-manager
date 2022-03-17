@@ -57,11 +57,12 @@ class MigrationManager
                 continue;
             }
 
-            $migrations[] = $migration;
+            $migrations[$migration::class] = $migration;
         }
 
-        return $migrations;
+        ksort($migrations);
 
+        return $migrations;
     }
 
     private function createMigration(string $className, string $directory): Migration|null
