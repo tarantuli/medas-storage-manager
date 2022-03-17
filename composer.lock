@@ -74,12 +74,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-cache.git",
-                "reference": "d228bc39a2c5bfb2a7039d85e052d19b6139af0c"
+                "reference": "c5e5849d7b35d6829265c86c5765122668b43413"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-cache/zipball/d228bc39a2c5bfb2a7039d85e052d19b6139af0c",
-                "reference": "d228bc39a2c5bfb2a7039d85e052d19b6139af0c",
+                "url": "https://api.github.com/repos/tarantuli/medas-cache/zipball/c5e5849d7b35d6829265c86c5765122668b43413",
+                "reference": "c5e5849d7b35d6829265c86c5765122668b43413",
                 "shasum": ""
             },
             "require": {
@@ -108,7 +108,7 @@
                 "source": "https://github.com/tarantuli/medas-cache/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-cache/issues"
             },
-            "time": "2022-03-03T09:22:12+00:00"
+            "time": "2022-03-16T10:41:35+00:00"
         },
         {
             "name": "morphp/medas-config-manager",
@@ -116,12 +116,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-config-manager.git",
-                "reference": "d90904a961ae13b656ec4700627c6ca388fb70ff"
+                "reference": "286b271c5a9234a017cb39fba9b7f0622ba6790e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/d90904a961ae13b656ec4700627c6ca388fb70ff",
-                "reference": "d90904a961ae13b656ec4700627c6ca388fb70ff",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/286b271c5a9234a017cb39fba9b7f0622ba6790e",
+                "reference": "286b271c5a9234a017cb39fba9b7f0622ba6790e",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "source": "https://github.com/tarantuli/medas-config-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-config-manager/issues"
             },
-            "time": "2022-02-08T15:47:39+00:00"
+            "time": "2022-03-03T14:14:33+00:00"
         },
         {
             "name": "morphp/medas-console",
@@ -160,19 +160,18 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-console.git",
-                "reference": "f83e73431c25be0425639bd72047e6b9fe096302"
+                "reference": "da4f57e9245531cf799e385ad8bc44c4b97ad3ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-console/zipball/f83e73431c25be0425639bd72047e6b9fe096302",
-                "reference": "f83e73431c25be0425639bd72047e6b9fe096302",
+                "url": "https://api.github.com/repos/tarantuli/medas-console/zipball/da4f57e9245531cf799e385ad8bc44c4b97ad3ee",
+                "reference": "da4f57e9245531cf799e385ad8bc44c4b97ad3ee",
                 "shasum": ""
             },
             "require": {
                 "morphp/medas-service-manager": "dev-dev"
             },
             "require-dev": {
-                "morphp/medas-cache": "dev-dev",
                 "morphp/medas-config-manager": "dev-dev",
                 "phpunit/phpunit": "^9.5"
             },
@@ -199,7 +198,7 @@
                 "source": "https://github.com/tarantuli/medas-console/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-console/issues"
             },
-            "time": "2022-02-23T11:51:46+00:00"
+            "time": "2022-03-16T11:04:36+00:00"
         },
         {
             "name": "morphp/medas-core",
@@ -253,12 +252,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "8124add93528f787d5cfadf782d105ae1e9dca68"
+                "reference": "202891ca6616d5253ab2a7b68e0b24ea7f197aa2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/8124add93528f787d5cfadf782d105ae1e9dca68",
-                "reference": "8124add93528f787d5cfadf782d105ae1e9dca68",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/202891ca6616d5253ab2a7b68e0b24ea7f197aa2",
+                "reference": "202891ca6616d5253ab2a7b68e0b24ea7f197aa2",
                 "shasum": ""
             },
             "require": {
@@ -288,7 +287,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2022-03-03T13:52:19+00:00"
+            "time": "2022-03-17T11:19:18+00:00"
         },
         {
             "name": "morphp/medas-file-builder",
@@ -337,12 +336,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-file-system.git",
-                "reference": "6adc0639e73d9fcf9d3b7a7719fd1a2fe245f151"
+                "reference": "43862c2e4c4c678067474082ad1b26281756a3f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/6adc0639e73d9fcf9d3b7a7719fd1a2fe245f151",
-                "reference": "6adc0639e73d9fcf9d3b7a7719fd1a2fe245f151",
+                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/43862c2e4c4c678067474082ad1b26281756a3f5",
+                "reference": "43862c2e4c4c678067474082ad1b26281756a3f5",
                 "shasum": ""
             },
             "require": {
@@ -370,7 +369,7 @@
                 "source": "https://github.com/tarantuli/medas-file-system/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-file-system/issues"
             },
-            "time": "2022-01-22T14:09:38+00:00"
+            "time": "2022-03-03T14:13:15+00:00"
         },
         {
             "name": "morphp/medas-php-formatter",
@@ -378,12 +377,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-formatter.git",
-                "reference": "004f145b7e9ee66aa83517414d93fa29bac9437a"
+                "reference": "d35ab51d436173794844db32e5c27e56e99f3fd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/004f145b7e9ee66aa83517414d93fa29bac9437a",
-                "reference": "004f145b7e9ee66aa83517414d93fa29bac9437a",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/d35ab51d436173794844db32e5c27e56e99f3fd7",
+                "reference": "d35ab51d436173794844db32e5c27e56e99f3fd7",
                 "shasum": ""
             },
             "require": {
@@ -393,6 +392,7 @@
                 "morphp/medas-service-manager": "dev-dev"
             },
             "require-dev": {
+                "morphp/medas-console": "dev-dev",
                 "phpunit/phpunit": "^9.5"
             },
             "type": "library",
@@ -413,7 +413,7 @@
                 "source": "https://github.com/tarantuli/medas-php-formatter/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-formatter/issues"
             },
-            "time": "2022-01-21T14:39:01+00:00"
+            "time": "2022-03-03T14:23:52+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
@@ -421,12 +421,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "3e952a5b0fca6c988c84b7dbbb02cf210988ff80"
+                "reference": "6dda54db06224397f5c5eb2dd58bc16b8bb76686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/3e952a5b0fca6c988c84b7dbbb02cf210988ff80",
-                "reference": "3e952a5b0fca6c988c84b7dbbb02cf210988ff80",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/6dda54db06224397f5c5eb2dd58bc16b8bb76686",
+                "reference": "6dda54db06224397f5c5eb2dd58bc16b8bb76686",
                 "shasum": ""
             },
             "require": {
@@ -461,7 +461,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2022-03-03T13:41:04+00:00"
+            "time": "2022-03-16T11:13:51+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -603,7 +603,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.24.0",
+            "version": "v1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -665,7 +665,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.24.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.25.0"
             },
             "funding": [
                 {
@@ -685,7 +685,7 @@
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
-            "version": "v1.24.0",
+            "version": "v1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
@@ -746,7 +746,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.24.0"
+                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.25.0"
             },
             "funding": [
                 {
@@ -766,7 +766,7 @@
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.24.0",
+            "version": "v1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
@@ -830,7 +830,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.24.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.25.0"
             },
             "funding": [
                 {
@@ -850,7 +850,7 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.24.0",
+            "version": "v1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -913,7 +913,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.24.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.25.0"
             },
             "funding": [
                 {
@@ -933,16 +933,16 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.24.0",
+            "version": "v1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "57b712b08eddb97c762a8caa32c84e037892d2e9"
+                "reference": "4407588e0d3f1f52efb65fbe92babe41f37fe50c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/57b712b08eddb97c762a8caa32c84e037892d2e9",
-                "reference": "57b712b08eddb97c762a8caa32c84e037892d2e9",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/4407588e0d3f1f52efb65fbe92babe41f37fe50c",
+                "reference": "4407588e0d3f1f52efb65fbe92babe41f37fe50c",
                 "shasum": ""
             },
             "require": {
@@ -996,7 +996,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.24.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.25.0"
             },
             "funding": [
                 {
@@ -1012,7 +1012,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-13T13:58:33+00:00"
+            "time": "2022-03-04T08:16:47+00:00"
         },
         {
             "name": "symfony/string",
@@ -1782,16 +1782,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.14",
+            "version": "9.2.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "9f4d60b6afe5546421462b76cd4e633ebc364ab4"
+                "reference": "2e9da11878c4202f97915c1cb4bb1ca318a63f5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/9f4d60b6afe5546421462b76cd4e633ebc364ab4",
-                "reference": "9f4d60b6afe5546421462b76cd4e633ebc364ab4",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2e9da11878c4202f97915c1cb4bb1ca318a63f5f",
+                "reference": "2e9da11878c4202f97915c1cb4bb1ca318a63f5f",
                 "shasum": ""
             },
             "require": {
@@ -1847,7 +1847,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.14"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.15"
             },
             "funding": [
                 {
@@ -1855,7 +1855,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-28T12:38:02+00:00"
+            "time": "2022-03-07T09:28:20+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2100,16 +2100,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.16",
+            "version": "9.5.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5ff8c545a50226c569310a35f4fa89d79f1ddfdc"
+                "reference": "35ea4b7f3acabb26f4bb640f8c30866c401da807"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5ff8c545a50226c569310a35f4fa89d79f1ddfdc",
-                "reference": "5ff8c545a50226c569310a35f4fa89d79f1ddfdc",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/35ea4b7f3acabb26f4bb640f8c30866c401da807",
+                "reference": "35ea4b7f3acabb26f4bb640f8c30866c401da807",
                 "shasum": ""
             },
             "require": {
@@ -2139,7 +2139,7 @@
                 "sebastian/global-state": "^5.0.1",
                 "sebastian/object-enumerator": "^4.0.3",
                 "sebastian/resource-operations": "^3.0.3",
-                "sebastian/type": "^2.3.4",
+                "sebastian/type": "^3.0",
                 "sebastian/version": "^3.0.2"
             },
             "require-dev": {
@@ -2187,7 +2187,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.16"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.19"
             },
             "funding": [
                 {
@@ -2199,7 +2199,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-23T17:10:58+00:00"
+            "time": "2022-03-15T09:57:31+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -3058,28 +3058,28 @@
         },
         {
             "name": "sebastian/type",
-            "version": "2.3.4",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "b8cd8a1c753c90bc1a0f5372170e3e489136f914"
+                "reference": "b233b84bc4465aff7b57cf1c4bc75c86d00d6dad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/b8cd8a1c753c90bc1a0f5372170e3e489136f914",
-                "reference": "b8cd8a1c753c90bc1a0f5372170e3e489136f914",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/b233b84bc4465aff7b57cf1c4bc75c86d00d6dad",
+                "reference": "b233b84bc4465aff7b57cf1c4bc75c86d00d6dad",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.3"
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -3102,7 +3102,7 @@
             "homepage": "https://github.com/sebastianbergmann/type",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
-                "source": "https://github.com/sebastianbergmann/type/tree/2.3.4"
+                "source": "https://github.com/sebastianbergmann/type/tree/3.0.0"
             },
             "funding": [
                 {
@@ -3110,7 +3110,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-15T12:49:02+00:00"
+            "time": "2022-03-15T09:54:48+00:00"
         },
         {
             "name": "sebastian/version",
