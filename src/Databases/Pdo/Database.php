@@ -88,7 +88,7 @@ class Database implements Storage
             $this->lastStatement = $this->pdo->prepare($query->query);
             $this->lastStatement->execute($query->arguments);
         }
-        catch (\PDOException $e) {
+        catch (\Exception|\Error $e) {
             throw new PdoDatabaseException($e->getMessage(), $query);
         }
 
