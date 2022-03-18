@@ -84,6 +84,8 @@ class Database implements Storage
 
     public function execute(Query $query): void
     {
+        $this->serializeArguments($query);
+
         try {
             $this->lastStatement = $this->pdo->prepare($query->query);
             $this->lastStatement->execute($query->arguments);
@@ -94,6 +96,15 @@ class Database implements Storage
 
         if ($onComplete = $query->onComplete()) {
             $onComplete($this);
+        }
+    }
+
+    private function serializeArguments(Query $query): void
+    {
+        foreach ($query->arguments as &$argument) {
+            if ($argument instanceof \DateTime) {
+                $argument = $argument->format('Y-m-d H:i:s');
+            }
         }
     }
 
