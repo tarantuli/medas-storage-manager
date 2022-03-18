@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo\Queries;
 
-use Medas\EntityManager\Filters\Between;
-use Medas\EntityManager\Filters\LessThan;
-use Medas\EntityManager\Filters\MoreThan;
+use Medas\EntityManager\Filters\{Between, LessThan, MoreThan};
 use Medas\StorageManager\Databases\Pdo\Database;
 use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
 use Medas\StorageManager\Databases\Pdo\Structure\Changes;
@@ -59,8 +57,13 @@ class BaseSqlQueryBuilder implements QueryBuilder
                 $this->arguments[] = $value->upperValue;
             }
             else {
-                $this->query .= $this->quote($field) . '=? ' . $separator . ' ';
-                $this->arguments[] = $value;
+                if ($value === null) {
+                    $this->query .= $this->quote($field) . 'IS NULL ' . $separator . ' ';
+                }
+                else {
+                    $this->query .= $this->quote($field) . '=? ' . $separator . ' ';
+                    $this->arguments[] = $value;
+                }
             }
         }
 
