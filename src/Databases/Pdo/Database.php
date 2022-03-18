@@ -105,6 +105,10 @@ class Database implements Storage
             if ($argument instanceof \DateTime) {
                 $argument = $argument->format('Y-m-d H:i:s');
             }
+
+            if (is_bool($argument)) {
+                $argument = (int) $argument;
+            }
         }
     }
 
