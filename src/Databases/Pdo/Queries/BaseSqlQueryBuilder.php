@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo\Queries;
 
+use Medas\EntityManager\Filters\Between;
+use Medas\EntityManager\Filters\LessThan;
+use Medas\EntityManager\Filters\MoreThan;
 use Medas\StorageManager\Databases\Pdo\Database;
 use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
 use Medas\StorageManager\Databases\Pdo\Structure\Changes;
@@ -42,11 +45,31 @@ class BaseSqlQueryBuilder implements QueryBuilder
     private function appendParameters(array $filters, string $separator = 'AND'): void
     {
         foreach ($filters as $field => $value) {
-            $this->query .= $this->quote($field) . '=? ' . $separator . ' ';
-            $this->arguments[] = $value;
+            if ($value instanceof LessThan) {
+                $this->query .= $this->quote($value->field) . '<? ' . $separator . ' ';
+                $this->arguments[] = $value->value;
+            }
+            elseif ($value instanceof MoreThan) {
+                $this->query .= $this->quote($value->field) . '>? ' . $separator . ' ';
+                $this->arguments[] = $value->value;
+            }
+            elseif ($value instanceof Between) {
+                $this->query .= $this->quote($value->field) . 'between ? and ? ' . $separator . ' ';
+                $this->arguments[] = $value->lowerValue;
+                $this->arguments[] = $value->upperValue;
+            }
+            else {
+                $this->query .= $this->quote($field) . '=? ' . $separator . ' ';
+                $this->arguments[] = $value;
+            }
         }
 
         $this->query = substr($this->query, 0, -2 - strlen($separator));
+    }
+
+    public function quote(string $identifier): string
+    {
+        return '"' . $identifier . '"';
     }
 
     public function update(Store $table, array $updates, array $conditions): Query
@@ -85,11 +108,6 @@ class BaseSqlQueryBuilder implements QueryBuilder
     public function alterTable(Changes $changes): Query
     {
         return (new AlterTableBuilder($changes))->create($this->database);
-    }
-
-    public function quote(string $identifier): string
-    {
-        return '"' . $identifier . '"';
     }
 
     public function dropTable(string $name): Query
