@@ -44,24 +44,24 @@ class BaseSqlQueryBuilder implements QueryBuilder
     {
         foreach ($filters as $field => $value) {
             if ($value instanceof LessThan) {
-                $this->query .= $this->quote($value->field) . '<? ' . $separator . ' ';
+                $this->query .= $this->quote($value->field) . ' < ? ' . $separator . ' ';
                 $this->arguments[] = $value->value;
             }
             elseif ($value instanceof MoreThan) {
-                $this->query .= $this->quote($value->field) . '>? ' . $separator . ' ';
+                $this->query .= $this->quote($value->field) . ' > ? ' . $separator . ' ';
                 $this->arguments[] = $value->value;
             }
             elseif ($value instanceof Between) {
-                $this->query .= $this->quote($value->field) . 'between ? and ? ' . $separator . ' ';
+                $this->query .= $this->quote($value->field) . 'BETWEEN ? AND ? ' . $separator . ' ';
                 $this->arguments[] = $value->lowerValue;
                 $this->arguments[] = $value->upperValue;
             }
             else {
-                if ($value === null) {
-                    $this->query .= $this->quote($field) . 'IS NULL ' . $separator . ' ';
+                if ($value === null && $separator === 'AND') {
+                    $this->query .= $this->quote($field) . ' IS NULL ' . $separator . ' ';
                 }
                 else {
-                    $this->query .= $this->quote($field) . '=? ' . $separator . ' ';
+                    $this->query .= $this->quote($field) . ' = ? ' . $separator . ' ';
                     $this->arguments[] = $value;
                 }
             }
