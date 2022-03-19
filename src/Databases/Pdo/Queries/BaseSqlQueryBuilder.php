@@ -34,13 +34,14 @@ class BaseSqlQueryBuilder implements QueryBuilder
 
         if ($filters) {
             $this->query .= ' WHERE ';
-            $this->appendParameters($filters);
+            $this->appendConditions($filters);
         }
 
         return new Query($this->query, $this->arguments, $this->database);
     }
 
-    private function appendParameters(array $filters, string $separator = 'AND'): void
+    /** @noinspection PhpSameParameterValueInspection */
+    private function appendConditions(array $filters, string $separator = 'AND'): void
     {
         foreach ($filters as $field => $value) {
             if ($value instanceof LessThan) {
@@ -80,12 +81,22 @@ class BaseSqlQueryBuilder implements QueryBuilder
         $this->arguments = [];
 
         $this->query = 'UPDATE ' . $table->name . ' SET ';
-        $this->appendParameters($updates, ', ');
+        $this->appendFields($updates);
 
         $this->query .= ' WHERE ';
-        $this->appendParameters($conditions);
+        $this->appendConditions($conditions);
 
         return new Query($this->query, $this->arguments, $this->database);
+    }
+
+    private function appendFields(array $fields): void
+    {
+        foreach ($fields as $field => $value) {
+            $this->query .= $this->quote($field) . '=?,';
+            $this->arguments[] = $value;
+        }
+
+        $this->query = substr($this->query, 0, -1);
     }
 
     public function create(Store $table, array $values): Query
@@ -93,7 +104,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
         $this->arguments = [];
 
         $this->query = 'INSERT INTO ' . $table->name . ' SET ';
-        $this->appendParameters($values, ', ');
+        $this->appendFields($values);
 
         return new Query($this->query, $this->arguments, $this->database);
     }
