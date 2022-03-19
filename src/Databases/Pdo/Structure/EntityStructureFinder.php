@@ -58,7 +58,7 @@ class EntityStructureFinder
         }
         elseif ($property->isNullable) {
             if ($property->default !== null) {
-                $definition .= ' DEFAULT ' . $property->default;
+                $definition .= $this->getDefaultDefinition($property);
             }
             else {
                 $definition .= ' DEFAULT NULL';
@@ -67,11 +67,22 @@ class EntityStructureFinder
         else {
             $definition .= ' NOT NULL';
             if ($property->default !== null) {
-                $definition .= ' DEFAULT ' . $property->default;
+                $definition .= $this->getDefaultDefinition($property);
             }
         }
 
         return $definition;
+    }
+
+    private function getDefaultDefinition(MetaData\Property $property): string
+    {
+        $default = $property->default;
+
+        if (is_bool($default)) {
+            $default = (int) $default;
+        }
+
+        return ' DEFAULT ' . $default;
     }
 
     private function findPrimaryKey(MetaData $metaData, Blueprint $blueprint): void
