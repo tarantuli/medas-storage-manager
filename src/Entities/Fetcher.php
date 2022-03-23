@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\EntityManager\Entities\Fetcher as FechterInterface;
+use Medas\EntityManager\Entities\Fetcher as FetcherInterface;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\ServiceManager\Attributes\Service;
@@ -13,7 +13,7 @@ use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\Interfaces\StoreRecord;
 
 #[Service]
-class Fetcher implements FechterInterface
+class Fetcher implements FetcherInterface
 {
     private \SplObjectStorage $records;
 
