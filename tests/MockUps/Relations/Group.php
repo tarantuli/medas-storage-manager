@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\Test\MockUps\Relations;
 
-use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique};
-use Medas\EntityManager\Types\{Integer, Text};
+use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique, Property};
 
 #[Entity(store: 'groups')]
 class Group
 {
-    #[Id, Integer, IsGeneratedValue]
+    #[Id, IsGeneratedValue]
     private int $id;
 
-    #[Text, IsUnique]
+    #[Property, IsUnique]
     private string $name;
 }
