@@ -103,7 +103,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
     {
         $this->arguments = [];
 
-        $this->query = 'INSERT INTO ' . $table->name . ' SET ';
+        $this->query = 'INSERT INTO ' . $this->database->quote($table->name) . ' SET ';
         $this->appendFields($values);
 
         return new Query($this->query, $this->arguments, $this->database);
