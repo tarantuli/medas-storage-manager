@@ -73,7 +73,7 @@ class Table implements Store
 
     public function exists(): bool
     {
-        $this->database->execute(new Query('show tables like "' . $this->name . '"'));
+        $this->database->execute(new Query('SHOW TABLES LIKE "' . $this->name . '"'));
         return (bool) $this->database->lastStatement()->fetchAll();
     }
 }
