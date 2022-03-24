@@ -13,6 +13,8 @@ use Medas\StorageManager\Interfaces\Store;
 #[Service]
 class MigrationStoreManager
 {
+    private Store $store;
+
     public function __construct(
         private ConfigManager $configManager,
     )
@@ -21,14 +23,15 @@ class MigrationStoreManager
 
     public function get(): Store
     {
-        /** @var Store $store */
-        $store = $this->configManager->getOptionValue(MigrationsStore::instance());
+        if (!isset($this->store)) {
+            $this->store = $this->configManager->getOptionValue(MigrationsStore::instance());
 
-        if (!$store->exists()) {
-            $this->build($store);
+            if (!$this->store->exists()) {
+                $this->build($this->store);
+            }
         }
 
-        return $store;
+        return $this->store;
     }
 
     private function build(Store $store): void
