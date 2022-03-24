@@ -31,7 +31,7 @@ class Fetcher implements FetcherInterface
         $record = $this->getRecord($metaData, $entity);
 
         try {
-            return $record?->get($property->name);
+            return $record ? $record[$property->name] : null;
         }
         catch (\Exception) {
             throw new StoreDoesNotHavePropertyException($this->getStore($metaData), $property->name);

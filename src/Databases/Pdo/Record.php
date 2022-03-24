@@ -12,15 +12,6 @@ class Record implements StoreRecord
     {
     }
 
-    public function get(string $name)
-    {
-        if (!array_key_exists($name, $this->data)) {
-            throw new \Exception('database record does not have a field named ' . $name);
-        }
-
-        return $this->data[$name];
-    }
-
     public function data(): array
     {
         return $this->data;

@@ -12,7 +12,7 @@ class TableTest extends BaseTest
     {
         $table = storage()->store('stored_entities');
 
-        self::assertEquals(1, $table->fetchRecord(['id' => 1])->get('id'));
+        self::assertEquals(1, $table->fetchRecord(['id' => 1])['id']);
     }
 
     public function testFetchAll(): void
