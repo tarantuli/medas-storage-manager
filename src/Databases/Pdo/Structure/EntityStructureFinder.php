@@ -14,8 +14,8 @@ use Medas\StorageManager\Databases\Pdo\Structure\Blueprint\Index;
 class EntityStructureFinder
 {
     public function __construct(
-        private MetaDataManager    $metaDataManager,
-        private TypeHandlerFactory $typeHandlerFactory,
+        private MetaDataManager   $metaDataManager,
+        private TypeHandlerFinder $typeHandlerFinder,
     )
     {
     }
@@ -50,7 +50,7 @@ class EntityStructureFinder
 
     private function determineDefinition(MetaData\Property $property): string
     {
-        $handler = $this->typeHandlerFactory->for($property->type);
+        $handler = $this->typeHandlerFinder->for($property->type);
         $definition = $handler->fieldDefinition($property);
 
         if ($property->isGeneratedValue) {
@@ -115,7 +115,7 @@ class EntityStructureFinder
     private function findForeignKeys(MetaData $metaData, Blueprint $blueprint): void
     {
         foreach ($metaData->properties as $property) {
-            $handler = $this->typeHandlerFactory->for($property->type);
+            $handler = $this->typeHandlerFinder->for($property->type);
             if ($foreignKey = $handler->foreignKey($property)) {
                 $blueprint->addForeignKey($foreignKey);
             }

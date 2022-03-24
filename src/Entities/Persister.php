@@ -19,6 +19,7 @@ use Medas\StorageManager\UnitOfWork\UnitOfWorkManager;
 class Persister
 {
     public function __construct(
+        private Fetcher           $fetcher,
         private MetaDataManager   $metaDataManager,
         private SnapshotManager   $snapshotManager,
         private UnitOfWorkManager $unitOfWorkManager,
@@ -48,12 +49,13 @@ class Persister
     private function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
+        $serializerFinder = storage($metaData->entity->storage)->getTypeSerializerFinder();
         $serializedValues = [];
 
         foreach ($metaData->properties as $property) {
             if ($property->reflection->isInitialized($entity)) {
                 $value = $property->reflection->getValue($entity);
-                $serializedValues[$property->name] = $property->type->serialize($value);
+                $serializedValues[$property->name] = $serializerFinder->for($property->type)->serialize($value);
             }
         }
 
@@ -87,18 +89,21 @@ class Persister
     private function prepareUpdate(object $entity, array $changedValues, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
+        $serializerFinder = storage($metaData->entity->storage)->getTypeSerializerFinder();
         $serializedValues = [];
-
         foreach ($changedValues as $name => $value) {
-            $property = $metaData->property($name);
-            $serializedValues[$name] = $property->type->serialize($value);
+            $serializedValues[$name] = $serializerFinder->for($metaData->property($name)->type)->serialize($value);
         }
+
+        $idValues = $this->valueGetter->get($entity, $metaData->idProperties);
 
         $this->unitOfWorkManager->queueUpdate(
             $unitOfWork,
             $this->getStore($metaData),
             $serializedValues,
-            $this->valueGetter->get($entity, $metaData->idProperties)
+            $idValues
         );
+
+        $this->fetcher->updateRecord($metaData, $serializedValues, $idValues);
     }
 }

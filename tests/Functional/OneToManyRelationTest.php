@@ -51,9 +51,10 @@ class OneToManyRelationTest extends BaseTest
         $this->rebuildTables();
 
         $group = em()->create(Group::class, ['name' => 'test group']);
-        $person = em()->create(Person::class, ['name' => 'test person', 'group' => $group]);
-
         em()->persist($group);
+        em()->flush();
+
+        $person = em()->create(Person::class, ['name' => 'test person', 'group' => $group]);
         em()->persist($person);
         em()->flush();
 

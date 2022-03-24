@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces;
 
+use Medas\StorageManager\Entities\TypeSerializerFinder;
 use Medas\StorageManager\Migrations\MigrationBuilder;
 
 interface Storage
@@ -25,4 +26,6 @@ interface Storage
     public function setName(string $name): void;
 
     public function deleteStore(string $name);
+
+    public function getTypeSerializerFinder(): TypeSerializerFinder;
 }

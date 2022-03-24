@@ -16,9 +16,10 @@ use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\{BinaryHandler,
     TextHandler,
     TypeHandler
 };
+use Medas\StorageManager\Entities\TypeSerializerFinder;
 
 #[Service]
-class TypeHandlerFactory
+class TypeHandlerFinder implements TypeSerializerFinder
 {
     public function __construct(
         private BinaryHandler   $binaryHandler,

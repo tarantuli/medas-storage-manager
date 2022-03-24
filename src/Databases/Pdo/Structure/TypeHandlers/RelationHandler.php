@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers;
 
+use Medas\EntityManager\Attributes\HasId;
+use Medas\EntityManager\Exceptions\ValueDoesNotImplementHasIdException;
 use Medas\EntityManager\MetaData\Property;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\Relation;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Databases\Pdo\Structure\Blueprint\ForeignKey;
-use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlerFactory;
+use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlerFinder;
 
 #[Service]
 class RelationHandler extends BaseHandler
@@ -23,10 +25,10 @@ class RelationHandler extends BaseHandler
     public function fieldDefinition(Property $property): string
     {
         // We can't inject it in the constructor due to circular dependencies
-        $typeHandlerFactory = service(TypeHandlerFactory::class);
+        $typeHandlerFinder = service(TypeHandlerFinder::class);
         $idProperty = $this->getIdProperty($property);
 
-        return $typeHandlerFactory->for($idProperty->type)->fieldDefinition($idProperty);
+        return $typeHandlerFinder->for($idProperty->type)->fieldDefinition($idProperty);
     }
 
     private function getIdProperty(Property $property): ?Property
@@ -47,5 +49,18 @@ class RelationHandler extends BaseHandler
         $idProperty = $this->getIdProperty($property);
 
         return new ForeignKey($property->name, $metaData->entity->store, $idProperty->name);
+    }
+
+    public function serialize(mixed $value): mixed
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (!$value instanceof HasId) {
+            throw new ValueDoesNotImplementHasIdException($value);
+        }
+
+        return $value->id();
     }
 }

@@ -15,6 +15,8 @@ use Medas\StorageManager\Databases\Pdo\Queries\MysqlQueryBuilder;
 use Medas\StorageManager\Databases\Pdo\Queries\Query;
 use Medas\StorageManager\Databases\Pdo\Queries\QueryBuilder;
 use Medas\StorageManager\Databases\Pdo\Structure\TableMigrationBuilder;
+use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlerFinder;
+use Medas\StorageManager\Entities\TypeSerializerFinder;
 use Medas\StorageManager\Interfaces\Storage;
 use Medas\StorageManager\Migrations\MigrationBuilder;
 
@@ -27,6 +29,7 @@ class Database implements Storage
     private \PDO $pdo;
     private \PDOStatement $lastStatement;
     private TableMigrationBuilder $migrationBuilder;
+    private TypeHandlerFinder $typeHandlerFinder;
 
     public function __construct(
         #[ConfigValue(PdoDns::class)] private string $dns,
@@ -61,6 +64,8 @@ class Database implements Storage
 
         $this->migrationBuilder = sm()->instantiate(TableMigrationBuilder::class);
         $this->migrationBuilder->setDatabase($this);
+
+        $this->typeHandlerFinder = sm()->resolve(TypeSerializerFinder::class);
     }
 
     public function stores(): array
@@ -166,5 +171,10 @@ class Database implements Storage
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getTypeSerializerFinder(): TypeSerializerFinder
+    {
+        return $this->typeHandlerFinder;
     }
 }

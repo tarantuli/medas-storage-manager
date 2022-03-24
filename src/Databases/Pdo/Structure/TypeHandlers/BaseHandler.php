@@ -13,4 +13,14 @@ abstract class BaseHandler implements TypeHandler
     {
         return null;
     }
+
+    public function deserialize(mixed $value): mixed
+    {
+        return $value;
+    }
+
+    public function serialize(mixed $value): mixed
+    {
+        return $value;
+    }
 }

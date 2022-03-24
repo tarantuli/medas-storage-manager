@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\EntityManager\Entities\Fetcher as FetcherInterface;
+use Medas\EntityManager\Entities\KeyMaker;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\ServiceManager\Attributes\Service;
@@ -15,13 +16,14 @@ use Medas\StorageManager\Interfaces\StoreRecord;
 #[Service]
 class Fetcher implements FetcherInterface
 {
-    private \SplObjectStorage $records;
+    /** @var StoreRecord[] */
+    private array $records = [];
 
     public function __construct(
-        private ValueGetter $valueGetter,
+        private KeyMaker    $keyMaker,
+        private ValueGetter $entityValueGetter,
     )
     {
-        $this->records = new \SplObjectStorage();
     }
 
     public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): mixed
@@ -38,11 +40,52 @@ class Fetcher implements FetcherInterface
 
     private function getRecord(MetaData $metaData, object $entity): ?StoreRecord
     {
-        if (!isset($this->records[$entity])) {
-            $this->records[$entity] = $this->getStore($metaData)->fetchRecord($this->valueGetter->get($entity, $metaData->idProperties));
+        $idValues = $this->entityValueGetter->get($entity, $metaData->idProperties);
+        $key = $this->keyMaker->get($entity::class, $idValues);
+
+        if (!isset($this->records[$key])) {
+            $this->addToCache($metaData, $this->getStore($metaData)->fetchRecord($idValues), $key);
         }
 
-        return $this->records[$entity];
+        return $this->records[$key];
+    }
+
+    private function addToCache(MetaData $metaData, StoreRecord|null $record, string|null $key = null): StoreRecord|null
+    {
+        if ($record === null) {
+            if ($key !== null) {
+                $this->records[$key] = null;
+            }
+
+            return null;
+        }
+
+        if ($key === null) {
+            $key = $this->getKeyFromRecord($metaData, $record->data());
+        }
+
+        $this->deserialize($metaData, $record);
+        $this->records[$key] = $record;
+
+        return $record;
+    }
+
+    private function getKeyFromRecord(MetaData $metaData, array $data): string
+    {
+        $idValues = [];
+        foreach ($metaData->idProperties as $idProperty) {
+            $idValues[$idProperty->name] = $data[$idProperty->name];
+        }
+        return $this->keyMaker->get($metaData->className, $idValues);
+    }
+
+    private function deserialize(MetaData $metaData, StoreRecord &$record): void
+    {
+        $serializerFinder = storage($metaData->entity->storage)->getTypeSerializerFinder();
+        foreach ($record as $key => &$value) {
+            $serializer = $serializerFinder->for($metaData->property($key)->type);
+            $value = $serializer->deserialize($value);
+        }
     }
 
     private function getStore(MetaData $metaData): Store
@@ -52,11 +95,27 @@ class Fetcher implements FetcherInterface
 
     public function fetchRecord(MetaData $metaData, array $conditions): array|null
     {
-        return $this->getStore($metaData)->fetchRecord($conditions)?->data();
+        $record = $this->getStore($metaData)->fetchRecord($conditions);
+        return $record ? $this->addToCache($metaData, $record)->data() : null;
     }
 
     public function fetchAll(MetaData $metaData, array $conditions): array
     {
-        return $this->getStore($metaData)->fetchAll($conditions);
+        $records = $this->getStore($metaData)->fetchAll($conditions);
+
+        foreach ($records as &$record) {
+            $record = $this->addToCache($metaData, $record);
+        }
+
+        return $records;
+    }
+
+    public function updateRecord(MetaData $metaData, array $values, array $idValues)
+    {
+        $key = $this->getKeyFromRecord($metaData, $idValues);
+
+        if (isset($this->records[$key])) {
+            $this->records[$key]->patch($values);
+        }
     }
 }

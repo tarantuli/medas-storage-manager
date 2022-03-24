@@ -25,4 +25,9 @@ class Record implements StoreRecord
     {
         return $this->data;
     }
+
+    public function patch(array $values): void
+    {
+        $this->data = array_merge($this->data, $values);
+    }
 }

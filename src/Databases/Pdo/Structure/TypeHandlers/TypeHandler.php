@@ -6,8 +6,9 @@ namespace Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers;
 
 use Medas\EntityManager\MetaData\Property;
 use Medas\StorageManager\Databases\Pdo\Structure\Blueprint\ForeignKey;
+use Medas\StorageManager\Entities\TypeSerializer;
 
-interface TypeHandler
+interface TypeHandler extends TypeSerializer
 {
     public function fieldDefinition(Property $property): string;
 
