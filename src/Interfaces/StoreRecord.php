@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces;
 
-interface StoreRecord
+interface StoreRecord extends \ArrayAccess
 {
     public function data(): array;
 
