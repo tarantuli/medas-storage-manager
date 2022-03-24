@@ -45,7 +45,14 @@ class Table implements Store
     {
         $this->database->execute($this->prepareGet($filters));
 
-        return $this->database->lastStatement()->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $this->database->lastStatement()->fetchAll(\PDO::FETCH_ASSOC);
+        $records = [];
+
+        foreach ($data as $set) {
+            $records[] = new Record($set);
+        }
+
+        return $records;
     }
 
     public function prepareCreate(array $values): Action
