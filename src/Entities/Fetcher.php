@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\EntityManager\Entities\Fetcher as FetcherInterface;
+use Medas\EntityManager\Entities\FetchResult;
 use Medas\EntityManager\Entities\KeyMaker;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
@@ -26,12 +27,16 @@ class Fetcher implements FetcherInterface
     {
     }
 
-    public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): mixed
+    public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult
     {
         $record = $this->getRecord($metaData, $entity);
 
+        if ($record === null) {
+            return new FetchResult(false);
+        }
+
         try {
-            return $record ? $record[$property->name] : null;
+            return new FetchResult(true, $record[$property->name]);
         }
         catch (\Exception) {
             throw new StoreDoesNotHavePropertyException($this->getStore($metaData), $property->name);
@@ -117,5 +122,12 @@ class Fetcher implements FetcherInterface
         if (isset($this->records[$key])) {
             $this->records[$key]->patch($values);
         }
+    }
+
+    public function removeRecord(MetaData $metaData, array $idValues)
+    {
+        $key = $this->getKeyFromRecord($metaData, $idValues);
+
+        unset($this->records[$key]);
     }
 }

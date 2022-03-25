@@ -53,4 +53,35 @@ class EntityPersisterTest extends BaseTest
 
         self::assertEquals($newName, $entity->name);
     }
+
+    public function testDelete(): void
+    {
+        // Create and persist a new entity
+        $storedEntity = em()->create(StoredEntity::class, ['name' => (string) mt_rand()]);
+
+        em()->persist($storedEntity);
+        em()->flush();
+        $id = $storedEntity->id();
+        var_dump($id);
+
+        // Clear the cache and fetch it from storage, to ensure it was stored
+        em()->clear();
+
+        $fetchedEntity = em()->get(StoredEntity::class, $id);
+        self::assertInstanceOf(StoredEntity::class, $fetchedEntity);
+
+        // Delete the entity and flush
+        em()->delete($fetchedEntity);
+        em()->flush();
+
+        // Ensure it does not exist in the cache anymore
+        $fetchedEntity = em()->get(StoredEntity::class, $id);
+        self::assertFalse(isset($fetchedEntity->name));
+
+        // Clerar the cache and fetch it again, to ensure it does not exist in storage anymore
+        em()->clear();
+        $repo = em()->repository(StoredEntity::class);
+        $fetchedEntity = $repo->findOne(['id' => $id]);
+        self::assertNull($fetchedEntity);
+    }
 }

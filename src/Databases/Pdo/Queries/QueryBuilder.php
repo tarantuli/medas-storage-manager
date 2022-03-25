@@ -12,10 +12,12 @@ interface QueryBuilder
 {
     public function create(Table $table, array $values): Query;
 
-    public function update(Table $table, array $updates, array $conditions): Query;
-
     /** @param Table[] $tables */
     public function select(array $tables, array $filters): Query;
+
+    public function update(Table $table, array $updates, array $conditions): Query;
+
+    public function delete(Table $table, array $conditions): Query;
 
     public function showCreate(Table $table): Query;
 

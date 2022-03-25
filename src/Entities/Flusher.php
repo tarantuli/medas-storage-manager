@@ -19,7 +19,7 @@ class Flusher implements FlusherInterface
     {
     }
 
-    public function flush(array $entities, \SplObjectStorage $savedStates): void
+    public function flush(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): void
     {
         $unitOfWork = new UnitOfWork();
 
@@ -29,6 +29,10 @@ class Flusher implements FlusherInterface
                 $savedStates[$entity] ?? null,
                 $unitOfWork
             );
+        }
+
+        foreach ($entitiesToDelete as $entity) {
+            $this->entityPersister->prepareDelete($entity, $unitOfWork);
         }
 
         $this->unitOfWorkExecutor->execute($unitOfWork);

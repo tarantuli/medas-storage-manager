@@ -9,7 +9,6 @@ use Medas\StorageManager\Databases\Pdo\Database;
 use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
 use Medas\StorageManager\Databases\Pdo\Structure\Changes;
 use Medas\StorageManager\Databases\Pdo\Table;
-use Medas\StorageManager\Interfaces\Store;
 
 class BaseSqlQueryBuilder implements QueryBuilder
 {
@@ -76,7 +75,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
         return '"' . $identifier . '"';
     }
 
-    public function update(Store $table, array $updates, array $conditions): Query
+    public function update(Table $table, array $updates, array $conditions): Query
     {
         $this->arguments = [];
 
@@ -92,14 +91,24 @@ class BaseSqlQueryBuilder implements QueryBuilder
     private function appendFields(array $fields): void
     {
         foreach ($fields as $field => $value) {
-            $this->query .= $this->quote($field) . '=?,';
+            $this->query .= $this->quote($field) . ' = ?, ';
             $this->arguments[] = $value;
         }
 
-        $this->query = substr($this->query, 0, -1);
+        $this->query = substr($this->query, 0, -2);
     }
 
-    public function create(Store $table, array $values): Query
+    public function delete(Table $table, array $conditions): Query
+    {
+        $this->arguments = [];
+
+        $this->query = 'DELETE FROM ' . $table->name . ' WHERE ';
+        $this->appendConditions($conditions);
+
+        return new Query($this->query, $this->arguments, $this->database);
+    }
+
+    public function create(Table $table, array $values): Query
     {
         $this->arguments = [];
 

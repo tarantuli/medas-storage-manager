@@ -65,6 +65,11 @@ class Table implements Store
         return $this->database->queryBuilder()->update($this, $updates, $conditions);
     }
 
+    public function prepareDelete(array $conditions): Action
+    {
+        return $this->database->queryBuilder()->delete($this, $conditions);
+    }
+
     public function getCreateTable(): string|null
     {
 

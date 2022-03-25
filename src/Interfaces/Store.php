@@ -18,9 +18,11 @@ interface Store
 
     public function prepareCreate(array $values): Action;
 
+    public function prepareGet(array $filters): Action;
+
     public function prepareUpdate(array $updates, array $conditions): Action;
 
-    public function prepareGet(array $filters): Action;
+    public function prepareDelete(array $conditions);
 
     public function exists(): bool;
 }

@@ -89,6 +89,7 @@ class Persister
     private function prepareUpdate(object $entity, array $changedValues, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
+
         $serializerFinder = storage($metaData->entity->storage)->getTypeSerializerFinder();
         $serializedValues = [];
         foreach ($changedValues as $name => $value) {
@@ -105,5 +106,20 @@ class Persister
         );
 
         $this->fetcher->updateRecord($metaData, $serializedValues, $idValues);
+    }
+
+    public function prepareDelete(object $entity, UnitOfWork $unitOfWork): void
+    {
+        $metaData = $this->metaDataManager->get($entity::class);
+
+        $idValues = $this->valueGetter->get($entity, $metaData->idProperties);
+
+        $this->unitOfWorkManager->queueDelete(
+            $unitOfWork,
+            $this->getStore($metaData),
+            $idValues
+        );
+
+        $this->fetcher->removeRecord($metaData, $idValues);
     }
 }
