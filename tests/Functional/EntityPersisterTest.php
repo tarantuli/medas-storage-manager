@@ -6,6 +6,8 @@ namespace Medas\Test\Functional;
 
 use Medas\Test\BaseTest;
 use Medas\Test\MockUps\Migrations\StoredEntity;
+use Medas\Test\MockUps\Selectors\StoredEntityWithId;
+use Medas\Test\MockUps\Selectors\StoredEntityWithName;
 
 class EntityPersisterTest extends BaseTest
 {
@@ -21,7 +23,10 @@ class EntityPersisterTest extends BaseTest
         // Clear the cache, fetch the entity again
         em()->clear();
 
-        $entity = em()->repository(StoredEntity::class)->findOne(['name' => $newName]);
+        $entity = em()->repository(StoredEntity::class)->findOne(
+            StoredEntityWithName::instance(),
+            ['name' => $newName]
+        );
 
         self::assertIsInt($entity->id());
         self::assertEquals($newName, $entity->name);
@@ -81,7 +86,7 @@ class EntityPersisterTest extends BaseTest
         // Clerar the cache and fetch it again, to ensure it does not exist in storage anymore
         em()->clear();
         $repo = em()->repository(StoredEntity::class);
-        $fetchedEntity = $repo->findOne(['id' => $id]);
+        $fetchedEntity = $repo->findOne(StoredEntityWithId::instance(), ['id' => $id]);
         self::assertNull($fetchedEntity);
     }
 }

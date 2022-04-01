@@ -206,12 +206,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "bceab8edaefcc81631a1d3d6386b863c066faf74"
+                "reference": "9654a2358561af5b45c09d42b9be64364f326add"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/bceab8edaefcc81631a1d3d6386b863c066faf74",
-                "reference": "bceab8edaefcc81631a1d3d6386b863c066faf74",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/9654a2358561af5b45c09d42b9be64364f326add",
+                "reference": "9654a2358561af5b45c09d42b9be64364f326add",
                 "shasum": ""
             },
             "require": {
@@ -244,7 +244,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2022-02-25T14:59:22+00:00"
+            "time": "2022-03-28T07:12:47+00:00"
         },
         {
             "name": "morphp/medas-entity-manager",
@@ -252,12 +252,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "ccb2042a09ae2ab11f820217d9aeddda1bd54792"
+                "reference": "d6cdb40db316c8e7632531d4ad043d7801a9eb89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/ccb2042a09ae2ab11f820217d9aeddda1bd54792",
-                "reference": "ccb2042a09ae2ab11f820217d9aeddda1bd54792",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/d6cdb40db316c8e7632531d4ad043d7801a9eb89",
+                "reference": "d6cdb40db316c8e7632531d4ad043d7801a9eb89",
                 "shasum": ""
             },
             "require": {
@@ -287,7 +287,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2022-03-25T09:55:01+00:00"
+            "time": "2022-04-01T13:08:54+00:00"
         },
         {
             "name": "morphp/medas-file-builder",
@@ -421,12 +421,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "6dda54db06224397f5c5eb2dd58bc16b8bb76686"
+                "reference": "6c37077e030139dcda0e8c519445d697651de4c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/6dda54db06224397f5c5eb2dd58bc16b8bb76686",
-                "reference": "6dda54db06224397f5c5eb2dd58bc16b8bb76686",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/6c37077e030139dcda0e8c519445d697651de4c5",
+                "reference": "6c37077e030139dcda0e8c519445d697651de4c5",
                 "shasum": ""
             },
             "require": {
@@ -461,7 +461,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2022-03-16T11:13:51+00:00"
+            "time": "2022-03-28T10:36:46+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -1665,16 +1665,16 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "93ebd0014cab80c4ea9f5e297ea48672f1b87706"
+                "reference": "77a32518733312af16a44300404e945338981de3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/93ebd0014cab80c4ea9f5e297ea48672f1b87706",
-                "reference": "93ebd0014cab80c4ea9f5e297ea48672f1b87706",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/77a32518733312af16a44300404e945338981de3",
+                "reference": "77a32518733312af16a44300404e945338981de3",
                 "shasum": ""
             },
             "require": {
@@ -1709,9 +1709,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.6.0"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.6.1"
             },
-            "time": "2022-01-04T19:58:01+00:00"
+            "time": "2022-03-15T21:29:03+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -2100,16 +2100,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.19",
+            "version": "9.5.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "35ea4b7f3acabb26f4bb640f8c30866c401da807"
+                "reference": "12bc8879fb65aef2138b26fc633cb1e3620cffba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/35ea4b7f3acabb26f4bb640f8c30866c401da807",
-                "reference": "35ea4b7f3acabb26f4bb640f8c30866c401da807",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/12bc8879fb65aef2138b26fc633cb1e3620cffba",
+                "reference": "12bc8879fb65aef2138b26fc633cb1e3620cffba",
                 "shasum": ""
             },
             "require": {
@@ -2187,7 +2187,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.19"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.20"
             },
             "funding": [
                 {
@@ -2199,7 +2199,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-15T09:57:31+00:00"
+            "time": "2022-04-01T12:37:26+00:00"
         },
         {
             "name": "sebastian/cli-parser",

@@ -9,7 +9,10 @@ use Medas\EntityManager\Entities\FetchResult;
 use Medas\EntityManager\Entities\KeyMaker;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
+use Medas\EntityManager\MetaDataManager;
+use Medas\EntityManager\Selector\Selector;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\StorageManager\Databases\Pdo\Queries\SelectQueryBuilder;
 use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHavePropertyException;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\Interfaces\StoreRecord;
@@ -21,8 +24,10 @@ class Fetcher implements FetcherInterface
     private array $records = [];
 
     public function __construct(
-        private KeyMaker    $keyMaker,
-        private ValueGetter $entityValueGetter,
+        private KeyMaker           $keyMaker,
+        private MetaDataManager    $metaDataManager,
+        private ValueGetter        $entityValueGetter,
+        private SelectQueryBuilder $selectQueryBuilder,
     )
     {
     }
@@ -98,15 +103,21 @@ class Fetcher implements FetcherInterface
         return storage($metaData->entity->storage)->store($metaData->entity->store);
     }
 
-    public function fetchRecord(MetaData $metaData, array $conditions): array|null
+    public function fetchRecord(Selector $selector, array $arguments = []): array|null
     {
-        $record = $this->getStore($metaData)->fetchRecord($conditions);
-        return $record ? $this->addToCache($metaData, $record)->data() : null;
+        $query = $this->selectQueryBuilder->build($selector, $arguments);
+        $query->execute();
+        $record = $query->storage()->fetchRecord();
+
+        return $record ? $this->addToCache($this->metaDataManager->get($selector->get()->entity), $record)->data() : null;
     }
 
-    public function fetchAll(MetaData $metaData, array $conditions): array
+    public function fetchAll(Selector $selector, array $arguments = []): array
     {
-        $records = $this->getStore($metaData)->fetchAll($conditions);
+        $query = $this->selectQueryBuilder->build($selector, $arguments);
+        $query->execute();
+        $records = $query->storage()->fetchRecords();
+        $metaData = $this->metaDataManager->get($selector->get()->entity);
 
         foreach ($records as &$record) {
             $record = $this->addToCache($metaData, $record);

@@ -28,4 +28,9 @@ interface Storage
     public function deleteStore(string $name);
 
     public function getTypeSerializerFinder(): TypeSerializerFinder;
+
+    public function fetchRecord(): StoreRecord|null;
+
+    /** @return StoreRecord[] */
+    public function fetchRecords(): array;
 }

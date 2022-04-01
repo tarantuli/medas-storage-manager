@@ -18,6 +18,7 @@ use Medas\StorageManager\Databases\Pdo\Structure\TableMigrationBuilder;
 use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlerFinder;
 use Medas\StorageManager\Entities\TypeSerializerFinder;
 use Medas\StorageManager\Interfaces\Storage;
+use Medas\StorageManager\Interfaces\StoreRecord;
 use Medas\StorageManager\Migrations\MigrationBuilder;
 
 class Database implements Storage
@@ -66,6 +67,11 @@ class Database implements Storage
         $this->migrationBuilder->setDatabase($this);
 
         $this->typeHandlerFinder = sm()->resolve(TypeSerializerFinder::class);
+    }
+
+    public function queryBuilder(): QueryBuilder
+    {
+        return $this->queryBuilder;
     }
 
     public function stores(): array
@@ -117,11 +123,6 @@ class Database implements Storage
         }
     }
 
-    public function queryBuilder(): QueryBuilder
-    {
-        return $this->queryBuilder;
-    }
-
     public function beginTransaction(): void
     {
         $this->pdo->beginTransaction();
@@ -148,19 +149,14 @@ class Database implements Storage
         return $id === false ? null : (int) $id;
     }
 
-    public function lastStatement(): \PDOStatement
+    public function migrationBuilder(): MigrationBuilder
     {
-        return $this->lastStatement;
+        return $this->migrationBuilder;
     }
 
     public function quote(string $identifier): string
     {
         return $this->queryBuilder->quote($identifier);
-    }
-
-    public function migrationBuilder(): MigrationBuilder
-    {
-        return $this->migrationBuilder;
     }
 
     public function name(): string
@@ -176,5 +172,28 @@ class Database implements Storage
     public function getTypeSerializerFinder(): TypeSerializerFinder
     {
         return $this->typeHandlerFinder;
+    }
+
+    public function fetchRecord(): StoreRecord|null
+    {
+        $data = $this->lastStatement->fetch();
+        return is_array($data) ? new Record($data) : null;
+    }
+
+    public function fetchRecords(): array
+    {
+        $data = $this->lastStatement()->fetchAll(\PDO::FETCH_ASSOC);
+        $records = [];
+
+        foreach ($data as $set) {
+            $records[] = new Record($set);
+        }
+
+        return $records;
+    }
+
+    public function lastStatement(): \PDOStatement
+    {
+        return $this->lastStatement;
     }
 }
