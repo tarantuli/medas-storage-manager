@@ -15,6 +15,7 @@ use Medas\EntityManager\Selector\{Conditions\Condition,
     Conditions\WhereIsNull,
     Exceptions\UndeclaredParametersException,
     Exceptions\UnhandledConditionTypeException,
+    Exceptions\UnhandledOperantTypeException,
     Exceptions\UnhandledRelationTypeException,
     Exceptions\UnhandledSortTypeException,
     Operants\Argument,
@@ -30,9 +31,10 @@ use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Cache\CacheManager;
 use Medas\ServiceManager\Interfaces\NotCacheable;
 use Medas\StorageManager\Databases\Pdo\Database;
+use Medas\StorageManager\Entities\SelectorActionBuilder;
 
 #[Service]
-class SelectQueryBuilder
+class SelectQueryBuilder implements SelectorActionBuilder
 {
     private string $query;
     private array $stores;
@@ -117,7 +119,9 @@ class SelectQueryBuilder
 
     private function processComparison(WhereIs $condition, string $operator): void
     {
-        $this->query .= $this->operantToQuery($condition->property) . $operator . $this->operantToQuery($condition->value);
+        $this->query .= $this->operantToQuery($condition->property)
+            . $operator
+            . $this->operantToQuery($condition->value);
     }
 
     private function operantToQuery(Operant $operant): string
@@ -138,12 +142,14 @@ class SelectQueryBuilder
             $this->foundConstants[$name] = $operant->value;
             return ':' . $name;
         }
-        throw new \Exception('unhandled operant type ' . $operant::class);
+
+        throw new UnhandledOperantTypeException($operant);
     }
 
     private function processNullComparison(WhereIsNull $condition, bool $isNull): void
     {
-        $this->query .= $this->operantToQuery($condition->property) . ($isNull ? ' IS NULL' : ' IS NOT NULL');
+        $this->query .= $this->operantToQuery($condition->property)
+            . ($isNull ? ' IS NULL' : ' IS NOT NULL');
     }
 
     /** @param SortBy[] $sorts */
@@ -182,10 +188,10 @@ class SelectQueryBuilder
             else {
                 throw new \Exception('no value given for parameter ' . $parameter->name);
             }
+
             $query->arguments[$parameter->name] = $value;
         }
 
         return $query;
     }
 }
-

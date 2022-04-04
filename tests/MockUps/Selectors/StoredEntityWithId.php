@@ -20,8 +20,13 @@ class StoredEntityWithId implements Selector
 
     public function get(): Definition
     {
-        return Definition::create(StoredEntity::class)
+        return Definition::create($this->entity())
             ->add(new Parameter('id'))
             ->add(new WhereIs(new Property('id'), new Argument('id')));
+    }
+
+    public function entity(): string
+    {
+        return StoredEntity::class;
     }
 }

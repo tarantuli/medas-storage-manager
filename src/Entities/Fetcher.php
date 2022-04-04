@@ -12,7 +12,6 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\Databases\Pdo\Queries\SelectQueryBuilder;
 use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHavePropertyException;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\Interfaces\StoreRecord;
@@ -24,10 +23,9 @@ class Fetcher implements FetcherInterface
     private array $records = [];
 
     public function __construct(
-        private KeyMaker           $keyMaker,
-        private MetaDataManager    $metaDataManager,
-        private ValueGetter        $entityValueGetter,
-        private SelectQueryBuilder $selectQueryBuilder,
+        private KeyMaker        $keyMaker,
+        private MetaDataManager $metaDataManager,
+        private ValueGetter     $entityValueGetter,
     )
     {
     }
@@ -40,12 +38,11 @@ class Fetcher implements FetcherInterface
             return new FetchResult(false);
         }
 
-        try {
+        if (isset($record[$property->name])) {
             return new FetchResult(true, $record[$property->name]);
         }
-        catch (\Exception) {
-            throw new StoreDoesNotHavePropertyException($this->getStore($metaData), $property->name);
-        }
+
+        throw new StoreDoesNotHavePropertyException($this->getStore($metaData), $property->name);
     }
 
     private function getRecord(MetaData $metaData, object $entity): ?StoreRecord
@@ -83,15 +80,18 @@ class Fetcher implements FetcherInterface
     private function getKeyFromRecord(MetaData $metaData, array $data): string
     {
         $idValues = [];
+
         foreach ($metaData->idProperties as $idProperty) {
             $idValues[$idProperty->name] = $data[$idProperty->name];
         }
+
         return $this->keyMaker->get($metaData->className, $idValues);
     }
 
     private function deserialize(MetaData $metaData, StoreRecord &$record): void
     {
-        $serializerFinder = storage($metaData->entity->storage)->getTypeSerializerFinder();
+        $serializerFinder = storage($metaData->entity->storage)->typeSerializerFinder();
+
         foreach ($record as $key => &$value) {
             $serializer = $serializerFinder->for($metaData->property($key)->type);
             $value = $serializer->deserialize($value);
@@ -105,19 +105,24 @@ class Fetcher implements FetcherInterface
 
     public function fetchRecord(Selector $selector, array $arguments = []): array|null
     {
-        $query = $this->selectQueryBuilder->build($selector, $arguments);
+        $metaData = $this->metaDataManager->get($selector->entity());
+        $query = storage($metaData->entity->storage)->selectorActionBuilder()
+            ->build($selector, $arguments);
+
         $query->execute();
         $record = $query->storage()->fetchRecord();
 
-        return $record ? $this->addToCache($this->metaDataManager->get($selector->get()->entity), $record)->data() : null;
+        return $record ? $this->addToCache($metaData, $record)->data() : null;
     }
 
     public function fetch(Selector $selector = null, array $arguments = []): array
     {
-        $query = $this->selectQueryBuilder->build($selector, $arguments);
+        $metaData = $this->metaDataManager->get($selector->entity());
+        $query = storage($metaData->entity->storage)->selectorActionBuilder()
+            ->build($selector, $arguments);
+
         $query->execute();
         $records = $query->storage()->fetchRecords();
-        $metaData = $this->metaDataManager->get($selector->get()->entity);
 
         foreach ($records as &$record) {
             $record = $this->addToCache($metaData, $record);

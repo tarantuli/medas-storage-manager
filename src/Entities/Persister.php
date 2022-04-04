@@ -49,7 +49,7 @@ class Persister
     private function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
-        $serializerFinder = storage($metaData->entity->storage)->getTypeSerializerFinder();
+        $serializerFinder = storage($metaData->entity->storage)->typeSerializerFinder();
         $serializedValues = [];
 
         foreach ($metaData->properties as $property) {
@@ -90,7 +90,7 @@ class Persister
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
-        $serializerFinder = storage($metaData->entity->storage)->getTypeSerializerFinder();
+        $serializerFinder = storage($metaData->entity->storage)->typeSerializerFinder();
         $serializedValues = [];
         foreach ($changedValues as $name => $value) {
             $serializedValues[$name] = $serializerFinder->for($metaData->property($name)->type)->serialize($value);

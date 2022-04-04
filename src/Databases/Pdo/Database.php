@@ -14,8 +14,10 @@ use Medas\StorageManager\Databases\Pdo\Queries\BaseSqlQueryBuilder;
 use Medas\StorageManager\Databases\Pdo\Queries\MysqlQueryBuilder;
 use Medas\StorageManager\Databases\Pdo\Queries\Query;
 use Medas\StorageManager\Databases\Pdo\Queries\QueryBuilder;
+use Medas\StorageManager\Databases\Pdo\Queries\SelectQueryBuilder;
 use Medas\StorageManager\Databases\Pdo\Structure\TableMigrationBuilder;
 use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlerFinder;
+use Medas\StorageManager\Entities\SelectorActionBuilder;
 use Medas\StorageManager\Entities\TypeSerializerFinder;
 use Medas\StorageManager\Interfaces\Storage;
 use Medas\StorageManager\Interfaces\StoreRecord;
@@ -31,6 +33,7 @@ class Database implements Storage
     private \PDOStatement $lastStatement;
     private TableMigrationBuilder $migrationBuilder;
     private TypeHandlerFinder $typeHandlerFinder;
+    private SelectQueryBuilder $selectQueryBuilder;
 
     public function __construct(
         #[ConfigValue(PdoDns::class)] private string $dns,
@@ -67,6 +70,7 @@ class Database implements Storage
         $this->migrationBuilder->setDatabase($this);
 
         $this->typeHandlerFinder = sm()->resolve(TypeSerializerFinder::class);
+        $this->selectQueryBuilder = sm()->resolve(SelectQueryBuilder::class);
     }
 
     public function queryBuilder(): QueryBuilder
@@ -169,9 +173,14 @@ class Database implements Storage
         $this->name = $name;
     }
 
-    public function getTypeSerializerFinder(): TypeSerializerFinder
+    public function typeSerializerFinder(): TypeSerializerFinder
     {
         return $this->typeHandlerFinder;
+    }
+
+    public function selectorActionBuilder(): SelectorActionBuilder
+    {
+        return $this->selectQueryBuilder;
     }
 
     public function fetchRecord(): StoreRecord|null

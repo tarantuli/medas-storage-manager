@@ -20,8 +20,13 @@ class StoredEntityWithName implements Selector
 
     public function get(): Definition
     {
-        return Definition::create(StoredEntity::class)
+        return Definition::create($this->entity())
             ->add(new Parameter('name'))
             ->add(new WhereIs(new Property('name'), new Argument('name')));
+    }
+
+    public function entity(): string
+    {
+        return StoredEntity::class;
     }
 }
