@@ -8,6 +8,9 @@ use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\{Conditions\Condition,
     Conditions\WhereIs,
     Exceptions\UndeclaredParametersException,
+    Exceptions\UnhandledConditionTypeException,
+    Exceptions\UnhandledRelationTypeException,
+    Exceptions\UnhandledSortTypeException,
     Operants\Argument,
     Operants\Property,
     Operants\Value,
@@ -81,7 +84,7 @@ class SelectQueryBuilder
     private function processRelations(array $relations): void
     {
         foreach ($relations as $relation) {
-            throw new \Exception('unhandled relation');
+            throw new UnhandledRelationTypeException($relation);
         }
     }
 
@@ -92,12 +95,10 @@ class SelectQueryBuilder
             $this->query .= ' WHERE ';
         }
         foreach ($conditions as $condition) {
-            if ($condition instanceof WhereIs) {
-                $this->processComparison($condition, '=');
-                continue;
-            }
-
-            throw new \Exception('unhandled condition');
+            match ($condition::class) {
+                WhereIs::class => $this->processComparison($condition, '='),
+                default => throw new UnhandledConditionTypeException($condition),
+            };
         }
     }
 
@@ -132,7 +133,7 @@ class SelectQueryBuilder
     private function processSorting(array $sorts): void
     {
         foreach ($sorts as $sort) {
-            throw new \Exception('unhandled sort');
+            throw new UnhandledSortTypeException($sort);
         }
 
     }
