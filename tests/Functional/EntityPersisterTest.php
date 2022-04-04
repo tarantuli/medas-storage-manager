@@ -67,7 +67,6 @@ class EntityPersisterTest extends BaseTest
         em()->persist($storedEntity);
         em()->flush();
         $id = $storedEntity->id();
-        var_dump($id);
 
         // Clear the cache and fetch it from storage, to ensure it was stored
         em()->clear();
@@ -83,10 +82,26 @@ class EntityPersisterTest extends BaseTest
         $fetchedEntity = em()->get(StoredEntity::class, $id);
         self::assertFalse(isset($fetchedEntity->name));
 
-        // Clerar the cache and fetch it again, to ensure it does not exist in storage anymore
+        // Clear the cache and fetch it again, to ensure it does not exist in storage anymore
         em()->clear();
         $repo = em()->repository(StoredEntity::class);
         $fetchedEntity = $repo->findOne(StoredEntityWithId::instance(), ['id' => $id]);
         self::assertNull($fetchedEntity);
+    }
+
+    public function testCreateAndFetchWithValues(): void
+    {
+        $entity = new StoredEntity();
+        $entity->name = $newName = (string) mt_rand();
+        self::assertNull($entity->id());
+
+        em()->persist($entity);
+        em()->flush();
+
+        // Clear the cache, fetch the entity again
+        em()->clear();
+        $repo = em()->repository(StoredEntity::class);
+        $fetchedEntity = $repo->getOrCreate(['name' => $newName]);
+        self::assertInstanceOf(StoredEntity::class, $fetchedEntity);
     }
 }

@@ -112,7 +112,7 @@ class Fetcher implements FetcherInterface
         return $record ? $this->addToCache($this->metaDataManager->get($selector->get()->entity), $record)->data() : null;
     }
 
-    public function fetchAll(Selector $selector, array $arguments = []): array
+    public function fetchAll(Selector $selector = null, array $arguments = []): array
     {
         $query = $this->selectQueryBuilder->build($selector, $arguments);
         $query->execute();

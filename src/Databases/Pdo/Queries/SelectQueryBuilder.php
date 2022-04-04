@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Databases\Pdo\Queries;
 
 use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Selector\Conditions\Condition;
-use Medas\EntityManager\Selector\Conditions\WhereIs;
-use Medas\EntityManager\Selector\Operants\Argument;
-use Medas\EntityManager\Selector\Operants\Property;
-use Medas\EntityManager\Selector\Parameter;
-use Medas\EntityManager\Selector\Relations\Relation;
-use Medas\EntityManager\Selector\Selector;
-use Medas\EntityManager\Selector\Sorting\SortBy;
+use Medas\EntityManager\Selector\{Conditions\Condition,
+    Conditions\WhereIs,
+    Exceptions\UndeclaredParametersException,
+    Operants\Argument,
+    Operants\Property,
+    Operants\Value,
+    Parameter,
+    Relations\Relation,
+    Selector,
+    Sorting\SortBy
+};
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Cache\CacheManager;
+use Medas\ServiceManager\Interfaces\NotCacheable;
 use Medas\StorageManager\Databases\Pdo\Database;
 
 #[Service]
@@ -22,6 +26,8 @@ class SelectQueryBuilder
 {
     private string $query;
     private array $stores;
+    private array $foundArguments;
+    private array $foundConstants;
     private string $mainEntity;
     private Database $database;
 
@@ -34,11 +40,16 @@ class SelectQueryBuilder
 
     public function build(Selector $selector, array $arguments): Query
     {
-        /** @var ParaQuery $paraQuery */
-        $paraQuery = $this->cacheManager->get()->get(
-            [static::class, $selector::class],
-            fn() => $this->process($selector)
-        );
+        if ($selector instanceof NotCacheable) {
+            $paraQuery = $this->process($selector);
+        }
+        else {
+            /** @var ParaQuery $paraQuery */
+            $paraQuery = $this->cacheManager->get()->get(
+                [static::class, $selector::class],
+                fn() => $this->process($selector)
+            );
+        }
 
         return $this->compileQuery($paraQuery, $arguments);
     }
@@ -53,14 +64,17 @@ class SelectQueryBuilder
 
         $quotedMainStore = $this->database->quote($metaData->entity->store);
         $this->stores = [$this->mainEntity => $quotedMainStore];
+        $this->foundArguments = [];
+        $this->foundConstants = [];
 
         $this->query = 'SELECT * FROM ' . $quotedMainStore;
 
         $this->processRelations($definition->relations);
         $this->processConditions($definition->conditions);
         $this->processSorting($definition->sorts);
+        $this->processParameters($definition->parameters);
 
-        return new ParaQuery($this->query, $definition->parameters, $this->database);
+        return new ParaQuery($this->query, $definition->parameters, $this->foundConstants, $this->database);
     }
 
     /** @param Relation[] $relations */
@@ -82,6 +96,7 @@ class SelectQueryBuilder
                 $this->processComparison($condition, '=');
                 continue;
             }
+
             throw new \Exception('unhandled condition');
         }
     }
@@ -99,6 +114,12 @@ class SelectQueryBuilder
 
         if ($condition->value instanceof Argument) {
             $value = ':' . $condition->value->name;
+            $this->foundArguments[$condition->value->name] = true;
+        }
+        elseif ($condition->value instanceof Value) {
+            $name = sha1($condition->value->value);
+            $value = ':' . $name;
+            $this->foundConstants[$name] = $condition->value->value;
         }
         else {
             throw new \Exception('unhandled condition value  type ' . $condition->value::class);
@@ -116,9 +137,21 @@ class SelectQueryBuilder
 
     }
 
+    private function processParameters(array $parameters): void
+    {
+        /** @var Parameter $parameter */
+        foreach ($parameters as $parameter) {
+            unset($this->foundArguments[$parameter->name]);
+        }
+
+        if ($this->foundArguments) {
+            throw new UndeclaredParametersException(array_keys($this->foundArguments));
+        }
+    }
+
     private function compileQuery(ParaQuery $paraQuery, array $arguments): Query
     {
-        $query = new Query($paraQuery->query, [], $paraQuery->database);
+        $query = new Query($paraQuery->query, $paraQuery->constants, $paraQuery->database);
 
         /** @var Parameter $parameter */
         foreach ($paraQuery->parameters as $parameter) {
