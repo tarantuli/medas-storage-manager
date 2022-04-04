@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
+use Medas\EntityManager\Repository;
 use Medas\Test\BaseTest;
 use Medas\Test\MockUps\Migrations\StoredEntity;
 use Medas\Test\MockUps\Selectors\StoredEntityWithId;
@@ -23,7 +24,7 @@ class EntityPersisterTest extends BaseTest
         // Clear the cache, fetch the entity again
         em()->clear();
 
-        $entity = em()->repository(StoredEntity::class)->findOne(
+        $entity = service(Repository::class)->fetchOne(
             StoredEntityWithName::instance(),
             ['name' => $newName]
         );
@@ -84,8 +85,7 @@ class EntityPersisterTest extends BaseTest
 
         // Clear the cache and fetch it again, to ensure it does not exist in storage anymore
         em()->clear();
-        $repo = em()->repository(StoredEntity::class);
-        $fetchedEntity = $repo->findOne(StoredEntityWithId::instance(), ['id' => $id]);
+        $fetchedEntity = service(Repository::class)->fetchOne(StoredEntityWithId::instance(), ['id' => $id]);
         self::assertNull($fetchedEntity);
     }
 
@@ -100,8 +100,7 @@ class EntityPersisterTest extends BaseTest
 
         // Clear the cache, fetch the entity again
         em()->clear();
-        $repo = em()->repository(StoredEntity::class);
-        $fetchedEntity = $repo->getOrCreate(['name' => $newName]);
+        $fetchedEntity = service(Repository::class)->getOrCreate(StoredEntity::class, ['name' => $newName]);
         self::assertInstanceOf(StoredEntity::class, $fetchedEntity);
     }
 }

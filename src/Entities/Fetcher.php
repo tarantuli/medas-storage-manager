@@ -103,18 +103,6 @@ class Fetcher implements FetcherInterface
         return storage($metaData->entity->storage)->store($metaData->entity->store);
     }
 
-    public function fetchRecord(Selector $selector, array $arguments = []): array|null
-    {
-        $metaData = $this->metaDataManager->get($selector->entity());
-        $query = storage($metaData->entity->storage)->selectorActionBuilder()
-            ->build($selector, $arguments);
-
-        $query->execute();
-        $record = $query->storage()->fetchRecord();
-
-        return $record ? $this->addToCache($metaData, $record)->data() : null;
-    }
-
     public function fetch(Selector $selector = null, array $arguments = []): array
     {
         $metaData = $this->metaDataManager->get($selector->entity());
