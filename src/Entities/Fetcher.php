@@ -32,7 +32,7 @@ class Fetcher implements FetcherInterface
     {
     }
 
-    public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult
+    public function fetchValue(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult
     {
         $record = $this->getRecord($metaData, $entity);
 
@@ -112,7 +112,7 @@ class Fetcher implements FetcherInterface
         return $record ? $this->addToCache($this->metaDataManager->get($selector->get()->entity), $record)->data() : null;
     }
 
-    public function fetchAll(Selector $selector = null, array $arguments = []): array
+    public function fetch(Selector $selector = null, array $arguments = []): array
     {
         $query = $this->selectQueryBuilder->build($selector, $arguments);
         $query->execute();
