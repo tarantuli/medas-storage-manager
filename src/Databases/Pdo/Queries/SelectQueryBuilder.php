@@ -11,11 +11,14 @@ use Medas\EntityManager\Selector\{Conditions\Condition,
     Conditions\WhereIsAtMost,
     Conditions\WhereIsLessThan,
     Conditions\WhereIsMoreThan,
+    Conditions\WhereIsNotNull,
+    Conditions\WhereIsNull,
     Exceptions\UndeclaredParametersException,
     Exceptions\UnhandledConditionTypeException,
     Exceptions\UnhandledRelationTypeException,
     Exceptions\UnhandledSortTypeException,
     Operants\Argument,
+    Operants\Operant,
     Operants\Property,
     Operants\Value,
     Parameter,
@@ -105,6 +108,8 @@ class SelectQueryBuilder
                 WhereIsLessThan::class => $this->processComparison($condition, '<'),
                 WhereIsAtLeast::class => $this->processComparison($condition, '>='),
                 WhereIsAtMost::class => $this->processComparison($condition, '<='),
+                WhereIsNull::class => $this->processNullComparison($condition, true),
+                WhereIsNotNull::class => $this->processNullComparison($condition, false),
                 default => throw new UnhandledConditionTypeException($condition),
             };
         }
@@ -112,29 +117,33 @@ class SelectQueryBuilder
 
     private function processComparison(WhereIs $condition, string $operator): void
     {
-        if ($condition->property instanceof Property) {
-            $property = $this->stores[$condition->property->entity ?? $this->mainEntity]
+        $this->query .= $this->operantToQuery($condition->property) . $operator . $this->operantToQuery($condition->value);
+    }
+
+    private function operantToQuery(Operant $operant): string
+    {
+        if ($operant instanceof Property) {
+            return $this->stores[$operant->entity ?? $this->mainEntity]
                 . '.'
-                . $this->database->quote($condition->property->name);
-        }
-        else {
-            throw new \Exception('unhandled condition property type ' . $condition->property::class);
+                . $this->database->quote($operant->name);
         }
 
-        if ($condition->value instanceof Argument) {
-            $value = ':' . $condition->value->name;
-            $this->foundArguments[$condition->value->name] = true;
-        }
-        elseif ($condition->value instanceof Value) {
-            $name = sha1(serialize($condition->value->value));
-            $value = ':' . $name;
-            $this->foundConstants[$name] = $condition->value->value;
-        }
-        else {
-            throw new \Exception('unhandled condition value  type ' . $condition->value::class);
+        if ($operant instanceof Argument) {
+            $this->foundArguments[$operant->name] = true;
+            return ':' . $operant->name;
         }
 
-        $this->query .= $property . $operator . $value;
+        if ($operant instanceof Value) {
+            $name = sha1(serialize($operant->value));
+            $this->foundConstants[$name] = $operant->value;
+            return ':' . $name;
+        }
+        throw new \Exception('unhandled operant type ' . $operant::class);
+    }
+
+    private function processNullComparison(WhereIsNull $condition, bool $isNull): void
+    {
+        $this->query .= $this->operantToQuery($condition->property) . ($isNull ? ' IS NULL' : ' IS NOT NULL');
     }
 
     /** @param SortBy[] $sorts */
