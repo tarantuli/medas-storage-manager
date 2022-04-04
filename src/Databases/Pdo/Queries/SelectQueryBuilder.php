@@ -126,7 +126,7 @@ class SelectQueryBuilder
             $this->foundArguments[$condition->value->name] = true;
         }
         elseif ($condition->value instanceof Value) {
-            $name = sha1($condition->value->value);
+            $name = sha1(serialize($condition->value->value));
             $value = ':' . $name;
             $this->foundConstants[$name] = $condition->value->value;
         }
