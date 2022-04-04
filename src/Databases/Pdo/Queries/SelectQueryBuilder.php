@@ -7,6 +7,10 @@ namespace Medas\StorageManager\Databases\Pdo\Queries;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\{Conditions\Condition,
     Conditions\WhereIs,
+    Conditions\WhereIsAtLeast,
+    Conditions\WhereIsAtMost,
+    Conditions\WhereIsLessThan,
+    Conditions\WhereIsMoreThan,
     Exceptions\UndeclaredParametersException,
     Exceptions\UnhandledConditionTypeException,
     Exceptions\UnhandledRelationTypeException,
@@ -97,6 +101,10 @@ class SelectQueryBuilder
         foreach ($conditions as $condition) {
             match ($condition::class) {
                 WhereIs::class => $this->processComparison($condition, '='),
+                WhereIsMoreThan::class => $this->processComparison($condition, '>'),
+                WhereIsLessThan::class => $this->processComparison($condition, '<'),
+                WhereIsAtLeast::class => $this->processComparison($condition, '>='),
+                WhereIsAtMost::class => $this->processComparison($condition, '<='),
                 default => throw new UnhandledConditionTypeException($condition),
             };
         }
