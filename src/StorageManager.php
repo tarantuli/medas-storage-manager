@@ -19,7 +19,7 @@ class StorageManager
     {
     }
 
-    public function add(Storage $storage, string $name = 'default', bool $isDefault = false)
+    public function add(Storage $storage, string $name = 'default', bool $isDefault = false): void
     {
         $this->storages[$name] = $storage;
 

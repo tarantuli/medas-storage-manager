@@ -30,7 +30,7 @@ class MigrationManager
         $this->processEntities($directory);
     }
 
-    private function processEntities(string $directory)
+    private function processEntities(string $directory): void
     {
         $unitOfWork = new UnitOfWork();
         $this->migrations = $this->findMigrations($directory);
