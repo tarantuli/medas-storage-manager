@@ -103,7 +103,15 @@ class SelectQueryBuilder implements SelectorActionBuilder
         if ($conditions) {
             $this->query .= ' WHERE ';
         }
+
+        $isFirstCondition = true;
+
         foreach ($conditions as $condition) {
+
+            if (!$isFirstCondition) {
+                $this->query .= ' AND ';
+            }
+
             match ($condition::class) {
                 WhereIs::class => $this->processComparison($condition, '='),
                 WhereIsMoreThan::class => $this->processComparison($condition, '>'),
@@ -114,6 +122,8 @@ class SelectQueryBuilder implements SelectorActionBuilder
                 WhereIsNotNull::class => $this->processNullComparison($condition, false),
                 default => throw new UnhandledConditionTypeException($condition),
             };
+
+            $isFirstCondition = false;
         }
     }
 
