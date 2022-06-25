@@ -10,7 +10,9 @@ use Medas\EntityManager\Entities\KeyMaker;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
+use Medas\EntityManager\Repository;
 use Medas\EntityManager\Selector\Selector;
+use Medas\EntityManager\Selector\Selectors\WithValues;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHavePropertyException;
 use Medas\StorageManager\Interfaces\Store;
@@ -25,6 +27,7 @@ class Fetcher implements FetcherInterface
     public function __construct(
         private KeyMaker        $keyMaker,
         private MetaDataManager $metaDataManager,
+        private Repository      $repository,
         private ValueGetter     $entityValueGetter,
     )
     {
@@ -133,5 +136,10 @@ class Fetcher implements FetcherInterface
         $key = $this->getKeyFromRecord($metaData, $idValues);
 
         unset($this->records[$key]);
+    }
+
+    public function fetchReferences(MetaData $metaData, object $entity, MetaData\Reference $reference): array
+    {
+        return $this->repository->fetch(new WithValues($reference->entity, [$reference->property => $entity->id]));
     }
 }
