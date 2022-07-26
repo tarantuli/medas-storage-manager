@@ -32,6 +32,11 @@ class EntityDirectory implements ConfigOption
         return is_string($value);
     }
 
+    public function hasDefault(): bool
+    {
+        return true;
+    }
+
     public function default(): string
     {
         return 'src';

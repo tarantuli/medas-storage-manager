@@ -33,6 +33,11 @@ class MigrationsStore implements ConfigOption
         return $value instanceof Store;
     }
 
+    public function hasDefault(): bool
+    {
+        return true;
+    }
+
     public function default(): Store
     {
         return storage()->store('medas_migrations');

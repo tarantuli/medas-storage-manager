@@ -32,6 +32,11 @@ class PdoDns implements ConfigOption
         return is_string($value);
     }
 
+    public function hasDefault(): bool
+    {
+        return false;
+    }
+
     public function default(): mixed
     {
         return null;

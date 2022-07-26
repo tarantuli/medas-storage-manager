@@ -116,12 +116,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-config-manager.git",
-                "reference": "286b271c5a9234a017cb39fba9b7f0622ba6790e"
+                "reference": "fd5bdf90ebe9b8b056ce4790d1146482517d6f20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/286b271c5a9234a017cb39fba9b7f0622ba6790e",
-                "reference": "286b271c5a9234a017cb39fba9b7f0622ba6790e",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/fd5bdf90ebe9b8b056ce4790d1146482517d6f20",
+                "reference": "fd5bdf90ebe9b8b056ce4790d1146482517d6f20",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "source": "https://github.com/tarantuli/medas-config-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-config-manager/issues"
             },
-            "time": "2022-03-03T14:14:33+00:00"
+            "time": "2022-07-18T11:55:36+00:00"
         },
         {
             "name": "morphp/medas-console",
@@ -377,12 +377,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-formatter.git",
-                "reference": "d35ab51d436173794844db32e5c27e56e99f3fd7"
+                "reference": "a27b0949c772819d17d124d84e81f81cdad4f292"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/d35ab51d436173794844db32e5c27e56e99f3fd7",
-                "reference": "d35ab51d436173794844db32e5c27e56e99f3fd7",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/a27b0949c772819d17d124d84e81f81cdad4f292",
+                "reference": "a27b0949c772819d17d124d84e81f81cdad4f292",
                 "shasum": ""
             },
             "require": {
@@ -413,7 +413,7 @@
                 "source": "https://github.com/tarantuli/medas-php-formatter/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-formatter/issues"
             },
-            "time": "2022-03-03T14:23:52+00:00"
+            "time": "2022-07-26T12:31:19+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
@@ -421,12 +421,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "17b7853888310fe13457a214e4baf676fc3abe89"
+                "reference": "5e71911e122924ec5faedec6c2c777935c73891e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/17b7853888310fe13457a214e4baf676fc3abe89",
-                "reference": "17b7853888310fe13457a214e4baf676fc3abe89",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/5e71911e122924ec5faedec6c2c777935c73891e",
+                "reference": "5e71911e122924ec5faedec6c2c777935c73891e",
                 "shasum": ""
             },
             "require": {
@@ -461,7 +461,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2022-04-22T09:49:59+00:00"
+            "time": "2022-07-25T10:18:06+00:00"
         },
         {
             "name": "phpoption/phpoption",
