@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional\ConsoleCommands;
 
-use Medas\ConfigManager\ConfigManager;
+use Medas\ConfigOptions\OptionController;
 use Medas\StorageManager\ConfigOptions\MigrationDirectory;
 use Medas\StorageManager\ConsoleCommands\MakeMigrationCommand;
 use Medas\StorageManager\ConsoleCommands\MigrateCommand;
@@ -27,7 +27,7 @@ class ConsoleCommandsTest extends TestCase
 
     private function getDirectory(): string
     {
-        return service(ConfigManager::class)->getOptionValue(MigrationDirectory::instance());
+        return service(OptionController::class)->getValue(MigrationDirectory::instance());
     }
 
     private function makeMigration(): void

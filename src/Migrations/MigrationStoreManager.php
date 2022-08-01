@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Migrations;
 
-use Medas\ConfigManager\ConfigManager;
+use Medas\ConfigOptions\OptionController;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\ConfigOptions\MigrationsStore;
 use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
@@ -16,7 +16,7 @@ class MigrationStoreManager
     private Store $store;
 
     public function __construct(
-        private ConfigManager $configManager,
+        private OptionController $optionController,
     )
     {
     }
@@ -24,7 +24,7 @@ class MigrationStoreManager
     public function get(): Store
     {
         if (!isset($this->store)) {
-            $this->store = $this->configManager->getOptionValue(MigrationsStore::instance());
+            $this->store = $this->optionController->getValue(MigrationsStore::instance());
 
             if (!$this->store->exists()) {
                 $this->build($this->store);

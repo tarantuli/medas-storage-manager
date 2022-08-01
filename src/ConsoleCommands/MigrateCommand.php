@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConsoleCommands;
 
-use Medas\ConfigManager\ConfigManager;
+use Medas\ConfigOptions\OptionController;
 use Medas\Console\Commands\BaseConsoleCommand;
 use Medas\Console\Commands\ConsoleCommandGroup;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\ConfigOptions\OptionController;
 use Medas\StorageManager\ConfigOptions\MigrationDirectory;
 use Medas\StorageManager\Migrations\MigrationManager;
 
@@ -17,7 +16,6 @@ class MigrateCommand extends BaseConsoleCommand
 {
     public function __construct(
         private CommandGroup     $group,
-        private ConfigManager    $configManager,
         private MigrationManager $migrationManager,
         private OptionController $optionController,
     )
@@ -42,7 +40,7 @@ class MigrateCommand extends BaseConsoleCommand
     public function process(array $arguments)
     {
         $this->migrationManager->migrate(
-            $this->configManager->getOptionValue(MigrationDirectory::instance())
+            $this->optionController->getValue(MigrationDirectory::instance())
         );
     }
 }

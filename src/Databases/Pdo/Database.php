@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo;
 
-use Medas\ServiceManager\Attributes\ConfigValue;
+use Medas\ConfigOptions\Attributes\ConfigValue;
 use Medas\StorageManager\ConfigOptions\PdoDns;
 use Medas\StorageManager\ConfigOptions\PdoPassword;
 use Medas\StorageManager\ConfigOptions\PdoUsername;
@@ -36,7 +36,7 @@ class Database implements Storage
     private SelectQueryBuilder $selectQueryBuilder;
 
     public function __construct(
-        #[ConfigValue(PdoDns::class)] private string $dns,
+        #[ConfigValue(PdoDns::class)] private string      $dns,
         #[ConfigValue(PdoUsername::class)] private string $username,
         #[ConfigValue(PdoPassword::class)] private string $password,
     )

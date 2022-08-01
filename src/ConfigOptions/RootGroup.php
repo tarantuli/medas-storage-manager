@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions;
 
+use Medas\ConfigOptions\{ConfigGroup};
 use Medas\ServiceManager\AsSingleton;
-use Medas\ServiceManager\ConfigOptions\ConfigGroup;
 
 class RootGroup implements ConfigGroup
 {
