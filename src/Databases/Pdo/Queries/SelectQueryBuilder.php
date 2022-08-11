@@ -165,10 +165,19 @@ class SelectQueryBuilder implements SelectorActionBuilder
     /** @param SortBy[] $sorts */
     private function processSorting(array $sorts): void
     {
+        $parts = [];
         foreach ($sorts as $sort) {
+            if ($sort instanceof SortBy && $sort->operant instanceof Property) {
+                $parts[] = $sort->operant->name . ' ' . $sort->direction->name;
+                continue;
+            }
+
             throw new UnhandledSortTypeException($sort);
         }
 
+        if ($parts) {
+            $this->query .= 'ORDER BY ' . implode(', ', $parts);
+        }
     }
 
     private function processParameters(array $parameters): void
