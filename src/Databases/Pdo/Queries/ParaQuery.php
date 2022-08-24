@@ -11,7 +11,7 @@ class ParaQuery
 {
     public function __construct(
         public string   $query,
-        /** @var Parameter[] */
+        /** @var Parameter[] $parameters */
         public array    $parameters,
         public array    $constants,
         public Database $database,
