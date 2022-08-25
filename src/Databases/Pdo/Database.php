@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo;
 
-use Medas\ConfigOptions\Attributes\ConfigValue;
+use Medas\ServiceManager\ConfigOptions\ConfigValue;
 use Medas\StorageManager\ConfigOptions\PdoDns;
 use Medas\StorageManager\ConfigOptions\PdoPassword;
 use Medas\StorageManager\ConfigOptions\PdoUsername;

@@ -37,7 +37,7 @@ class MigrateCommand extends BaseConsoleCommand
         return 'Migrates the storages';
     }
 
-    public function process(array $arguments)
+    public function process(array $arguments): void
     {
         $this->migrationManager->migrate(
             $this->optionController->getValue(MigrationDirectory::instance())

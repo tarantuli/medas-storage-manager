@@ -28,8 +28,7 @@ use Medas\EntityManager\Selector\{Conditions\Condition,
     Sorting\SortBy
 };
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Cache\CacheManager;
-use Medas\ServiceManager\Interfaces\NotCacheable;
+use Medas\ServiceManager\Cache\{CacheManager, Interfaces\NotCacheable};
 use Medas\StorageManager\Databases\Pdo\Database;
 use Medas\StorageManager\Entities\SelectorActionBuilder;
 

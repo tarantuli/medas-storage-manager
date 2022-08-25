@@ -38,7 +38,7 @@ class MakeMigrationCommand extends BaseConsoleCommand
         return 'Makes a new migration class file';
     }
 
-    public function process(array $arguments)
+    public function process(array $arguments): void
     {
         $this->migrationBuildManager->createMigration(
             $this->optionController->getValue(EntityDirectory::instance()),
