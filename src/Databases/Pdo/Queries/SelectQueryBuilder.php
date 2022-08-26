@@ -175,7 +175,7 @@ class SelectQueryBuilder implements SelectorActionBuilder
         }
 
         if ($parts) {
-            $this->query .= 'ORDER BY ' . implode(', ', $parts);
+            $this->query .= ' ORDER BY ' . implode(', ', $parts);
         }
     }
 
