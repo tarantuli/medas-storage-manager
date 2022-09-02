@@ -197,7 +197,7 @@ class SelectQueryBuilder implements SelectorActionBuilder
 
         /** @var Parameter $parameter */
         foreach ($paraQuery->parameters as $parameter) {
-            if (isset($arguments[$parameter->name])) {
+            if (array_key_exists($parameter->name, $arguments)) {
                 $value = $arguments[$parameter->name];
             }
             elseif ($parameter->hasDefault) {
