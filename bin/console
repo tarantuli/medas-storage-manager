@@ -1,37 +1,13 @@
 <?php
 
-use Medas\Console\Commands\CommandProcessor;
-use Medas\Console\ConsolePackage;
-use Medas\Console\Printer;
-use Medas\ServiceManager\ServiceManager;
-use Medas\StorageManager\StorageManagerPackage;
-use Symfony\Component\Cache\Adapter\ApcuAdapter;
-use Symfony\Contracts\Cache\CacheInterface;
+use Medas\ConsolePrinter\CommandProcessor;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
-$sm = ServiceManager::get();
-$sm->addPackage(StorageManagerPackage::instance());
-$sm->addPackage(ConsolePackage::instance());
-
-$cache = new ApcuAdapter('entity-manager');
-$cache->clear();
-$sm->bindService($cache, CacheInterface::class);
+require_once __DIR__ . '/../bootstrap.php';
 
 $arguments = $argv;
+
 if (str_ends_with($arguments[0], 'console')) {
     array_shift($arguments);
 }
 
-try {
-    service(CommandProcessor::class)->process($arguments);
-}
-catch (Exception $exception) {
-    service(Printer::class)
-        ->printLine()
-        ->printLine(new Printer\Text('[Exception]', Printer\BashFormat::WHITE))
-        ->printLine()
-        ->printLine(new Printer\Text('  ' . $exception->getMessage()))
-        ->printLine()
-        ->printLine(new Printer\Text('at ' . $exception->getFile() . ':' . $exception->getLine()));
-}
+service(CommandProcessor::class)->process($arguments);
