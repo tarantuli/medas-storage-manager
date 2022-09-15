@@ -25,7 +25,8 @@ class UnitOfWork
         $this->actions[] = $action;
     }
 
-    public function storages(): \SplObjectStorage
+    /** @return Storage[]|\SplObjectStorage */
+    public function storages(): array|\SplObjectStorage
     {
         return $this->storages;
     }

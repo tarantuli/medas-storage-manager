@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional\Databases\Pdo\Structure;
 
+use Medas\StorageManager\Databases\Pdo\Queries\CreateTableBuilder;
 use Medas\StorageManager\Databases\Pdo\Structure\EntityStructureFinder;
 use Medas\Test\BaseTest;
 use Medas\Test\MockUps\Migrations\StoredEntity;
@@ -14,7 +15,7 @@ class CreateTableBuilderTest extends BaseTest
     {
         $esf = service(EntityStructureFinder::class);
         $structure = $esf->find(StoredEntity::class);
-        $query = storage()->queryBuilder()->createTable($structure);
+        $query = (new CreateTableBuilder($structure))->create(storage());
 
         $expected = <<<EXPECTED
 CREATE TABLE `stored_entities` (

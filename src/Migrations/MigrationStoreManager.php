@@ -7,6 +7,7 @@ namespace Medas\StorageManager\Migrations;
 use Medas\ConfigOptions\OptionController;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\ConfigOptions\MigrationsStore;
+use Medas\StorageManager\Databases\Pdo\Queries\CreateTableBuilder;
 use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
 use Medas\StorageManager\Interfaces\Store;
 
@@ -50,6 +51,6 @@ class MigrationStoreManager
         $index->fields[] = $migrationField;
         $blueprint->addIndex($index);
 
-        $store->storage()->queryBuilder()->createTable($blueprint)->execute();
+        (new CreateTableBuilder($blueprint))->create($store->storage())->execute();
     }
 }

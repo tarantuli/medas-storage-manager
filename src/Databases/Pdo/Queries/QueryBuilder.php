@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo\Queries;
 
-use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
-use Medas\StorageManager\Databases\Pdo\Structure\Changes;
 use Medas\StorageManager\Databases\Pdo\Table;
 
 interface QueryBuilder
@@ -20,10 +18,6 @@ interface QueryBuilder
     public function delete(Table $table, array $conditions): Query;
 
     public function showCreate(Table $table): Query;
-
-    public function createTable(Blueprint $blueprint): Query;
-
-    public function alterTable(Changes $changes): Query;
 
     public function quote(string $identifier): string;
 

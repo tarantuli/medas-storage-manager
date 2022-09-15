@@ -6,8 +6,6 @@ namespace Medas\StorageManager\Databases\Pdo\Queries;
 
 use Medas\EntityManager\Filters\{Between, LessThan, MoreThan};
 use Medas\StorageManager\Databases\Pdo\Database;
-use Medas\StorageManager\Databases\Pdo\Structure\Blueprint;
-use Medas\StorageManager\Databases\Pdo\Structure\Changes;
 use Medas\StorageManager\Databases\Pdo\Table;
 
 class BaseSqlQueryBuilder implements QueryBuilder
@@ -23,7 +21,8 @@ class BaseSqlQueryBuilder implements QueryBuilder
     public function select(array $tables, array $filters): Query
     {
         $this->arguments = [];
-        $this->query = 'SELECT * FROM ';
+        $this->query = /** @lang text */
+            'SELECT * FROM ';
 
         foreach ($tables as $table) {
             $this->query .= $this->database->quote($table->name) . ',';
@@ -121,16 +120,6 @@ class BaseSqlQueryBuilder implements QueryBuilder
     public function showCreate(Table $table): Query
     {
         return new Query('SHOW CREATE TABLE ' . $this->database->quote($table->name), [], $this->database);
-    }
-
-    public function createTable(Blueprint $blueprint): Query
-    {
-        return (new CreateTableBuilder($blueprint))->create($this->database);
-    }
-
-    public function alterTable(Changes $changes): Query
-    {
-        return (new AlterTableBuilder($changes))->create($this->database);
     }
 
     public function dropTable(string $name): Query
