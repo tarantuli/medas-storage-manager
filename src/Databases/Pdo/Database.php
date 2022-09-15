@@ -5,35 +5,23 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Databases\Pdo;
 
 use Medas\ServiceManager\ConfigOptions\ConfigValue;
-use Medas\StorageManager\ConfigOptions\PdoDns;
-use Medas\StorageManager\ConfigOptions\PdoPassword;
-use Medas\StorageManager\ConfigOptions\PdoUsername;
-use Medas\StorageManager\Databases\Pdo\Exceptions\DriverNotImplementedException;
-use Medas\StorageManager\Databases\Pdo\Exceptions\PdoDatabaseException;
-use Medas\StorageManager\Databases\Pdo\Queries\BaseSqlQueryBuilder;
-use Medas\StorageManager\Databases\Pdo\Queries\MysqlQueryBuilder;
-use Medas\StorageManager\Databases\Pdo\Queries\Query;
-use Medas\StorageManager\Databases\Pdo\Queries\QueryBuilder;
-use Medas\StorageManager\Databases\Pdo\Queries\SelectQueryBuilder;
-use Medas\StorageManager\Databases\Pdo\Structure\TableMigrationBuilder;
-use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlerFinder;
-use Medas\StorageManager\Entities\SelectorActionBuilder;
-use Medas\StorageManager\Entities\TypeSerializerFinder;
-use Medas\StorageManager\Interfaces\Storage;
-use Medas\StorageManager\Interfaces\StoreRecord;
+use Medas\StorageManager\ConfigOptions\{PdoDns, PdoPassword, PdoUsername};
+use Medas\StorageManager\Entities\{SelectorActionBuilder, TypeSerializerFinder};
+use Medas\StorageManager\Interfaces\{Storage, StoreRecord};
 use Medas\StorageManager\Migrations\MigrationBuilder;
 
 class Database implements Storage
 {
     private string $name;
+
     /** @var Table[] */
     private array $tables = [];
-    private QueryBuilder $queryBuilder;
+    private Queries\QueryBuilder $queryBuilder;
     private \PDO $pdo;
     private \PDOStatement $lastStatement;
-    private TableMigrationBuilder $migrationBuilder;
-    private TypeHandlerFinder $typeHandlerFinder;
-    private SelectQueryBuilder $selectQueryBuilder;
+    private Structure\TableMigrationBuilder $migrationBuilder;
+    private Structure\TypeHandlerFinder $typeHandlerFinder;
+    private Queries\SelectQueryBuilder $selectQueryBuilder;
 
     public function __construct(
         #[ConfigValue(PdoDns::class)] private string      $dns,
@@ -62,19 +50,19 @@ class Database implements Storage
         $driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
         $this->queryBuilder = match ($driver) {
-            'mysql' => new MysqlQueryBuilder($this),
-            'sqlite' => new BaseSqlQueryBuilder($this),
-            default => throw new DriverNotImplementedException($driver)
+            'mysql' => new Queries\MysqlQueryBuilder($this),
+            'sqlite' => new Queries\BaseSqlQueryBuilder($this),
+            default => throw new Exceptions\DriverNotImplementedException($driver)
         };
 
-        $this->migrationBuilder = sm()->instantiate(TableMigrationBuilder::class);
+        $this->migrationBuilder = sm()->instantiate(Structure\TableMigrationBuilder::class);
         $this->migrationBuilder->setDatabase($this);
 
         $this->typeHandlerFinder = sm()->resolve(TypeSerializerFinder::class);
-        $this->selectQueryBuilder = sm()->resolve(SelectQueryBuilder::class);
+        $this->selectQueryBuilder = sm()->resolve(Queries\SelectQueryBuilder::class);
     }
 
-    public function queryBuilder(): QueryBuilder
+    public function queryBuilder(): Queries\QueryBuilder
     {
         return $this->queryBuilder;
     }
@@ -98,7 +86,7 @@ class Database implements Storage
         $this->execute($this->queryBuilder->dropTable($name));
     }
 
-    public function execute(Query $query): void
+    public function execute(Queries\Query $query): void
     {
         $this->serializeArguments($query);
 
@@ -107,7 +95,7 @@ class Database implements Storage
             $this->lastStatement->execute($query->arguments);
         }
         catch (\Exception|\Error $e) {
-            throw new PdoDatabaseException($e->getMessage(), $query);
+            throw new Exceptions\PdoDatabaseException($e->getMessage(), $query);
         }
 
         if ($onComplete = $query->onComplete()) {
@@ -115,7 +103,7 @@ class Database implements Storage
         }
     }
 
-    private function serializeArguments(Query $query): void
+    private function serializeArguments(Queries\Query $query): void
     {
         foreach ($query->arguments as &$argument) {
             if ($argument instanceof \DateTime) {
