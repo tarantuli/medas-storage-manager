@@ -25,8 +25,7 @@ use Medas\EntityManager\Selector\{Conditions\Condition,
     Parameter,
     Relations\Relation,
     Selector,
-    Sorting\SortBy
-};
+    Sorting\SortBy};
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Cache\{CacheManager, Interfaces\NotCacheable};
 use Medas\StorageManager\Databases\Pdo\Database;
@@ -43,8 +42,8 @@ class SelectQueryBuilder implements SelectorActionBuilder
     private Database $database;
 
     public function __construct(
-        private CacheManager    $cacheManager,
-        private MetaDataManager $metaDataManager,
+        private readonly CacheManager    $cacheManager,
+        private readonly MetaDataManager $metaDataManager,
     )
     {
     }

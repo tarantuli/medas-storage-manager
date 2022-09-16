@@ -13,7 +13,9 @@ class BaseSqlQueryBuilder implements QueryBuilder
     private string $query;
     private array $arguments;
 
-    public function __construct(private Database $database)
+    public function __construct(
+        private readonly Database $database,
+    )
     {
     }
 
@@ -43,35 +45,30 @@ class BaseSqlQueryBuilder implements QueryBuilder
     {
         foreach ($filters as $field => $value) {
             if ($value instanceof LessThan) {
-                $this->query .= $this->quote($value->field) . ' < ? ' . $separator . ' ';
+                $this->query .= $this->database->quote($value->field) . ' < ? ' . $separator . ' ';
                 $this->arguments[] = $value->value;
             }
             elseif ($value instanceof MoreThan) {
-                $this->query .= $this->quote($value->field) . ' > ? ' . $separator . ' ';
+                $this->query .= $this->database->quote($value->field) . ' > ? ' . $separator . ' ';
                 $this->arguments[] = $value->value;
             }
             elseif ($value instanceof Between) {
-                $this->query .= $this->quote($value->field) . 'BETWEEN ? AND ? ' . $separator . ' ';
+                $this->query .= $this->database->quote($value->field) . 'BETWEEN ? AND ? ' . $separator . ' ';
                 $this->arguments[] = $value->lowerValue;
                 $this->arguments[] = $value->upperValue;
             }
             else {
                 if ($value === null && $separator === 'AND') {
-                    $this->query .= $this->quote($field) . ' IS NULL ' . $separator . ' ';
+                    $this->query .= $this->database->quote($field) . ' IS NULL ' . $separator . ' ';
                 }
                 else {
-                    $this->query .= $this->quote($field) . ' = ? ' . $separator . ' ';
+                    $this->query .= $this->database->quote($field) . ' = ? ' . $separator . ' ';
                     $this->arguments[] = $value;
                 }
             }
         }
 
         $this->query = substr($this->query, 0, -2 - strlen($separator));
-    }
-
-    public function quote(string $identifier): string
-    {
-        return '"' . $identifier . '"';
     }
 
     public function update(Table $table, array $updates, array $conditions): Query
@@ -90,7 +87,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
     private function appendFields(array $fields): void
     {
         foreach ($fields as $field => $value) {
-            $this->query .= $this->quote($field) . ' = ?, ';
+            $this->query .= $this->database->quote($field) . ' = ?, ';
             $this->arguments[] = $value;
         }
 
@@ -124,6 +121,6 @@ class BaseSqlQueryBuilder implements QueryBuilder
 
     public function dropTable(string $name): Query
     {
-        return new Query('DROP TABLE IF EXISTS ' . $this->quote($name), [], $this->database);
+        return new Query('DROP TABLE IF EXISTS ' . $this->database->quote($name), [], $this->database);
     }
 }

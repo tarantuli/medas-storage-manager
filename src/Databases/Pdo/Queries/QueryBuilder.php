@@ -19,7 +19,5 @@ interface QueryBuilder
 
     public function showCreate(Table $table): Query;
 
-    public function quote(string $identifier): string;
-
     public function dropTable(string $name): Query;
 }

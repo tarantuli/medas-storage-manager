@@ -13,8 +13,8 @@ use Medas\StorageManager\UnitOfWork\UnitOfWorkExecutor;
 class Flusher implements FlusherInterface
 {
     public function __construct(
-        private Persister          $entityPersister,
-        private UnitOfWorkExecutor $unitOfWorkExecutor,
+        private readonly Persister          $entityPersister,
+        private readonly UnitOfWorkExecutor $unitOfWorkExecutor,
     )
     {
     }

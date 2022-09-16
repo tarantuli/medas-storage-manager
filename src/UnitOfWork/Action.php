@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\UnitOfWork;
 
+use Medas\StorageManager\Interfaces\RecordSet;
 use Medas\StorageManager\Interfaces\Storage;
 use Medas\StorageManager\UnitOfWork\ActionTypes\ActionType;
 
 interface Action
 {
     public function execute(): void;
+
+    public function recordSet(): RecordSet;
 
     public function storage(): Storage;
 

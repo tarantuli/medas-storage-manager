@@ -19,11 +19,11 @@ use Medas\StorageManager\UnitOfWork\UnitOfWorkManager;
 class Persister
 {
     public function __construct(
-        private Fetcher           $fetcher,
-        private MetaDataManager   $metaDataManager,
-        private SnapshotManager   $snapshotManager,
-        private UnitOfWorkManager $unitOfWorkManager,
-        private ValueGetter       $valueGetter,
+        private readonly Fetcher           $fetcher,
+        private readonly MetaDataManager   $metaDataManager,
+        private readonly SnapshotManager   $snapshotManager,
+        private readonly UnitOfWorkManager $unitOfWorkManager,
+        private readonly ValueGetter       $valueGetter,
     )
     {
     }
@@ -49,7 +49,7 @@ class Persister
     private function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
-        $serializerFinder = storage($metaData->entity->storage)->typeSerializerFinder();
+        $serializerFinder = storage($metaData->entity->storage)->controller()->typeSerializerFinder();
         $serializedValues = [];
 
         foreach ($metaData->properties as $property) {
@@ -90,7 +90,7 @@ class Persister
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
-        $serializerFinder = storage($metaData->entity->storage)->typeSerializerFinder();
+        $serializerFinder = storage($metaData->entity->storage)->controller()->typeSerializerFinder();
         $serializedValues = [];
         foreach ($changedValues as $name => $value) {
             $serializedValues[$name] = $serializerFinder->for($metaData->property($name)->type)->serialize($value);

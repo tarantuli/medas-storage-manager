@@ -11,7 +11,7 @@ class TableStructureFinderTest extends BaseTest
 {
     public function testFindStructure(): void
     {
-        $tsf = new TableStructureFinder(storage());
+        $tsf = service(TableStructureFinder::class);
         $structure = $tsf->find(storage()->store('stored_entities'));
 
         self::assertEquals('stored_entities', $structure->name);

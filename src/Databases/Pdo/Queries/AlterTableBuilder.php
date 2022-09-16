@@ -10,7 +10,7 @@ use Medas\StorageManager\Databases\Pdo\Structure\Changes;
 class AlterTableBuilder
 {
     public function __construct(
-        private Changes $changes,
+        private readonly Changes $changes,
     )
     {
     }

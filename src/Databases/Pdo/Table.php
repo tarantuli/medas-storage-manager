@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Databases\Pdo;
 
-use Medas\StorageManager\Databases\Pdo\Exceptions\PdoDatabaseException;
 use Medas\StorageManager\Databases\Pdo\Queries\Query;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\UnitOfWork\Action;
@@ -30,10 +29,10 @@ class Table implements Store
 
     public function fetchRecord(array $filters): Record|null
     {
-        $this->database->execute($this->prepareGet($filters));
+        $query = $this->prepareGet($filters);
+        $query->execute();
 
-        $data = $this->database->lastStatement()->fetch();
-        return is_array($data) ? new Record($data) : null;
+        return $query->recordSet()->fetchRecord();
     }
 
     public function prepareGet(array $filters): Action
@@ -43,16 +42,10 @@ class Table implements Store
 
     public function fetchAll(array $filters): array|null
     {
-        $this->database->execute($this->prepareGet($filters));
+        $query = $this->prepareGet($filters);
+        $query->execute();
 
-        $data = $this->database->lastStatement()->fetchAll(\PDO::FETCH_ASSOC);
-        $records = [];
-
-        foreach ($data as $set) {
-            $records[] = new Record($set);
-        }
-
-        return $records;
+        return $query->recordSet()->fetchRecords();
     }
 
     public function prepareCreate(array $values): Action
@@ -72,20 +65,20 @@ class Table implements Store
 
     public function getCreateTable(): string|null
     {
-
         try {
-            $this->database->queryBuilder()->showCreate($this)->execute();
-            return $this->database->lastStatement()->fetchColumn(1);
+            $query = $this->database->queryBuilder()->showCreate($this);
+            $query->execute();
+            return $query->recordSet()->fetchRecord()['Create Table'];
         }
-            /** @noinspection PhpRedundantCatchClauseInspection */
-        catch (PdoDatabaseException) {
+        catch (\Exception) {
             return null;
         }
     }
 
     public function exists(): bool
     {
-        $this->database->execute(new Query('SHOW TABLES LIKE "' . $this->name . '"'));
-        return (bool) $this->database->lastStatement()->fetchAll();
+        $query = new Query('SHOW TABLES LIKE "' . $this->name . '"');
+        $query->execute();
+        return $query->recordSet()->hasRecords();
     }
 }

@@ -21,6 +21,11 @@ abstract class BaseTest extends TestCase
         if (!file_exists($directory)) {
             mkdir($directory);
         }
+        else {
+            foreach (glob($directory . DIRECTORY_SEPARATOR . '*') as $existingFile) {
+                unlink($existingFile);
+            }
+        }
 
         // Execute the migration
         file_put_contents($fileName, $migration);

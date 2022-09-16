@@ -6,12 +6,17 @@ namespace Medas\StorageManager\Entities\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 use Medas\StorageManager\Interfaces\Store;
+use Medas\StorageManager\StorageManager;
 
 class StoreDoesNotHavePropertyException extends BaseException
 {
     public function __construct(Store $store, string $property)
     {
-        parent::__construct($store->storage()->name(), $store->name(), $property);
+        parent::__construct(
+            service(StorageManager::class)->getName($store->storage()),
+            $store->name(),
+            $property
+        );
     }
 
     public function pattern(): string

@@ -6,31 +6,30 @@ namespace Medas\StorageManager\Databases\Pdo;
 
 use Medas\ServiceManager\ConfigOptions\ConfigValue;
 use Medas\StorageManager\ConfigOptions\{PdoDns, PdoPassword, PdoUsername};
-use Medas\StorageManager\Entities\{SelectorActionBuilder, TypeSerializerFinder};
-use Medas\StorageManager\Interfaces\{Storage, StoreRecord};
-use Medas\StorageManager\Migrations\MigrationBuilder;
+use Medas\StorageManager\Databases\Pdo\Structure\IdentifierQuoters\IdentifierQuoter;
+use Medas\StorageManager\Interfaces\{Storage, StorageController};
 
 class Database implements Storage
 {
-    private string $name;
+    private DatabaseController $controller;
+    private \PDO $pdo;
+
+    private Queries\QueryBuilder $queryBuilder;
+    private IdentifierQuoter $identifierQuoter;
 
     /** @var Table[] */
     private array $tables = [];
-    private Queries\QueryBuilder $queryBuilder;
-    private \PDO $pdo;
-    private \PDOStatement $lastStatement;
-    private Structure\TableMigrationBuilder $migrationBuilder;
-    private Structure\TypeHandlerFinder $typeHandlerFinder;
-    private Queries\SelectQueryBuilder $selectQueryBuilder;
 
     public function __construct(
-        #[ConfigValue(PdoDns::class)] private string      $dns,
-        #[ConfigValue(PdoUsername::class)] private string $username,
-        #[ConfigValue(PdoPassword::class)] private string $password,
+        #[ConfigValue(PdoDns::class)] private readonly string      $dns,
+        #[ConfigValue(PdoUsername::class)] private readonly string $username,
+        #[ConfigValue(PdoPassword::class)] private readonly string $password,
     )
     {
         $this->initializePdo();
-        $this->initializeBuilders();
+        $this->processDriver();
+
+        $this->controller = sm()->resolve(DatabaseController::class);
     }
 
     private function initializePdo(): void
@@ -45,26 +44,26 @@ class Database implements Storage
         $this->pdo = new \PDO($this->dns, $this->username, $this->password, $options);
     }
 
-    private function initializeBuilders(): void
+    private function processDriver(): void
     {
         $driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
         $this->queryBuilder = match ($driver) {
             'mysql' => new Queries\MysqlQueryBuilder($this),
             'sqlite' => new Queries\BaseSqlQueryBuilder($this),
-            default => throw new Exceptions\DriverNotImplementedException($driver)
+            default => throw new Exceptions\DriverNotImplementedException($driver),
         };
 
-        $this->migrationBuilder = sm()->instantiate(Structure\TableMigrationBuilder::class);
-        $this->migrationBuilder->setDatabase($this);
-
-        $this->typeHandlerFinder = sm()->resolve(TypeSerializerFinder::class);
-        $this->selectQueryBuilder = sm()->resolve(Queries\SelectQueryBuilder::class);
+        $this->identifierQuoter = match ($driver) {
+            'mysql' => new Structure\IdentifierQuoters\MysqlQuoter(),
+            'sqlite' => new Structure\IdentifierQuoters\BaseSqlQuoter(),
+            default => throw new Exceptions\DriverNotImplementedException($driver),
+        };
     }
 
-    public function queryBuilder(): Queries\QueryBuilder
+    public function controller(): StorageController
     {
-        return $this->queryBuilder;
+        return $this->controller;
     }
 
     public function stores(): array
@@ -84,36 +83,6 @@ class Database implements Storage
     public function deleteStore(string $name): void
     {
         $this->execute($this->queryBuilder->dropTable($name));
-    }
-
-    public function execute(Queries\Query $query): void
-    {
-        $this->serializeArguments($query);
-
-        try {
-            $this->lastStatement = $this->pdo->prepare($query->query);
-            $this->lastStatement->execute($query->arguments);
-        }
-        catch (\Exception|\Error $e) {
-            throw new Exceptions\PdoDatabaseException($e->getMessage(), $query);
-        }
-
-        if ($onComplete = $query->onComplete()) {
-            $onComplete($this);
-        }
-    }
-
-    private function serializeArguments(Queries\Query $query): void
-    {
-        foreach ($query->arguments as &$argument) {
-            if ($argument instanceof \DateTime) {
-                $argument = $argument->format('Y-m-d H:i:s');
-            }
-
-            if (is_bool($argument)) {
-                $argument = (int) $argument;
-            }
-        }
     }
 
     public function beginTransaction(): void
@@ -142,56 +111,18 @@ class Database implements Storage
         return $id === false ? null : (int) $id;
     }
 
-    public function migrationBuilder(): MigrationBuilder
-    {
-        return $this->migrationBuilder;
-    }
-
     public function quote(string $identifier): string
     {
-        return $this->queryBuilder->quote($identifier);
+        return $this->identifierQuoter->quote($identifier);
     }
 
-    public function name(): string
+    public function execute(Queries\Query $query): void
     {
-        return $this->name;
+        $this->controller->execute($this, $this->pdo, $query);
     }
 
-    public function setName(string $name): void
+    public function queryBuilder(): Queries\QueryBuilder
     {
-        $this->name = $name;
-    }
-
-    public function typeSerializerFinder(): TypeSerializerFinder
-    {
-        return $this->typeHandlerFinder;
-    }
-
-    public function selectorActionBuilder(): SelectorActionBuilder
-    {
-        return $this->selectQueryBuilder;
-    }
-
-    public function fetchRecord(): StoreRecord|null
-    {
-        $data = $this->lastStatement->fetch();
-        return is_array($data) ? new Record($data) : null;
-    }
-
-    public function fetchRecords(): array
-    {
-        $data = $this->lastStatement()->fetchAll(\PDO::FETCH_ASSOC);
-        $records = [];
-
-        foreach ($data as $set) {
-            $records[] = new Record($set);
-        }
-
-        return $records;
-    }
-
-    public function lastStatement(): \PDOStatement
-    {
-        return $this->lastStatement;
+        return $this->queryBuilder;
     }
 }

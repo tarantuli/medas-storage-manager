@@ -14,16 +14,13 @@ class StorageManager
     private array $storages = [];
     private string $default;
 
-    public function __construct(
-    )
+    public function __construct()
     {
     }
 
     public function add(Storage $storage, string $name = 'default', bool $isDefault = false): void
     {
         $this->storages[$name] = $storage;
-
-        $storage->setName($name);
 
         if ($isDefault || count($this->storages) === 1) {
             $this->default = $name;
@@ -39,5 +36,16 @@ class StorageManager
     public function storages(): array
     {
         return $this->storages;
+    }
+
+    public function getName(Storage $storage): string
+    {
+        $name = array_search($storage, $this->storages, true);
+
+        if ($name === false) {
+            throw new \Exception('unknown storage');
+        }
+
+        return $name;
     }
 }

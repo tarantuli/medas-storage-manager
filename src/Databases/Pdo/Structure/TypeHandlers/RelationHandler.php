@@ -17,7 +17,7 @@ use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlerFinder;
 class RelationHandler extends BaseHandler
 {
     public function __construct(
-        private MetaDataManager $metaDataManager,
+        private readonly MetaDataManager $metaDataManager,
     )
     {
     }

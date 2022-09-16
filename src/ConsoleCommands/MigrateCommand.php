@@ -15,9 +15,9 @@ use Medas\StorageManager\Migrations\MigrationManager;
 class MigrateCommand extends BaseConsoleCommand
 {
     public function __construct(
-        private CommandGroup     $group,
-        private MigrationManager $migrationManager,
-        private OptionController $optionController,
+        private readonly CommandGroup     $group,
+        private readonly MigrationManager $migrationManager,
+        private readonly OptionController $optionController,
     )
     {
     }

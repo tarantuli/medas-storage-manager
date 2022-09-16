@@ -13,7 +13,7 @@ class CreateTableBuilder
     private Database $database;
 
     public function __construct(
-        private Blueprint $blueprint,
+        private readonly Blueprint $blueprint,
     )
     {
     }
@@ -21,7 +21,7 @@ class CreateTableBuilder
     public function create(Database $database): Query
     {
         $this->database = $database;
-        $this->query = sprintf("CREATE TABLE %s (\n", $database->quote($this->blueprint->name));
+        $this->query = sprintf(/** @lang text */ "CREATE TABLE %s (\n", $database->quote($this->blueprint->name));
 
         $this->addFields();
         $this->addKeys();

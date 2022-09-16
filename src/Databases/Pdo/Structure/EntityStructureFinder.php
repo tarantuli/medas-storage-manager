@@ -14,8 +14,8 @@ use Medas\StorageManager\Databases\Pdo\Structure\Blueprint\Index;
 class EntityStructureFinder
 {
     public function __construct(
-        private MetaDataManager   $metaDataManager,
-        private TypeHandlerFinder $typeHandlerFinder,
+        private readonly MetaDataManager   $metaDataManager,
+        private readonly TypeHandlerFinder $typeHandlerFinder,
     )
     {
     }

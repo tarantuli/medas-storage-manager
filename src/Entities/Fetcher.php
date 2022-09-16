@@ -23,9 +23,9 @@ class Fetcher implements FetcherInterface
     private array $records = [];
 
     public function __construct(
-        private KeyMaker        $keyMaker,
-        private MetaDataManager $metaDataManager,
-        private ValueGetter     $entityValueGetter,
+        private readonly KeyMaker        $keyMaker,
+        private readonly MetaDataManager $metaDataManager,
+        private readonly ValueGetter     $entityValueGetter,
     )
     {
     }
@@ -90,7 +90,7 @@ class Fetcher implements FetcherInterface
 
     private function deserialize(MetaData $metaData, StoreRecord &$record): void
     {
-        $serializerFinder = storage($metaData->entity->storage)->typeSerializerFinder();
+        $serializerFinder = storage($metaData->entity->storage)->controller()->typeSerializerFinder();
 
         foreach ($record as $key => &$value) {
             $serializer = $serializerFinder->for($metaData->property($key)->type);
@@ -106,11 +106,11 @@ class Fetcher implements FetcherInterface
     public function fetch(Selector $selector = null, array $arguments = []): array
     {
         $metaData = $this->metaDataManager->get($selector->entity());
-        $query = storage($metaData->entity->storage)->selectorActionBuilder()
+        $query = storage($metaData->entity->storage)->controller()->selectorActionBuilder()
             ->build($selector, $arguments);
 
         $query->execute();
-        $records = $query->storage()->fetchRecords();
+        $records = $query->recordSet()->fetchRecords();
 
         foreach ($records as &$record) {
             $record = $this->addToCache($metaData, $record);

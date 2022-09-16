@@ -15,9 +15,9 @@ class MigrationManager
     private array $migrations;
 
     public function __construct(
-        private DirectoryManager      $directoryManager,
-        private MigrationStoreManager $migrationStoreManager,
-        private UnitOfWorkExecutor    $unitOfWorkExecutor,
+        private readonly DirectoryManager      $directoryManager,
+        private readonly MigrationStoreManager $migrationStoreManager,
+        private readonly UnitOfWorkExecutor    $unitOfWorkExecutor,
     )
     {
     }

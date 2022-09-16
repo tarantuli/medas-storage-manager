@@ -6,6 +6,7 @@ namespace Medas\StorageManager\Databases\Pdo\Queries;
 
 use Medas\EntityManager\Selector\Parameter;
 use Medas\StorageManager\Databases\Pdo\Database;
+use Medas\StorageManager\StorageManager;
 
 class ParaQuery
 {
@@ -25,7 +26,7 @@ class ParaQuery
             $this->query,
             $this->parameters,
             $this->constants,
-            $this->database->name(),
+            service(StorageManager::class)->getName($this->database),
         ];
     }
 

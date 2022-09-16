@@ -17,7 +17,7 @@ class MigrationStoreManager
     private Store $store;
 
     public function __construct(
-        private OptionController $optionController,
+        private readonly OptionController $optionController,
     )
     {
     }

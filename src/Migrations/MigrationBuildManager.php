@@ -22,8 +22,8 @@ class MigrationBuildManager
     private MethodDefinition $undoMethod;
 
     public function __construct(
-        private DirectoryManager $directoryManager,
-        private PhpClassBuilder  $phpClassBuilder,
+        private readonly DirectoryManager $directoryManager,
+        private readonly PhpClassBuilder  $phpClassBuilder,
     )
     {
     }
@@ -113,7 +113,8 @@ class MigrationBuildManager
 
     private function processEntity(string $className, Entity $entity): void
     {
-        storage($entity->storage)->migrationBuilder()
-            ->build($className, $this->migrateMethod, $this->undoMethod);
+        $storage = storage($entity->storage);
+        $storage->controller()->migrationBuilder()
+            ->build($storage, $className, $this->migrateMethod, $this->undoMethod);
     }
 }

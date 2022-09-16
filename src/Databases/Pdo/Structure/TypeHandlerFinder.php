@@ -14,20 +14,19 @@ use Medas\StorageManager\Databases\Pdo\Structure\TypeHandlers\{BinaryHandler,
     IntegerHandler,
     RelationHandler,
     TextHandler,
-    TypeHandler
-};
+    TypeHandler};
 use Medas\StorageManager\Entities\TypeSerializerFinder;
 
 #[Service]
 class TypeHandlerFinder implements TypeSerializerFinder
 {
     public function __construct(
-        private BinaryHandler   $binaryHandler,
-        private BooleanHandler  $booleanHandler,
-        private DateTimeHandler $dateTimeHandler,
-        private IntegerHandler  $integerHandler,
-        private RelationHandler $relationHandler,
-        private TextHandler     $textHandler,
+        private readonly BinaryHandler   $binaryHandler,
+        private readonly BooleanHandler  $booleanHandler,
+        private readonly DateTimeHandler $dateTimeHandler,
+        private readonly IntegerHandler  $integerHandler,
+        private readonly RelationHandler $relationHandler,
+        private readonly TextHandler     $textHandler,
     )
     {
     }
