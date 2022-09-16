@@ -111,9 +111,22 @@ class Database implements Storage
         return $id === false ? null : (int) $id;
     }
 
-    public function quote(string $identifier): string
+    public function quoteIdentifier(string $identifier): string
     {
         return $this->identifierQuoter->quote($identifier);
+    }
+
+    public function escapeValue(mixed $value): string
+    {
+        if (is_int($value) || is_float($value)) {
+            return (string) $value;
+        }
+
+        if (is_null($value)) {
+            return 'NULL';
+        }
+
+        return (string) $this->pdo->quote($value);
     }
 
     public function execute(Queries\Query $query): void

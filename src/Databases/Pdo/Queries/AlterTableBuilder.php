@@ -17,14 +17,14 @@ class AlterTableBuilder
 
     public function create(Database $database): Query
     {
-        $query = 'ALTER TABLE ' . $database->quote($this->changes->name) . "\n";
+        $query = 'ALTER TABLE ' . $database->quoteIdentifier($this->changes->name) . "\n";
 
         foreach ($this->changes->addFields as $field) {
-            $query .= sprintf("ADD COLUMN %s %s,\n", $database->quote($field->name), $field->definition);
+            $query .= sprintf("ADD COLUMN %s %s,\n", $database->quoteIdentifier($field->name), $field->definition);
         }
 
         foreach ($this->changes->changeFields as $field) {
-            $query .= sprintf("MODIFY COLUMN %1\$s %2\$s,\n", $database->quote($field->name), $field->definition);
+            $query .= sprintf("MODIFY COLUMN %1\$s %2\$s,\n", $database->quoteIdentifier($field->name), $field->definition);
         }
 
         $query = substr($query, 0, -2);

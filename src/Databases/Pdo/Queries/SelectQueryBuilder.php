@@ -72,7 +72,7 @@ class SelectQueryBuilder implements SelectorActionBuilder
         $this->database = storage($metaData->entity->storage);
         $this->mainEntity = $metaData->className;
 
-        $quotedMainStore = $this->database->quote($metaData->entity->store);
+        $quotedMainStore = $this->database->quoteIdentifier($metaData->entity->store);
         $this->stores = [$this->mainEntity => $quotedMainStore];
         $this->foundArguments = [];
         $this->foundConstants = [];
@@ -137,7 +137,7 @@ class SelectQueryBuilder implements SelectorActionBuilder
         if ($operant instanceof Property) {
             return $this->stores[$operant->entity ?? $this->mainEntity]
                 . '.'
-                . $this->database->quote($operant->name);
+                . $this->database->quoteIdentifier($operant->name);
         }
 
         if ($operant instanceof Argument) {

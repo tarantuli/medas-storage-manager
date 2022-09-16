@@ -22,6 +22,8 @@ CREATE TABLE `stored_entities` (
  `id` int unsigned NOT NULL AUTO_INCREMENT,
  `name` varchar(255) NOT NULL,
  `createdAt` datetime DEFAULT NULL,
+ `defaultString` varchar(255) NOT NULL DEFAULT 'default string',
+ `defaultInteger` int unsigned NOT NULL DEFAULT 10,
  PRIMARY KEY (`id`),
  UNIQUE KEY `name` (`name`)
 )

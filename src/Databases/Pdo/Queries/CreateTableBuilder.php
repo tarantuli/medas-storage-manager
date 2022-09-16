@@ -21,7 +21,7 @@ class CreateTableBuilder
     public function create(Database $database): Query
     {
         $this->database = $database;
-        $this->query = sprintf(/** @lang text */ "CREATE TABLE %s (\n", $database->quote($this->blueprint->name));
+        $this->query = sprintf(/** @lang text */ "CREATE TABLE %s (\n", $database->quoteIdentifier($this->blueprint->name));
 
         $this->addFields();
         $this->addKeys();
@@ -36,7 +36,12 @@ class CreateTableBuilder
     private function addFields(): void
     {
         foreach ($this->blueprint->fields as $field) {
-            $this->query .= sprintf(" %s %s,\n", $this->database->quote($field->name), $field->definition);
+            $this->query .= sprintf(
+                " %s %s%s,\n",
+                $this->database->quoteIdentifier($field->name),
+                $field->definition,
+                $field->hasDefault ? ' DEFAULT ' . $this->database->escapeValue($field->default) : '',
+            );
         }
     }
 
@@ -50,11 +55,11 @@ class CreateTableBuilder
                 if ($index->isUnique) {
                     $this->query .= " UNIQUE";
                 }
-                $this->query .= " KEY " . $this->database->quote($index->name) . ' (';
+                $this->query .= " KEY " . $this->database->quoteIdentifier($index->name) . ' (';
             }
 
             foreach ($index->fields as $field) {
-                $this->query .= $this->database->quote($field->name) . ',';
+                $this->query .= $this->database->quoteIdentifier($field->name) . ',';
             }
 
             $this->query = substr($this->query, 0, -1) . "),\n";
@@ -64,10 +69,10 @@ class CreateTableBuilder
     private function addForeignKeys(): void
     {
         foreach ($this->blueprint->foreignKeys as $name => $foreignKey) {
-            $this->query .= " CONSTRAINT " . $this->database->quote($name) . "\n"
-                . "   FOREIGN KEY (" . $this->database->quote($foreignKey->field) . ")\n"
-                . "   REFERENCES " . $this->database->quote($foreignKey->foreignEntity)
-                . " (" . $this->database->quote($foreignKey->foreignField) . "),\n";
+            $this->query .= " CONSTRAINT " . $this->database->quoteIdentifier($name) . "\n"
+                . "   FOREIGN KEY (" . $this->database->quoteIdentifier($foreignKey->field) . ")\n"
+                . "   REFERENCES " . $this->database->quoteIdentifier($foreignKey->foreignEntity)
+                . " (" . $this->database->quoteIdentifier($foreignKey->foreignField) . "),\n";
         }
     }
 }

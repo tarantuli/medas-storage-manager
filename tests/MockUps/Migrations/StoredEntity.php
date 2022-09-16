@@ -19,6 +19,12 @@ class StoredEntity
     #[Property, IsNullable, DateTime]
     public ?\DateTime $createdAt;
 
+    #[Property]
+    public string $defaultString = 'default string';
+
+    #[Property]
+    public int $defaultInteger = 10;
+
     public function id(): int|null
     {
         return $this->id ?? null;

@@ -43,8 +43,9 @@ class EntityStructureFinder
     {
         foreach ($metaData->properties as $property) {
             $definition = $this->determineDefinition($property);
+            [$hasDefault, $default] = $this->determineDefault($property);
 
-            $blueprint->addField(new Field($property->name, $definition));
+            $blueprint->addField(new Field($property->name, $definition, $hasDefault, $default));
         }
     }
 
@@ -56,33 +57,24 @@ class EntityStructureFinder
         if ($property->isGeneratedValue) {
             $definition .= ' NOT NULL AUTO_INCREMENT';
         }
-        elseif ($property->isNullable) {
-            if ($property->default !== null) {
-                $definition .= $this->getDefaultDefinition($property);
-            }
-            else {
-                $definition .= ' DEFAULT NULL';
-            }
-        }
-        else {
+        elseif (!$property->isNullable) {
             $definition .= ' NOT NULL';
-            if ($property->default !== null) {
-                $definition .= $this->getDefaultDefinition($property);
-            }
         }
 
         return $definition;
     }
 
-    private function getDefaultDefinition(MetaData\Property $property): string
+    private function determineDefault(MetaData\Property $property): array
     {
-        $default = $property->default;
-
-        if (is_bool($default)) {
-            $default = (int) $default;
+        if ($property->isGeneratedValue) {
+            return [false, null];
         }
-
-        return ' DEFAULT ' . $default;
+        elseif ($property->isNullable || $property->default !== null) {
+            return [true, $property->default];
+        }
+        else {
+            return [false, null];
+        }
     }
 
     private function findPrimaryKey(MetaData $metaData, Blueprint $blueprint): void
