@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Medas\ConfigManager\ConfigManager;
 use Medas\ConfigManager\ConfigManagerPackage;
 use Medas\ConsolePrinter\ConsolePrinterPackage;
-use Medas\PdoStorage\Database;
 use Medas\ServiceManager\ServiceManager;
 use Medas\StorageManager\Entities\Fetcher;
 use Medas\StorageManager\Entities\Flusher;

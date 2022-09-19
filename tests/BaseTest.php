@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace Medas\StorageManagerTest;
 
-use Medas\StorageManager\Migrations\MigrationManager;
+use Medas\StorageManager\Migrations\{MigrationBuildManager, MigrationManager};
 use PHPUnit\Framework\TestCase;
 
 abstract class BaseTest extends TestCase
 {
+    protected function createMigrationClassContent(): string
+    {
+        $buildManager = service(MigrationBuildManager::class);
+        $directory = realpath(__DIR__ . '/../../MockUps/Relations');
+
+        return $buildManager->createMigrationClass($directory);
+    }
+
     protected function executeMigration(string $migration): void
     {
         preg_match('/class (Migration\d+)/', $migration, $match);
