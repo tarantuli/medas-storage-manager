@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\StorageManagerTest\Functional;
 
 use Medas\EntityManager\Repository;
-use Medas\Test\BaseTest;
-use Medas\Test\MockUps\Migrations\StoredEntity;
-use Medas\Test\MockUps\Selectors\StoredEntityWithId;
-use Medas\Test\MockUps\Selectors\StoredEntityWithName;
+use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\MockUps\Migrations\StoredEntity;
+use Medas\StorageManagerTest\MockUps\Selectors\StoredEntityWithId;
+use Medas\StorageManagerTest\MockUps\Selectors\StoredEntityWithName;
 
 class EntityPersisterTest extends BaseTest
 {

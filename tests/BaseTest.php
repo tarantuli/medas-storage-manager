@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test;
+namespace Medas\StorageManagerTest;
 
-use Medas\EntityManager\EntityManager;
-use Medas\ServiceManager\ServiceManager;
 use Medas\StorageManager\Migrations\MigrationManager;
 use PHPUnit\Framework\TestCase;
 
@@ -35,11 +33,5 @@ abstract class BaseTest extends TestCase
         // Remove the test directory
         unlink($fileName);
         rmdir($directory);
-    }
-
-    protected function entityManager(): EntityManager
-    {
-        $serviceManager = ServiceManager::get();
-        return $serviceManager->resolve(EntityManager::class);
     }
 }

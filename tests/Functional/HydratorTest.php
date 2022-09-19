@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\StorageManagerTest\Functional;
 
-use Medas\Test\BaseTest;
-use Medas\Test\MockUps\Migrations\StoredEntity;
+use Medas\EntityManager\EntityManager;
+use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\MockUps\Migrations\StoredEntity;
+use function service;
 
 class HydratorTest extends BaseTest
 {
     public function testHydrateEntity(): void
     {
-        $entityManager = $this->entityManager();
+        $entityManager = service(EntityManager::class);
 
         $entity = $entityManager->get(StoredEntity::class, 1);
 

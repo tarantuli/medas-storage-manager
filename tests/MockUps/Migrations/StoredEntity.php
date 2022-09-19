@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\MockUps\Migrations;
+namespace Medas\StorageManagerTest\MockUps\Migrations;
 
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsNullable, IsUnique, Property};
 use Medas\EntityManager\Types\DateTime;

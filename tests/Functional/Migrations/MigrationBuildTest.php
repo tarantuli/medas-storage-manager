@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional\Migrations;
+namespace Medas\StorageManagerTest\Functional\Migrations;
 
-use Medas\StorageManager\Databases\Pdo\Queries\Query;
+use Medas\PdoStorage\Queries\Query;
 use Medas\StorageManager\Migrations\MigrationBuildManager;
-use Medas\Test\BaseTest;
+use Medas\StorageManagerTest\BaseTest;
 
 class MigrationBuildTest extends BaseTest
 {

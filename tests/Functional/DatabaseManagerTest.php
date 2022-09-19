@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\StorageManagerTest\Functional;
 
-use Medas\StorageManager\Databases\Pdo\Database;
-use Medas\StorageManager\Databases\Pdo\Table;
-use Medas\Test\BaseTest;
+use Medas\PdoStorage\Database;
+use Medas\PdoStorage\Table;
+use Medas\StorageManagerTest\BaseTest;
 
 class DatabaseManagerTest extends BaseTest
 {

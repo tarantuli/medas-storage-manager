@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\MockUps\Selectors;
+namespace Medas\StorageManagerTest\MockUps\Selectors;
 
 use Medas\EntityManager\Selector\{Conditions\WhereIs,
     Definition,
@@ -12,7 +12,7 @@ use Medas\EntityManager\Selector\{Conditions\WhereIs,
     Selector
 };
 use Medas\ServiceManager\AsSingleton;
-use Medas\Test\MockUps\Migrations\StoredEntity;
+use Medas\StorageManagerTest\MockUps\Migrations\StoredEntity;
 
 class StoredEntityWithId implements Selector
 {

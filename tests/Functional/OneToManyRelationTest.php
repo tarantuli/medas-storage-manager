@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\StorageManagerTest\Functional;
 
 use Medas\StorageManager\Migrations\MigrationBuildManager;
-use Medas\Test\BaseTest;
-use Medas\Test\MockUps\Relations\Group;
-use Medas\Test\MockUps\Relations\Person;
+use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\MockUps\Relations\Group;
+use Medas\StorageManagerTest\MockUps\Relations\Person;
 
 class OneToManyRelationTest extends BaseTest
 {
@@ -37,7 +37,7 @@ class OneToManyRelationTest extends BaseTest
 
     private function rebuildTables(): void
     {
-// Delete both stores if they still exist
+        // Delete both stores if they still exist
         storage()->deleteStore('persons');
         storage()->deleteStore('groups');
 

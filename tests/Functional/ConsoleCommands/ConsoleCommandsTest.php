@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional\ConsoleCommands;
+namespace Medas\StorageManagerTest\Functional\ConsoleCommands;
 
 use Medas\ConfigOptions\OptionController;
 use Medas\StorageManager\ConfigOptions\MigrationDirectory;
