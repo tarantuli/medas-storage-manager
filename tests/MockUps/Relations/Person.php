@@ -6,7 +6,7 @@ namespace Medas\StorageManagerTest\MockUps\Relations;
 
 use Medas\EntityManager\Attributes\{Entity, HasId, Id, IsGeneratedValue, IsUnique, Property};
 
-#[Entity(store: 'persons')]
+#[Entity(store: 'people')]
 class Person implements HasId
 {
     #[Id, IsGeneratedValue]
@@ -21,5 +21,10 @@ class Person implements HasId
     public function id(): int
     {
         return $this->id;
+    }
+
+    public function group(): Group
+    {
+        return $this->group;
     }
 }

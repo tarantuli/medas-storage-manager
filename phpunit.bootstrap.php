@@ -8,7 +8,6 @@ use Medas\ConsolePrinter\ConsolePrinterPackage;
 use Medas\ServiceManager\ServiceManager;
 use Medas\StorageManager\Entities\Fetcher;
 use Medas\StorageManager\Entities\Flusher;
-use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\StorageManagerPackage;
 
 chdir(__DIR__);
@@ -26,6 +25,3 @@ $config->addDirectory(__DIR__ . '/config');
 
 $sm->bindService($sm->resolve(Fetcher::class), \Medas\EntityManager\Entities\Fetcher::class);
 $sm->bindService($sm->resolve(Flusher::class), \Medas\EntityManager\Entities\Flusher::class);
-
-$storageManager = $sm->resolve(StorageManager::class);
-$storageManager->add($sm->instantiate(Database::class));

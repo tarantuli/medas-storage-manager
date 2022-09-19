@@ -12,7 +12,7 @@ abstract class BaseTest extends TestCase
     protected function createMigrationClassContent(): string
     {
         $buildManager = service(MigrationBuildManager::class);
-        $directory = realpath(__DIR__ . '/../../MockUps/Relations');
+        $directory = realpath(__DIR__ . '/MockUps/Relations');
 
         return $buildManager->createMigrationClass($directory);
     }
