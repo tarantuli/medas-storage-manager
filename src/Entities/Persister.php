@@ -7,13 +7,10 @@ namespace Medas\StorageManager\Entities;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Snapshots\Snapshot;
-use Medas\EntityManager\Snapshots\SnapshotManager;
+use Medas\EntityManager\Snapshots\{Snapshot, SnapshotManager};
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\Interfaces\Storage;
-use Medas\StorageManager\Interfaces\Store;
-use Medas\StorageManager\UnitOfWork\UnitOfWork;
-use Medas\StorageManager\UnitOfWork\UnitOfWorkManager;
+use Medas\StorageManager\Interfaces\{Storage, Store};
+use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
 
 #[Service]
 class Persister

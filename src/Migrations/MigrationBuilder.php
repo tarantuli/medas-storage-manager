@@ -9,5 +9,8 @@ use Medas\StorageManager\Interfaces\Storage;
 
 interface MigrationBuilder
 {
-    public function build(Storage $storage, string $className, MethodDefinition $migrateMethod, MethodDefinition $undoMethod): void;
+    public function build(Storage          $storage,
+                          string           $className,
+                          MethodDefinition $migrateMethod,
+                          MethodDefinition $undoMethod): void;
 }

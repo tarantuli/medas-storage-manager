@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Migrations;
 
 use Medas\EntityManager\Attributes\Entity;
-use Medas\FileBuilder\PhpClass\MethodDefinition;
-use Medas\FileBuilder\PhpClass\ParameterDefinition;
-use Medas\FileBuilder\PhpClass\PhpClassDefinition;
+use Medas\FileBuilder\PhpClass\{MethodDefinition, ParameterDefinition, PhpClassDefinition};
 use Medas\FileBuilder\PhpClassBuilder;
 use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;

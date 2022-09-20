@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Migrations;
 
 use Medas\ConfigOptions\OptionController;
-use Medas\PdoStorage\Queries\CreateTableBuilder;
-use Medas\PdoStorage\Structure\Blueprint;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\ConfigOptions\MigrationsStore;
 use Medas\StorageManager\Interfaces\Store;
@@ -41,8 +39,8 @@ class MigrationStoreManager
 
         $blueprint->name = $store->name();
 
-        $migrationField = new \Medas\PdoStorage\Structure\Blueprint\Field('migration', 'varchar(255) not null');
-        $datetimeField = new \Medas\PdoStorage\Structure\Blueprint\Field('migrated_at', 'datetime not null');
+        $migrationField = new Field('migration', 'varchar(255) not null');
+        $datetimeField = new Field('migrated_at', 'datetime not null');
         $index = new Blueprint\Index('migration');
 
         $blueprint->addField($migrationField);

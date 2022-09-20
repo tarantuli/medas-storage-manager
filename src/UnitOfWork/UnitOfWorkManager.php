@@ -6,8 +6,7 @@ namespace Medas\StorageManager\UnitOfWork;
 
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Interfaces\Store;
-use Medas\StorageManager\UnitOfWork\ActionTypes\Create;
-use Medas\StorageManager\UnitOfWork\ActionTypes\Update;
+use Medas\StorageManager\UnitOfWork\ActionTypes\{Create, Update};
 
 #[Service]
 class UnitOfWorkManager

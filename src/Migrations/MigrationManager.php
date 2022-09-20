@@ -6,8 +6,7 @@ namespace Medas\StorageManager\Migrations;
 
 use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\UnitOfWork\UnitOfWork;
-use Medas\StorageManager\UnitOfWork\UnitOfWorkExecutor;
+use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 
 #[Service]
 class MigrationManager

@@ -6,8 +6,7 @@ namespace Medas\StorageManager\Entities;
 
 use Medas\EntityManager\Entities\Flusher as FlusherInterface;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\UnitOfWork\UnitOfWork;
-use Medas\StorageManager\UnitOfWork\UnitOfWorkExecutor;
+use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 
 #[Service]
 class Flusher implements FlusherInterface

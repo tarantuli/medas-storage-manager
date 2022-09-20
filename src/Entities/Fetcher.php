@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\EntityManager\Entities\Fetcher as FetcherInterface;
-use Medas\EntityManager\Entities\FetchResult;
-use Medas\EntityManager\Entities\KeyMaker;
+use Medas\EntityManager\Entities\{Fetcher as FetcherInterface, FetchResult, KeyMaker};
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHavePropertyException;
-use Medas\StorageManager\Interfaces\Store;
-use Medas\StorageManager\Interfaces\StoreRecord;
+use Medas\StorageManager\Interfaces\{Store, StoreRecord};
 
 #[Service]
 class Fetcher implements FetcherInterface
