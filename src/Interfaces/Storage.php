@@ -21,4 +21,6 @@ interface Storage
     public function lastGeneratedValue(): int|null;
 
     public function deleteStore(string $name);
+
+    public function actionBuilder(): ActionBuilder;
 }
