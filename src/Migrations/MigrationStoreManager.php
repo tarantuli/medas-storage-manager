@@ -6,9 +6,9 @@ namespace Medas\StorageManager\Migrations;
 
 use Medas\ConfigOptions\OptionController;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\Blueprint\{Blueprint, Field, Index, Type};
 use Medas\StorageManager\ConfigOptions\MigrationsStore;
 use Medas\StorageManager\Interfaces\Store;
+use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index, Blueprint\Type};
 
 #[Service]
 class MigrationStoreManager
@@ -42,15 +42,13 @@ class MigrationStoreManager
 
         $migrationField = new Field('migration', Type::Text);
         $datetimeField = new Field('migrated_at', Type::DateTime);
-        $index = new Index('migration');
 
-        $blueprint->addField($migrationField);
-        $blueprint->addField($datetimeField);
+        $blueprint->fields[] = $migrationField;
+        $blueprint->fields[] = $datetimeField;
 
-        $index->fields[] = $migrationField;
-        $blueprint->addIndex($index);
+        $blueprint->indexes[] = new Index([$migrationField]);
 
-        $store->storage()->actionBuilder()->createTable($blueprint)->execute();
+        $store->storage()->actionBuilder()->createStore($blueprint)->execute();
 
     }
 }

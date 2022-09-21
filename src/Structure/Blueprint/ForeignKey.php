@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\StorageManager\Blueprint;
+namespace Medas\StorageManager\Structure\Blueprint;
 
 class ForeignKey
 {
