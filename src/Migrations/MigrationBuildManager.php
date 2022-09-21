@@ -112,7 +112,7 @@ class MigrationBuildManager
     private function processEntity(string $className, Entity $entity): void
     {
         $storage = storage($entity->storage);
-        $storage->controller()->migrationBuilder()
+        $storage->migrationBuilder()
             ->build($storage, $className, $this->migrateMethod, $this->undoMethod);
     }
 }

@@ -87,11 +87,10 @@ class Fetcher implements FetcherInterface
 
     private function deserialize(MetaData $metaData, StoreRecord &$record): void
     {
-        $serializerFinder = storage($metaData->entity->storage)->controller()->typeSerializerFinder();
+        $serializer = storage($metaData->entity->storage)->serializer();
 
         foreach ($record as $key => &$value) {
-            $serializer = $serializerFinder->for($metaData->property($key)->type);
-            $value = $serializer->deserialize($value);
+            $value = $serializer->deserialize($metaData->property($key)->type, $value);
         }
     }
 
@@ -103,7 +102,7 @@ class Fetcher implements FetcherInterface
     public function fetch(Selector $selector = null, array $arguments = []): array
     {
         $metaData = $this->metaDataManager->get($selector->entity());
-        $query = storage($metaData->entity->storage)->controller()->selectorActionBuilder()
+        $query = storage($metaData->entity->storage)->selectorActionBuilder()
             ->build($selector, $arguments);
 
         $query->execute();
