@@ -20,6 +20,7 @@ abstract class AbstractStorageTest extends BaseTest
 
     public function testPrepare(): void
     {
+        em()->clear();
         $this->initialize();
 
         self::assertInstanceOf(Storage::class, storage());
