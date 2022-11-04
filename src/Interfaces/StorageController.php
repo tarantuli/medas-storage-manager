@@ -13,6 +13,8 @@ interface StorageController
 
     public function deleteStore(string $name): void;
 
+    public function lastGeneratedValue(): int|null;
+
     public function serializer(): TypeSerializer;
 
     public function actionBuilder(): ActionBuilder;

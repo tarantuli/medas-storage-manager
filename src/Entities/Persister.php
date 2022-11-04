@@ -46,7 +46,7 @@ class Persister
     private function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
-        $serializer = storage($metaData->entity->storage)->serializer();
+        $serializer = storage($metaData->entity->storage)->controller()->serializer();
         $serializedValues = [];
 
         foreach ($metaData->properties as $property) {
@@ -73,7 +73,7 @@ class Persister
         }
 
         return function (Storage $storage) use ($metaData, $entity) {
-            $metaData->idProperty->reflection->setValue($entity, $storage->lastGeneratedValue());
+            $metaData->idProperty->reflection->setValue($entity, $storage->controller()->lastGeneratedValue());
             em()->resetKey($entity);
         };
     }
@@ -87,7 +87,7 @@ class Persister
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
-        $serializer = storage($metaData->entity->storage)->serializer();
+        $serializer = storage($metaData->entity->storage)->controller()->serializer();
         $serializedValues = [];
 
         foreach ($changedValues as $name => $value) {

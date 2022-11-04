@@ -10,7 +10,5 @@ interface Storage
 
     public function store(string $name): Store;
 
-    public function lastGeneratedValue(): int|null;
-
     public function controller(): StorageController;
 }
