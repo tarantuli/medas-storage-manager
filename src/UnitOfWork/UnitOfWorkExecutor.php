@@ -12,7 +12,7 @@ class UnitOfWorkExecutor
     public function execute(UnitOfWork $unitOfWork): void
     {
         foreach ($unitOfWork->storages() as $storage) {
-            $storage->transaction()->begin();
+            $storage->controller()->transaction()->begin();
         }
 
         try {
@@ -22,14 +22,14 @@ class UnitOfWorkExecutor
         }
         catch (\Exception $exception) {
             foreach ($unitOfWork->storages() as $storage) {
-                $storage->transaction()->rollback();
+                $storage->controller()->transaction()->rollback();
             }
 
             throw $exception;
         }
 
         foreach ($unitOfWork->storages() as $storage) {
-            $storage->transaction()->commit();
+            $storage->controller()->transaction()->commit();
         }
     }
 }
