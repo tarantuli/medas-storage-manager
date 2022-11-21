@@ -38,15 +38,15 @@ class MigrationStoreManager
     {
         $blueprint = new Blueprint();
 
-        $blueprint->name = $store->name();
+        $blueprint->setName($store->name());
 
         $migrationField = new Field('migration', Type::Text);
         $datetimeField = new Field('migrated_at', Type::DateTime);
 
-        $blueprint->fields[] = $migrationField;
-        $blueprint->fields[] = $datetimeField;
+        $blueprint->addField($migrationField);
+        $blueprint->addField($datetimeField);
 
-        $blueprint->indexes[] = new Index([$migrationField]);
+        $blueprint->addIndex(new Index([$migrationField]));
 
         $store->storage()->controller()->actionBuilder()->createStore($blueprint)->execute();
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\StorageManagerTest\Functional;
 
-use Medas\StorageManager\Migrations\MigrationBuildManager;
 use Medas\StorageManagerTest\BaseTest;
 use Medas\StorageManagerTest\MockUps\Relations\Group;
 use Medas\StorageManagerTest\MockUps\Relations\Person;
@@ -23,15 +22,15 @@ class OneToManyRelationTest extends BaseTest
         $this->rebuildTables();
 
         // Check that both tables exist and are empty
-        self::assertNull(storage()->store('persons')->fetchRecord([]));
+        self::assertNull(storage()->store('people')->fetchRecord([]));
         self::assertNull(storage()->store('groups')->fetchRecord([]));
     }
 
     private function rebuildTables(): void
     {
         // Delete both stores if they still exist
-        storage()->deleteStore('persons');
-        storage()->deleteStore('groups');
+        storage()->controller()->deleteStore('people');
+        storage()->controller()->deleteStore('groups');
 
         // Execute the migration
         $migration = $this->createMigrationClassContent();

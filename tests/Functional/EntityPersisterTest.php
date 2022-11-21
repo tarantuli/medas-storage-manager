@@ -6,9 +6,10 @@ namespace Medas\StorageManagerTest\Functional;
 
 use Medas\EntityManager\Repository;
 use Medas\StorageManagerTest\BaseTest;
-use Medas\StorageManagerTest\MockUps\Migrations\StoredEntity;
-use Medas\StorageManagerTest\MockUps\Selectors\StoredEntityWithId;
-use Medas\StorageManagerTest\MockUps\Selectors\StoredEntityWithName;
+use Medas\StorageManagerTest\MockUps\{Migrations\StoredEntity,
+    Selectors\StoredEntityWithId,
+    Selectors\StoredEntityWithName
+};
 
 class EntityPersisterTest extends BaseTest
 {

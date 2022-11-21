@@ -36,7 +36,7 @@ class EntityStructureFinder
 
     private function findName(): void
     {
-        $this->blueprint->name = $this->metaData->entity->store;
+        $this->blueprint->setName($this->metaData->entity->store);
     }
 
     private function findFields(): void
@@ -44,7 +44,7 @@ class EntityStructureFinder
         foreach ($this->metaData->properties as $property) {
             $field = new Blueprint\Field($property->name, Blueprint\Type::Text);
             $this->analyseProperty($property, $field);
-            $this->blueprint->fields[] = $field;
+            $this->blueprint->addField($field);
         }
     }
 
@@ -74,7 +74,7 @@ class EntityStructureFinder
             $index->fields[] = $this->blueprint->fieldByName($property->name);
         }
 
-        $this->blueprint->indexes[] = $index;
+        $this->blueprint->addIndex($index);
     }
 
     private function findKeys(): void
@@ -85,7 +85,9 @@ class EntityStructureFinder
                 continue;
             }
 
-            $this->blueprint->indexes[] = new Blueprint\Index([$this->blueprint->fieldByName($property->name)], false, true);
+            $this->blueprint->addIndex(
+                new Blueprint\Index([$this->blueprint->fieldByName($property->name)], false, true)
+            );
         }
     }
 
@@ -95,7 +97,7 @@ class EntityStructureFinder
             $handler = $this->typeHandlerFinder->for($property->type);
 
             if ($foreignKey = $handler->foreignKey($property)) {
-                $this->blueprint->foreignKeys[] = $foreignKey;
+                $this->blueprint->addForeignKey($foreignKey);
             }
         }
     }
