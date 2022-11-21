@@ -18,14 +18,6 @@ class OneToManyRelationTest extends BaseTest
         self::assertStringContainsString('class Migration', $migration);
     }
 
-    private function createMigrationClassContent(): string
-    {
-        $buildManager = service(MigrationBuildManager::class);
-        $directory = realpath(__DIR__ . '/../MockUps/Relations');
-
-        return $buildManager->createMigrationClass($directory);
-    }
-
     public function testExecuteMigration(): void
     {
         $this->rebuildTables();

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional\Migrations;
 
 use Medas\PdoStorage\Queries\Query;
-use Medas\StorageManager\Migrations\MigrationBuildManager;
 use Medas\StorageManagerTest\BaseTest;
 
 class MigrationBuildTest extends BaseTest
@@ -17,14 +16,6 @@ class MigrationBuildTest extends BaseTest
         self::assertStringContainsString('class Migration', $migration);
     }
 
-    private function createMigrationClassContent(): string
-    {
-        $buildManager = service(MigrationBuildManager::class);
-        $directory = realpath(__DIR__ . '/../../MockUps/Migrations');
-
-        return $buildManager->createMigrationClass($directory);
-    }
-
     public function testExecuteMigration(): void
     {
         $newStoreName = 'new_stored_entities';
@@ -34,7 +25,7 @@ class MigrationBuildTest extends BaseTest
         $store = storage()->store($newStoreName);
 
         // Prepare database by deleting the table if it exists
-        storage()->deleteStore($newStoreName);
+        storage()->controller()->deleteStore($newStoreName);
 
         // Alter the existing store
         (new Query("alter table $existingStoreName modify column name varchar(255) null"))->execute();

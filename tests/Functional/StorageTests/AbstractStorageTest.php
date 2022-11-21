@@ -13,11 +13,6 @@ abstract class AbstractStorageTest extends BaseTest
 {
     protected Storage $storage;
 
-    /**
-     * This method should register a default storage
-     */
-    abstract protected function initialize(): void;
-
     public function testPrepare(): void
     {
         em()->clear();
@@ -27,13 +22,18 @@ abstract class AbstractStorageTest extends BaseTest
     }
 
     /**
+     * This method should register a default storage
+     */
+    abstract protected function initialize(): void;
+
+    /**
      * @depends testPrepare
      */
     public function testMigration(): void
     {
         // Delete both stores if they still exist
-        storage()->deleteStore('people');
-        storage()->deleteStore('groups');
+        storage()->controller()->deleteStore('people');
+        storage()->controller()->deleteStore('groups');
 
         // Create and execute a migration
         $migration = $this->createMigrationClassContent();
