@@ -17,6 +17,11 @@ class Blueprint
     /** @var Blueprint\ForeignKey[] */
     private array $foreignKeys = [];
 
+    public function name(): string
+    {
+        return $this->name;
+    }
+
     public function setName(string $name): void
     {
         $this->name = $name;

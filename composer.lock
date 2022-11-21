@@ -1081,12 +1081,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "f45477e43bd7ba899f6d8e6d319cb9ac659eaebc"
+                "reference": "85823b8090d6558edd7e37d6f2e5aa21c213ad9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/f45477e43bd7ba899f6d8e6d319cb9ac659eaebc",
-                "reference": "f45477e43bd7ba899f6d8e6d319cb9ac659eaebc",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/85823b8090d6558edd7e37d6f2e5aa21c213ad9e",
+                "reference": "85823b8090d6558edd7e37d6f2e5aa21c213ad9e",
                 "shasum": ""
             },
             "require": {
@@ -1118,7 +1118,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2022-11-21T10:02:44+00:00"
+            "time": "2022-11-21T11:08:48+00:00"
         },
         {
             "name": "myclabs/deep-copy",
