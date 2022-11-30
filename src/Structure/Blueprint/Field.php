@@ -17,6 +17,7 @@ class Field
         public mixed  $default = null,
         public int    $minValue = 0,
         public int    $maxValue = Integer::UNSIGNED_4_BYTE_MAX,
+        public int    $minLength = 0,
         public int    $maxLength = Integer::UNSIGNED_1_BYTE_MAX,
     )
     {

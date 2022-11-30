@@ -6,6 +6,8 @@ namespace Medas\StorageManager\Structure;
 
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
+use Medas\EntityManager\Types\Binary;
+use Medas\EntityManager\Types\Integer;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -63,6 +65,16 @@ class EntityStructureFinder
         if ($property->isNullable || $property->default !== null) {
             $field->hasDefault = true;
             $field->default = $property->default;
+        }
+
+        if ($property->type instanceof Integer) {
+            $field->minValue = $property->type->minValue;
+            $field->maxValue = $property->type->minValue;
+        }
+
+        if ($property->type instanceof Binary) {
+            $field->minLength = $property->type->minLength;
+            $field->maxLength = $property->type->maxLength;
         }
     }
 
