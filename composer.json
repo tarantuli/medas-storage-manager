@@ -20,6 +20,7 @@
         "morphp/medas-config-manager": "dev-dev",
         "morphp/medas-console-printer": "dev-dev",
         "morphp/medas-pdo-storage": "dev-dev",
+        "morphp/medas-ramsey-uuid-bridge": "dev-dev",
         "phpunit/phpunit": "^9.5"
     },
     "extra": {

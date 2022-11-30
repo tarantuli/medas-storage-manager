@@ -8,7 +8,9 @@ use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Snapshots\{Snapshot, SnapshotManager};
+use Medas\EntityManager\Types\Guid;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Values\Interfaces\GuidProvider;
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
 
@@ -17,6 +19,7 @@ class Persister
 {
     public function __construct(
         private readonly Fetcher           $fetcher,
+        private readonly GuidProvider|null $guidProvider,
         private readonly MetaDataManager   $metaDataManager,
         private readonly SnapshotManager   $snapshotManager,
         private readonly UnitOfWorkManager $unitOfWorkManager,
@@ -60,6 +63,15 @@ class Persister
             }
             elseif ($property->reflection->isInitialized($entity)) {
                 $value = $property->reflection->getValue($entity);
+                $foundValue = true;
+            }
+            elseif ($property->type instanceof Guid) {
+                if ($this->guidProvider === null) {
+                    throw new \Exception('no GuidProvider registered, but it is needed');
+                }
+
+                $value = $this->guidProvider->create();
+                $property->reflection->setValue($entity, $value);
                 $foundValue = true;
             }
 

@@ -6,6 +6,7 @@ use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
 use Medas\ConsolePrinter\ConsolePrinterPackage;
 use Medas\PdoStorage\Database;
 use Medas\PdoStorage\PdoStoragePackage;
+use Medas\RamseyUuidBridge\RamseyUuidBridgePackage;
 use Medas\ServiceManager\ServiceManager;
 use Medas\StorageManager\Entities\{Fetcher, Flusher};
 use Medas\StorageManager\StorageManager;
@@ -18,7 +19,8 @@ $sm = ServiceManager::get();
 $sm->addPackage(StorageManagerPackage::instance())
     ->addPackage(ConfigManagerPackage::instance())
     ->addPackage(ConsolePrinterPackage::instance())
-    ->addPackage(PdoStoragePackage::instance());
+    ->addPackage(PdoStoragePackage::instance())
+    ->addPackage(RamseyUuidBridgePackage::instance());
 
 /** @var ConfigManager $config */
 $config = $sm->resolve(ConfigManager::class);

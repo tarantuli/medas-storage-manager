@@ -7,7 +7,6 @@ namespace Medas\StorageManagerTest\Functional;
 use Medas\PdoStorage\Table;
 use Medas\StorageManagerTest\BaseTest;
 use Medas\StorageManagerTest\MockUps\Attributes\TimestampedPost;
-use function PHPUnit\Framework\assertInstanceOf;
 
 class TimestampsTest extends BaseTest
 {
@@ -19,7 +18,7 @@ class TimestampsTest extends BaseTest
         $migration = $this->createMigrationClassContent();
         $this->executeMigration($migration);
 
-        assertInstanceOf(Table::class, storage()->store(self::TABLE_NAME));
+        self::assertInstanceOf(Table::class, storage()->store(self::TABLE_NAME));
     }
 
     /**
