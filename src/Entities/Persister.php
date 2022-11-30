@@ -50,20 +50,35 @@ class Persister
         $serializedValues = [];
 
         foreach ($metaData->properties as $property) {
-            if ($property->reflection->isInitialized($entity)) {
+            $foundValue = false;
+            $value = null;
+
+            if ($property->isCreationTimestamp || $property->isModificationTimestamp) {
+                $value = new \DateTime();
+                $property->reflection->setValue($entity, $value);
+                $foundValue = true;
+            }
+            elseif ($property->reflection->isInitialized($entity)) {
                 $value = $property->reflection->getValue($entity);
+                $foundValue = true;
+            }
+
+            if ($foundValue) {
                 $serializedValues[$property->name] = $serializer->serialize($property->type, $value);
             }
         }
-
-        $onComplete = $this->generatedValueSetter($metaData, $entity);
 
         $this->unitOfWorkManager->queueCreate(
             $unitOfWork,
             $this->getStore($metaData),
             $serializedValues,
-            $onComplete
+            $this->generatedValueSetter($metaData, $entity)
         );
+    }
+
+    private function getStore(MetaData $metaData): Store
+    {
+        return storage($metaData->entity->storage)->store($metaData->entity->store);
     }
 
     private function generatedValueSetter(MetaData $metaData, object $entity): ?\Closure
@@ -78,17 +93,20 @@ class Persister
         };
     }
 
-    private function getStore(MetaData $metaData): Store
-    {
-        return storage($metaData->entity->storage)->store($metaData->entity->store);
-    }
-
     private function prepareUpdate(object $entity, array $changedValues, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
         $serializer = storage($metaData->entity->storage)->controller()->serializer();
         $serializedValues = [];
+
+        foreach ($metaData->properties as $property) {
+            if ($property->isModificationTimestamp) {
+                $value = new \DateTime();
+                $serializedValues[$property->name] = $serializer->serialize($property->type, $value);
+                $property->reflection->setValue($entity, $value);
+            }
+        }
 
         foreach ($changedValues as $name => $value) {
             $serializedValues[$name] = $serializer->serialize($metaData->property($name)->type, $value);
