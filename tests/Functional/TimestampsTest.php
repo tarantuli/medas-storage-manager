@@ -15,7 +15,7 @@ class TimestampsTest extends BaseTest
     public function testCreateTable(): void
     {
         storage()->controller()->deleteStore(self::TABLE_NAME);
-        $migration = $this->createMigrationClassContent();
+        $migration = $this->createMigrationClassContent('Attributes');
         $this->executeMigration($migration);
 
         self::assertInstanceOf(Table::class, storage()->store(self::TABLE_NAME));

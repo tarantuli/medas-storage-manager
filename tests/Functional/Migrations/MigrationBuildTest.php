@@ -11,7 +11,7 @@ class MigrationBuildTest extends BaseTest
 {
     public function testCreateMigration(): void
     {
-        $migration = $this->createMigrationClassContent();
+        $migration = $this->createMigrationClassContent('Migrations');
 
         self::assertStringContainsString('class Migration', $migration);
     }
@@ -30,7 +30,7 @@ class MigrationBuildTest extends BaseTest
         // Alter the existing store
         (new Query("alter table $existingStoreName modify column name varchar(255) null"))->execute();
 
-        $migration = $this->createMigrationClassContent();
+        $migration = $this->createMigrationClassContent('Migrations');
         $this->executeMigration($migration);
 
         // The table should exist and be empty

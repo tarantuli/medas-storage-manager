@@ -9,12 +9,16 @@ use PHPUnit\Framework\TestCase;
 
 abstract class BaseTest extends TestCase
 {
-    protected function createMigrationClassContent(): string
+    protected function createMigrationClassContent(string $directory): string
     {
         $buildManager = service(MigrationBuildManager::class);
-        $directory = realpath(__DIR__ . '/MockUps');
+        $realDirectory = realpath(__DIR__ . '/MockUps/' . $directory);
 
-        return $buildManager->createMigrationClass($directory);
+        if ($realDirectory === false) {
+            throw new \Exception('directory "' . __DIR__ . '/MockUps/' . $directory . '" does not exist');
+        }
+
+        return $buildManager->createMigrationClass($realDirectory);
     }
 
     protected function executeMigration(string $migration): void

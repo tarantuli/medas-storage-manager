@@ -36,7 +36,7 @@ abstract class AbstractStorageTest extends BaseTest
         storage()->controller()->deleteStore('groups');
 
         // Create and execute a migration
-        $migration = $this->createMigrationClassContent();
+        $migration = $this->createMigrationClassContent('Relations');
 
         self::assertStringContainsString('public function migrate(', $migration);
 

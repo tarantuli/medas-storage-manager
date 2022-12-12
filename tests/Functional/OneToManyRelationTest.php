@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional;
 
 use Medas\StorageManagerTest\BaseTest;
-use Medas\StorageManagerTest\MockUps\Relations\Group;
-use Medas\StorageManagerTest\MockUps\Relations\Person;
+use Medas\StorageManagerTest\MockUps\Relations\{Group, Person};
 
 class OneToManyRelationTest extends BaseTest
 {
     public function testCreateMigration(): void
     {
-        $migration = $this->createMigrationClassContent();
+        $migration = $this->createMigrationClassContent('Relations');
 
         self::assertStringContainsString('class Migration', $migration);
     }
@@ -33,7 +32,7 @@ class OneToManyRelationTest extends BaseTest
         storage()->controller()->deleteStore('groups');
 
         // Execute the migration
-        $migration = $this->createMigrationClassContent();
+        $migration = $this->createMigrationClassContent('Relations');
         $this->executeMigration($migration);
     }
 

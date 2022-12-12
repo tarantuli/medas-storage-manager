@@ -5,8 +5,8 @@ storage:
     dns: $env(DB_PDO_DNS)
     username: $env(DB_PDO_USERNAME)
     password: $env(DB_PDO_PASSWORD)
-  migration-directory: tests/Migrations
-  entity-directory: tests/MockUps
+  migration-directory: $env(STORAGE_MIGRATION_DIRECTORY)
+  entity-directory: $env(STORAGE_ENTITY_DIRECTORY)
 
 php-formatter:
   validator:

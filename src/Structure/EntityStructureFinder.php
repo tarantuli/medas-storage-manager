@@ -6,9 +6,9 @@ namespace Medas\StorageManager\Structure;
 
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Types\Binary;
-use Medas\EntityManager\Types\Integer;
+use Medas\EntityManager\Types\{Binary, Integer, Relation};
 use Medas\ServiceManager\Attributes\Service;
+use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
 
 #[Service]
 class EntityStructureFinder
@@ -19,6 +19,7 @@ class EntityStructureFinder
     public function __construct(
         private readonly MetaDataManager   $metaDataManager,
         private readonly TypeHandlerFinder $typeHandlerFinder,
+        private readonly EnumHandler       $enumHandler,
     )
     {
     }
@@ -52,7 +53,8 @@ class EntityStructureFinder
 
     protected function analyseProperty(MetaData\Property $property, Blueprint\Field $field): void
     {
-        $field->type = $this->typeHandlerFinder->for($property->type)->fieldType($property);
+        $typeHandler = $this->typeHandlerFinder->for($property->type);
+        $field->type = $typeHandler->fieldType($property);
 
         if (!$property->isGeneratedValue && $property->isNullable) {
             $field->isNullable = true;
@@ -67,14 +69,27 @@ class EntityStructureFinder
             $field->default = $property->default;
         }
 
-        if ($property->type instanceof Integer) {
-            $field->minValue = $property->type->minValue;
-            $field->maxValue = $property->type->minValue;
+        $type = $property->type;
+
+        if ($type instanceof Relation) {
+            if (enum_exists($type->entity)) {
+                $type = $this->enumHandler->getPseudoType($type->entity);
+            }
+            else {
+                // Use the type of the id property of the related entity
+                /** @var RelationHandler $typeHandler */
+                $type = $typeHandler->getIdProperty($type->entity)->type;
+            }
         }
 
-        if ($property->type instanceof Binary) {
-            $field->minLength = $property->type->minLength;
-            $field->maxLength = $property->type->maxLength;
+        if ($type instanceof Integer) {
+            $field->minValue = $type->minValue;
+            $field->maxValue = $type->minValue;
+        }
+
+        if ($type instanceof Binary) {
+            $field->minLength = $type->minLength;
+            $field->maxLength = $type->maxLength;
         }
     }
 

@@ -8,44 +8,57 @@ use Medas\EntityManager\MetaData\Property;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\Relation;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\Structure\{TypeHandlerFinder};
-use Medas\StorageManager\Structure\Blueprint\{ForeignKey, Type};
+use Medas\StorageManager\Structure\{Blueprint\ForeignKey, Blueprint\Type, TypeHandlerFinder};
 
 #[Service]
 class RelationHandler extends BaseHandler
 {
     public function __construct(
         private readonly MetaDataManager $metaDataManager,
+        private readonly EnumHandler     $enumHandler,
     )
     {
     }
 
     public function fieldType(Property $property): Type
     {
-        // We can't inject it in the constructor due to circular dependencies
-        $typeHandlerFinder = service(TypeHandlerFinder::class);
-        $idProperty = $this->getIdProperty($property);
-
-        return $typeHandlerFinder->for($idProperty->type)->fieldType($property);
-    }
-
-    private function getIdProperty(Property $property): ?Property
-    {
         /** @var Relation $type */
         $type = $property->type;
-        $metaData = $this->metaDataManager->get($type->entity);
 
-        return $metaData->idProperty;
+        return match (true) {
+            enum_exists($type->entity) => $this->enumHandler->getBlueprintType($type->entity),
+            default => $this->getEntityType($type->entity),
+        };
+    }
+
+    private function getEntityType(string $entity): Type
+    {
+        $idProperty = $this->getIdProperty($entity);
+
+        // We can't inject it in the constructor due to circular dependencies
+        $typeHandlerFinder = service(TypeHandlerFinder::class);
+
+        return $typeHandlerFinder->for($idProperty->type)->fieldType($idProperty);
+    }
+
+    public function getIdProperty(string $entity): ?Property
+    {
+        return $this->metaDataManager->get($entity)->idProperty;
     }
 
     public function foreignKey(Property $property): ForeignKey|null
     {
         /** @var Relation $type */
         $type = $property->type;
-        $metaData = $this->metaDataManager->get($type->entity);
 
-        $idProperty = $this->getIdProperty($property);
+        if (enum_exists($type->entity)) {
+            return null;
+        }
 
-        return new ForeignKey($property->name, $metaData->entity->store, $idProperty->name);
+        return new ForeignKey(
+            $property->name,
+            $this->metaDataManager->get($type->entity)->entity->store,
+            $this->getIdProperty($type->entity)->name
+        );
     }
 }
