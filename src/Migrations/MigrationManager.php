@@ -11,7 +11,7 @@ use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 #[Service]
 class MigrationManager
 {
-    private array $migrations;
+    private array $processedMigrations = [];
 
     public function __construct(
         private readonly DirectoryManager      $directoryManager,
@@ -32,19 +32,22 @@ class MigrationManager
     private function processEntities(string $directory): void
     {
         $unitOfWork = new UnitOfWork();
-        $this->migrations = $this->findMigrations($directory);
+        $migrations = $this->findMigrations($directory);
 
-        foreach ($this->migrations as $migration) {
+        foreach ($migrations as $migration) {
             if ($this->isExecuted($migration)) {
                 continue;
             }
 
             $migration->migrate($unitOfWork);
-
-            $this->registerExecution($migration);
+            $this->processedMigrations[] = $migration;
         }
 
         $this->unitOfWorkExecutor->execute($unitOfWork);
+
+        foreach ($this->processedMigrations as $migration) {
+            $this->registerExecution($migration);
+        }
     }
 
     /** @return Migration[] */
@@ -102,6 +105,6 @@ class MigrationManager
 
     public function processedMigrations(): array
     {
-        return $this->migrations;
+        return $this->processedMigrations;
     }
 }
