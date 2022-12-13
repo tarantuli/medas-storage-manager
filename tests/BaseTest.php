@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class BaseTest extends TestCase
 {
-    protected function createMigrationClassContent(string $directory): string
+    protected function createMigrationClassContent(string $directory): string|null
     {
         $buildManager = service(MigrationBuildManager::class);
         $realDirectory = realpath(__DIR__ . '/MockUps/' . $directory);

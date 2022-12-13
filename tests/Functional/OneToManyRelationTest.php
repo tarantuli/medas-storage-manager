@@ -11,6 +11,9 @@ class OneToManyRelationTest extends BaseTest
 {
     public function testCreateMigration(): void
     {
+        storage()->controller()->deleteStore('people');
+        storage()->controller()->deleteStore('groups');
+
         $migration = $this->createMigrationClassContent('Relations');
 
         self::assertStringContainsString('class Migration', $migration);

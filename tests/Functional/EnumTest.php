@@ -18,6 +18,8 @@ class EnumTest extends BaseTest
 
     public function testBackedEnum(): void
     {
+        storage()->controller()->deleteStore('backed_enum_entities');
+
         $migration = $this->createMigrationClassContent('BackedEnums');
 
         self::assertStringContainsString('`enum` tinyint', $migration);

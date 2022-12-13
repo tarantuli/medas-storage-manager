@@ -15,7 +15,7 @@ use Medas\StorageManager\UnitOfWork\UnitOfWork;
 class MigrationBuildManager
 {
     private string $className;
-    private string $classCode;
+    private string|null $classCode;
     private bool $migrationNeeded;
 
     private PhpClassDefinition $migrationClass;
@@ -41,7 +41,7 @@ class MigrationBuildManager
         return $this->migrationNeeded;
     }
 
-    public function createMigrationClass(string $directory): void
+    public function createMigrationClass(string $directory): string|null
     {
         $directory = realpath($directory);
 
@@ -50,9 +50,7 @@ class MigrationBuildManager
         $this->directoryManager->loadPhpFiles($directory);
         $this->processEntities($directory);
 
-        if ($this->migrationNeeded) {
-            $this->classCode = $this->phpClassBuilder->build($this->migrationClass);
-        }
+        return $this->classCode = $this->migrationNeeded ? $this->phpClassBuilder->build($this->migrationClass) : null;
     }
 
     private function initializeClass(): void
@@ -126,6 +124,6 @@ class MigrationBuildManager
         $needed = $storage->controller()->migrationBuilder()
             ->build($storage, $className, $this->migrateMethod, $this->undoMethod);
 
-        $this->migrationNeeded |= $needed;
+        $this->migrationNeeded = $this->migrationNeeded || $needed;
     }
 }
