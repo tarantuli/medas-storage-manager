@@ -12,5 +12,5 @@ interface MigrationBuilder
     public function build(Storage          $storage,
                           string           $className,
                           MethodDefinition $migrateMethod,
-                          MethodDefinition $undoMethod): void;
+                          MethodDefinition $undoMethod): bool;
 }

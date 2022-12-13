@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "f7bb13c5a24f050a9c2c57d78e77dbed0625f4de"
+                "reference": "130eb1f824dc5847aeb08c02bf258c0a1eb5fe69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/f7bb13c5a24f050a9c2c57d78e77dbed0625f4de",
-                "reference": "f7bb13c5a24f050a9c2c57d78e77dbed0625f4de",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/130eb1f824dc5847aeb08c02bf258c0a1eb5fe69",
+                "reference": "130eb1f824dc5847aeb08c02bf258c0a1eb5fe69",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2022-12-01T13:41:52+00:00"
+            "time": "2022-12-12T08:37:41+00:00"
         },
         {
             "name": "morphp/medas-file-builder",
@@ -315,12 +315,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "819d7cae6eaf3c15ceac46392ebebe8f0d0e241d"
+                "reference": "190469ecee7ba5019299a07b18a4e1be5b970cb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/819d7cae6eaf3c15ceac46392ebebe8f0d0e241d",
-                "reference": "819d7cae6eaf3c15ceac46392ebebe8f0d0e241d",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/190469ecee7ba5019299a07b18a4e1be5b970cb6",
+                "reference": "190469ecee7ba5019299a07b18a4e1be5b970cb6",
                 "shasum": ""
             },
             "require": {
@@ -354,7 +354,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2022-12-07T14:41:04+00:00"
+            "time": "2022-12-12T09:30:23+00:00"
         }
     ],
     "packages-dev": [
@@ -595,12 +595,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-console-printer.git",
-                "reference": "d6ad8551bed5d5e49684fa4a66b639c1f1987fdd"
+                "reference": "2ca71c31090cf51700c6080d66717be83e25049e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-console-printer/zipball/d6ad8551bed5d5e49684fa4a66b639c1f1987fdd",
-                "reference": "d6ad8551bed5d5e49684fa4a66b639c1f1987fdd",
+                "url": "https://api.github.com/repos/tarantuli/medas-console-printer/zipball/2ca71c31090cf51700c6080d66717be83e25049e",
+                "reference": "2ca71c31090cf51700c6080d66717be83e25049e",
                 "shasum": ""
             },
             "require": {
@@ -630,7 +630,7 @@
                 "source": "https://github.com/tarantuli/medas-console-printer/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-console-printer/issues"
             },
-            "time": "2022-09-14T10:27:53+00:00"
+            "time": "2022-12-12T14:29:47+00:00"
         },
         {
             "name": "morphp/medas-pdo-storage",
@@ -638,12 +638,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "543144f5ff8d238c94acf94f7a6e32d2b929ebf7"
+                "reference": "3efd59271e8b641359a338ea9a65f7ea8253f2a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/543144f5ff8d238c94acf94f7a6e32d2b929ebf7",
-                "reference": "543144f5ff8d238c94acf94f7a6e32d2b929ebf7",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/3efd59271e8b641359a338ea9a65f7ea8253f2a3",
+                "reference": "3efd59271e8b641359a338ea9a65f7ea8253f2a3",
                 "shasum": ""
             },
             "require": {
@@ -675,7 +675,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2022-11-30T15:12:26+00:00"
+            "time": "2022-12-12T15:23:50+00:00"
         },
         {
             "name": "morphp/medas-ramsey-uuid-bridge",

@@ -15,6 +15,9 @@ use Medas\StorageManager\UnitOfWork\UnitOfWork;
 class MigrationBuildManager
 {
     private string $className;
+    private string $classCode;
+    private bool $migrationNeeded;
+
     private PhpClassDefinition $migrationClass;
     private MethodDefinition $migrateMethod;
     private MethodDefinition $undoMethod;
@@ -26,14 +29,19 @@ class MigrationBuildManager
     {
     }
 
-    public function createMigration(string $sourceDirectory, string $migrationsDirectory): void
+    public function createMigration(string $sourceDirectory, string $migrationsDirectory): bool
     {
-        $classCode = $this->createMigrationClass(realpath($sourceDirectory));
-        $this->directoryManager->create($migrationsDirectory);
-        file_put_contents($migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php', $classCode);
+        $this->createMigrationClass(realpath($sourceDirectory));
+
+        if ($this->migrationNeeded) {
+            $this->directoryManager->create($migrationsDirectory);
+            file_put_contents($migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php', $this->classCode);
+        }
+
+        return $this->migrationNeeded;
     }
 
-    public function createMigrationClass(string $directory): string
+    public function createMigrationClass(string $directory): void
     {
         $directory = realpath($directory);
 
@@ -42,7 +50,9 @@ class MigrationBuildManager
         $this->directoryManager->loadPhpFiles($directory);
         $this->processEntities($directory);
 
-        return $this->phpClassBuilder->build($this->migrationClass);
+        if ($this->migrationNeeded) {
+            $this->classCode = $this->phpClassBuilder->build($this->migrationClass);
+        }
     }
 
     private function initializeClass(): void
@@ -81,6 +91,7 @@ class MigrationBuildManager
 
     private function processEntities(string $directory): void
     {
+        $this->migrationNeeded = false;
         foreach (get_declared_classes() as $className) {
             if (null === $entity = $this->determineStoredEntity($className, $directory)) {
                 continue;
@@ -112,7 +123,9 @@ class MigrationBuildManager
     private function processEntity(string $className, Entity $entity): void
     {
         $storage = storage($entity->storage);
-        $storage->controller()->migrationBuilder()
+        $needed = $storage->controller()->migrationBuilder()
             ->build($storage, $className, $this->migrateMethod, $this->undoMethod);
+
+        $this->migrationNeeded |= $needed;
     }
 }
