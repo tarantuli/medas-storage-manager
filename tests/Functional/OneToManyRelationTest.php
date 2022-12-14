@@ -11,6 +11,7 @@ class OneToManyRelationTest extends BaseTest
 {
     public function testCreateMigration(): void
     {
+        storage()->controller()->deleteStore('other_people');
         storage()->controller()->deleteStore('people');
         storage()->controller()->deleteStore('groups');
 
@@ -31,6 +32,7 @@ class OneToManyRelationTest extends BaseTest
     private function rebuildTables(): void
     {
         // Delete both stores if they still exist
+        storage()->controller()->deleteStore('other_people');
         storage()->controller()->deleteStore('people');
         storage()->controller()->deleteStore('groups');
 
