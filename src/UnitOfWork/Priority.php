@@ -14,5 +14,8 @@ enum Priority: int
 
     case CreateRecord = 6;
     case UpdateRecord = 7;
-    case DeleteRecord = 8;
+
+    case Default = 8;
+
+    case DeleteRecord = 9;
 }

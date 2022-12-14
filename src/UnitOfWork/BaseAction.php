@@ -9,7 +9,7 @@ use Medas\StorageManager\Interfaces\Storage;
 abstract class BaseAction implements Action
 {
     protected Storage $storage;
-    protected Priority $priority;
+    protected Priority $priority = Priority::Default;
     private \Closure|null $onComplete = null;
 
     public function storage(): Storage
