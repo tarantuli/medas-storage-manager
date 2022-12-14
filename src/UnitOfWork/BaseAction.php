@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManager\UnitOfWork;
 
 use Medas\StorageManager\Interfaces\Storage;
-use Medas\StorageManager\UnitOfWork\ActionTypes\ActionType;
 
 abstract class BaseAction implements Action
 {
     protected Storage $storage;
-    protected ActionType $type;
+    protected Priority $priority;
     private \Closure|null $onComplete = null;
 
     public function storage(): Storage
@@ -30,14 +29,14 @@ abstract class BaseAction implements Action
         return $this;
     }
 
-    public function type(): ActionType
+    public function priority(): Priority
     {
-        return $this->type;
+        return $this->priority;
     }
 
-    public function setType(ActionType $type): self
+    public function setPriority(Priority $priority): self
     {
-        $this->type = $type;
+        $this->priority = $priority;
 
         return $this;
     }

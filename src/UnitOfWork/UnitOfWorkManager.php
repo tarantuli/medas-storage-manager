@@ -6,7 +6,6 @@ namespace Medas\StorageManager\UnitOfWork;
 
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Interfaces\Store;
-use Medas\StorageManager\UnitOfWork\ActionTypes\{Create, Update};
 
 #[Service]
 class UnitOfWorkManager
@@ -14,14 +13,16 @@ class UnitOfWorkManager
     public function queueUpdate(UnitOfWork $unitOfWork, Store $store, array $updates, array $conditions): void
     {
         $unitOfWork->addAction(
-            $store->prepareUpdate($updates, $conditions)->setType(Update::instance())
+            $store->prepareUpdate($updates, $conditions)
+                ->setPriority(Priority::UpdateRecord)
         );
     }
 
     public function queueCreate(UnitOfWork $unitOfWork, Store $store, array $values, \Closure $onComplete = null): void
     {
         $unitOfWork->addAction(
-            $store->prepareCreate($values)->setOnComplete($onComplete)->setType(Create::instance())
+            $store->prepareCreate($values)->setOnComplete($onComplete)
+                ->setPriority(Priority::CreateRecord)
         );
     }
 

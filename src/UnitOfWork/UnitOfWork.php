@@ -41,6 +41,6 @@ class UnitOfWork
 
     private function sortByPriority(): void
     {
-        usort($this->actions, fn(Action $a, Action $b) => $a->type()->priority() <=> $b->type()->priority());
+        usort($this->actions, fn(Action $a, Action $b) => $a->priority() <=> $b->priority());
     }
 }

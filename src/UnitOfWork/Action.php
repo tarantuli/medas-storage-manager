@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\StorageManager\UnitOfWork;
 
 use Medas\StorageManager\Interfaces\{RecordSet, Storage};
-use Medas\StorageManager\UnitOfWork\ActionTypes\ActionType;
 
 interface Action
 {
@@ -19,7 +18,5 @@ interface Action
 
     public function setOnComplete(\Closure|null $onComplete): self;
 
-    public function type(): ActionType;
-
-    public function setType(ActionType $type): self;
+    public function priority(): Priority;
 }
