@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConsoleCommands;
 
 use Medas\ConfigOptions\OptionController;
-use Medas\Console\Commands\BaseConsoleCommand;
-use Medas\Console\Commands\ConsoleCommandGroup;
+use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
+use Medas\Console\Formats\Color;
+use Medas\Console\Text;
+use Medas\ConsolePrinter\ConsolePrinter;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\ConfigOptions\EntityDirectory;
-use Medas\StorageManager\ConfigOptions\MigrationDirectory;
+use Medas\StorageManager\ConfigOptions\{EntityDirectory, MigrationDirectory};
 use Medas\StorageManager\Migrations\MigrationBuildManager;
 
 #[Service]
@@ -17,6 +18,7 @@ class MakeMigrationCommand extends BaseConsoleCommand
 {
     public function __construct(
         private readonly CommandGroup          $group,
+        private readonly ConsolePrinter        $consolePrinter,
         private readonly MigrationBuildManager $migrationBuildManager,
         private readonly OptionController      $optionController,
     )
@@ -40,9 +42,15 @@ class MakeMigrationCommand extends BaseConsoleCommand
 
     public function process(array $arguments): void
     {
-        $this->migrationBuildManager->createMigration(
+        $filePath = $this->migrationBuildManager->createMigration(
             $this->optionController->getValue(EntityDirectory::instance()),
             $this->optionController->getValue(MigrationDirectory::instance())
         );
+
+        $this->consolePrinter->printEol();
+
+        $filePath
+            ? $this->consolePrinter->print(new Text('created migration file '), new Text($filePath, Color::LightYellow))
+            : $this->consolePrinter->print(new Text('no need to create a migration file', Color::LightGray));
     }
 }

@@ -29,16 +29,19 @@ class MigrationBuildManager
     {
     }
 
-    public function createMigration(string $sourceDirectory, string $migrationsDirectory): bool
+    public function createMigration(string $sourceDirectory, string $migrationsDirectory): string|null
     {
         $this->createMigrationClass(realpath($sourceDirectory));
 
         if ($this->migrationNeeded) {
             $this->directoryManager->create($migrationsDirectory);
-            file_put_contents($migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php', $this->classCode);
+            $filePath = $migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php';
+            file_put_contents($filePath, $this->classCode);
+
+            return $filePath;
         }
 
-        return $this->migrationNeeded;
+        return null;
     }
 
     public function createMigrationClass(string $directory): string|null
