@@ -100,12 +100,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "dd8ce3a660c79768ecbb615f5756d362c934570e"
+                "reference": "9cc7452470dc0f85b5b7911084954fe77d9d62fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/dd8ce3a660c79768ecbb615f5756d362c934570e",
-                "reference": "dd8ce3a660c79768ecbb615f5756d362c934570e",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/9cc7452470dc0f85b5b7911084954fe77d9d62fa",
+                "reference": "9cc7452470dc0f85b5b7911084954fe77d9d62fa",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2022-11-30T09:45:06+00:00"
+            "time": "2022-12-14T14:50:33+00:00"
         },
         {
             "name": "morphp/medas-entity-manager",
@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "130eb1f824dc5847aeb08c02bf258c0a1eb5fe69"
+                "reference": "5dfdfa168c6b961e38b79bd0403ac3628a399b7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/130eb1f824dc5847aeb08c02bf258c0a1eb5fe69",
-                "reference": "130eb1f824dc5847aeb08c02bf258c0a1eb5fe69",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/5dfdfa168c6b961e38b79bd0403ac3628a399b7a",
+                "reference": "5dfdfa168c6b961e38b79bd0403ac3628a399b7a",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2022-12-12T08:37:41+00:00"
+            "time": "2022-12-14T14:47:55+00:00"
         },
         {
             "name": "morphp/medas-file-builder",
@@ -638,12 +638,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "bdea0cf311228f560f7f93279dcf657e55336bc5"
+                "reference": "a7e0a57a80ef56a97c106537d99fbaa7adfbe998"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/bdea0cf311228f560f7f93279dcf657e55336bc5",
-                "reference": "bdea0cf311228f560f7f93279dcf657e55336bc5",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/a7e0a57a80ef56a97c106537d99fbaa7adfbe998",
+                "reference": "a7e0a57a80ef56a97c106537d99fbaa7adfbe998",
                 "shasum": ""
             },
             "require": {
@@ -675,7 +675,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2022-12-13T08:45:45+00:00"
+            "time": "2022-12-15T09:54:32+00:00"
         },
         {
             "name": "morphp/medas-ramsey-uuid-bridge",
@@ -1022,16 +1022,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.20",
+            "version": "9.2.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "af7463c955007de36db0c5e26d03e2f933c2e980"
+                "reference": "3f893e19712bb0c8bc86665d1562e9fd509c4ef0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/af7463c955007de36db0c5e26d03e2f933c2e980",
-                "reference": "af7463c955007de36db0c5e26d03e2f933c2e980",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/3f893e19712bb0c8bc86665d1562e9fd509c4ef0",
+                "reference": "3f893e19712bb0c8bc86665d1562e9fd509c4ef0",
                 "shasum": ""
             },
             "require": {
@@ -1087,7 +1087,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.20"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.21"
             },
             "funding": [
                 {
@@ -1095,7 +1095,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-12-13T07:49:28+00:00"
+            "time": "2022-12-14T13:26:54+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",

@@ -40,13 +40,22 @@ abstract class AbstractStorageTest extends BaseTest
         $migration = $this->createMigrationClassContent('Relations');
 
         self::assertStringContainsString('public function migrate(', $migration);
-        self::assertStringContainsString('ALTER TABLE', $migration);
+        $this->migrationAssertions($migration);
 
         $this->executeMigration($migration);
 
         self::assertTrue(storage()->store('groups')->exists());
         self::assertTrue(storage()->store('people')->exists());
         self::assertTrue(storage()->store('other_people')->exists());
+    }
+
+    /**
+     * This method should make driver specific assertions about the migration file content,
+     * if necessary
+     */
+    protected function migrationAssertions(string $migration): void
+    {
+        // Do nothing by default
     }
 
     /**
