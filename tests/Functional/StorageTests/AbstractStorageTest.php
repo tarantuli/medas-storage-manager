@@ -32,6 +32,7 @@ abstract class AbstractStorageTest extends BaseTest
     public function testMigration(): void
     {
         // Delete both stores if they still exist
+        storage()->controller()->deleteStore('other_people');
         storage()->controller()->deleteStore('people');
         storage()->controller()->deleteStore('groups');
 
@@ -39,11 +40,13 @@ abstract class AbstractStorageTest extends BaseTest
         $migration = $this->createMigrationClassContent('Relations');
 
         self::assertStringContainsString('public function migrate(', $migration);
+        self::assertStringContainsString('ALTER TABLE', $migration);
 
         $this->executeMigration($migration);
 
         self::assertTrue(storage()->store('groups')->exists());
         self::assertTrue(storage()->store('people')->exists());
+        self::assertTrue(storage()->store('other_people')->exists());
     }
 
     /**
