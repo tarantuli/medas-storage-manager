@@ -14,7 +14,6 @@ class UnitOfWorkManager
     {
         $unitOfWork->addAction(
             $store->prepareUpdate($updates, $conditions)
-                ->setPriority(Priority::UpdateRecord)
         );
     }
 
@@ -22,7 +21,6 @@ class UnitOfWorkManager
     {
         $unitOfWork->addAction(
             $store->prepareCreate($values)->setOnComplete($onComplete)
-                ->setPriority(Priority::CreateRecord)
         );
     }
 

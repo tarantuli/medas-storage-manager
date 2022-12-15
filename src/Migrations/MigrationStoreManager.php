@@ -48,7 +48,8 @@ class MigrationStoreManager
 
         $blueprint->addIndex(new Index([$migrationField]));
 
-        $store->storage()->controller()->actionBuilder()->createStore($blueprint)->execute();
-
+        foreach ($store->storage()->controller()->actionBuilder()->createStore($blueprint) as $query) {
+            $query->execute();
+        }
     }
 }
