@@ -67,7 +67,7 @@ class Persister
             }
             elseif ($property->type instanceof Guid) {
                 if ($this->guidProvider === null) {
-                    throw new \Exception('no GuidProvider registered, but it is needed');
+                    throw new \Exception('no GuidProvider registered, but it is needed. Try for instance morphp/medas-ramsey-uuid-bridge');
                 }
 
                 $value = $this->guidProvider->create();
