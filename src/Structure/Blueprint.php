@@ -6,7 +6,7 @@ namespace Medas\StorageManager\Structure;
 
 class Blueprint
 {
-    private string $name;
+    private string|null $name;
 
     /** @var Blueprint\Field[] */
     private array $fields = [];
@@ -17,12 +17,12 @@ class Blueprint
     /** @var Blueprint\ForeignKey[] */
     private array $foreignKeys = [];
 
-    public function name(): string
+    public function name(): string|null
     {
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(string|null $name): void
     {
         $this->name = $name;
     }

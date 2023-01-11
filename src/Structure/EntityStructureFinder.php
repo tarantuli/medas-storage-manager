@@ -64,7 +64,7 @@ class EntityStructureFinder
             $field->isGenerated = true;
         }
 
-        if ($property->isNullable || $property->default !== null) {
+        if ($property->hasDefault) {
             $field->hasDefault = true;
             $field->default = $property->default;
         }
