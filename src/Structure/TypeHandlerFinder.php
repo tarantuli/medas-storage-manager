@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure;
 
-use Medas\EntityManager\Types\{Binary, Boolean, DateTime, Integer, Relation, Text, Type};
+use Medas\EntityManager\Types\{Binary, Boolean, DateTime, FloatingPoint, Integer, Relation, Text, Type};
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Exceptions\UnhandledTypeException;
 use Medas\StorageManager\Structure\TypeHandlers\TypeHandler;
@@ -17,6 +17,7 @@ class TypeHandlerFinder
         private readonly TypeHandlers\BooleanHandler  $booleanHandler,
         private readonly TypeHandlers\DateTimeHandler $dateTimeHandler,
         private readonly TypeHandlers\IntegerHandler  $integerHandler,
+        private readonly TypeHandlers\FloatHandler    $floatHandler,
         private readonly TypeHandlers\RelationHandler $relationHandler,
         private readonly TypeHandlers\TextHandler     $textHandler,
     )
@@ -32,6 +33,7 @@ class TypeHandlerFinder
             $type instanceof Relation => $this->relationHandler,
             $type instanceof Integer => $this->integerHandler,
             $type instanceof Boolean => $this->booleanHandler,
+            $type instanceof FloatingPoint => $this->floatHandler,
             default => throw new UnhandledTypeException($type),
         };
     }

@@ -9,6 +9,7 @@ enum Type
     case Binary;
     case Boolean;
     case DateTime;
+    case Float;
     case Integer;
     case Text;
 }
