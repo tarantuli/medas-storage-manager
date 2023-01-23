@@ -13,6 +13,8 @@ class Field
         public Type   $type,
         public bool   $isNullable = false,
         public bool   $isGenerated = false,
+        public bool   $isCreationTimestamp = false,
+        public bool   $isModificationTimestamp = false,
         public bool   $hasDefault = false,
         public mixed  $default = null,
         public int    $minValue = 0,

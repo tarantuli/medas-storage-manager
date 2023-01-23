@@ -64,6 +64,14 @@ class EntityStructureFinder
             $field->isGenerated = true;
         }
 
+        if ($property->isCreationTimestamp) {
+            $field->isCreationTimestamp = true;
+        }
+
+        if ($property->isModificationTimestamp) {
+            $field->isModificationTimestamp = true;
+        }
+
         if ($property->hasDefault) {
             $field->hasDefault = true;
             $field->default = $property->default;
