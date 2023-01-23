@@ -89,8 +89,8 @@ class Fetcher implements FetcherInterface
     {
         $serializer = storage($metaData->entity->storage)->controller()->serializer();
 
-        foreach ($record as $key => &$value) {
-            $value = $serializer->deserialize($metaData->property($key)->type, $value);
+        foreach ($record as $key => $value) {
+            $record[$key] = $serializer->deserialize($metaData->property($key)->type, $value);
         }
     }
 
