@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional;
 
 use Medas\PdoStorage\Table;
+use Medas\ServiceManager\Values\Interfaces\Guid;
 use Medas\StorageManagerTest\BaseTest;
 use Medas\StorageManagerTest\MockUps\Attributes\GuidPost;
+use Medas\StorageManagerTest\MockUps\Attributes\GuidPropertyPost;
 
 class GuidTest extends BaseTest
 {
@@ -36,6 +38,21 @@ class GuidTest extends BaseTest
         self::assertNotEquals($post2->id(), $post->id());
 
         return $post;
+    }
+
+    /**
+     * @depends testCreateTable
+     */
+    public function testGuidProperty(): void
+    {
+        $post = new GuidPropertyPost();
+
+        em()->persist($post);
+        em()->flush();
+
+        self::assertTrue($post->id() > 0);
+        self::assertInstanceOf(Guid::class, $post->guid());
+        self::assertTrue($this->isGuid((string) $post->guid()));
     }
 
     private function isGuid(string $value): bool
