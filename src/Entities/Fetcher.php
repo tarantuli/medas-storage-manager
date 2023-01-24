@@ -64,11 +64,12 @@ class Fetcher implements FetcherInterface
             return null;
         }
 
+        $this->deserialize($metaData, $record);
+
         if ($key === null) {
             $key = $this->getKeyFromRecord($metaData, $record->data());
         }
 
-        $this->deserialize($metaData, $record);
         $this->records[$key] = $record;
 
         return $record;
