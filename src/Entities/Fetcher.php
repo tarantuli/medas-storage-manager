@@ -9,6 +9,7 @@ use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
+use Medas\EntityManager\Types\Relation;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHavePropertyException;
 use Medas\StorageManager\Interfaces\{Store, StoreRecord};
@@ -75,6 +76,22 @@ class Fetcher implements FetcherInterface
         return $record;
     }
 
+    private function deserialize(MetaData $metaData, StoreRecord &$record): void
+    {
+        $serializer = storage($metaData->entity->storage)->controller()->serializer();
+
+        foreach ($record as $key => $value) {
+            $type = $metaData->property($key)->type;
+
+            if ($type instanceof Relation) {
+                // Deserialize using the type of the referenced ID property of the related class
+                $type = $this->metaDataManager->get($type->entity)->idProperty->type;
+            }
+
+            $record[$key] = $serializer->deserialize($type, $value);
+        }
+    }
+
     private function getKeyFromRecord(MetaData $metaData, array $data): string
     {
         $idValues = [];
@@ -84,15 +101,6 @@ class Fetcher implements FetcherInterface
         }
 
         return $this->keyMaker->get($metaData->className, $idValues);
-    }
-
-    private function deserialize(MetaData $metaData, StoreRecord &$record): void
-    {
-        $serializer = storage($metaData->entity->storage)->controller()->serializer();
-
-        foreach ($record as $key => $value) {
-            $record[$key] = $serializer->deserialize($metaData->property($key)->type, $value);
-        }
     }
 
     private function getStore(MetaData $metaData): Store
