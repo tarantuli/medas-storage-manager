@@ -18,6 +18,7 @@ use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
 class Persister
 {
     public function __construct(
+        private readonly DataSerializer    $dataSerializer,
         private readonly Fetcher           $fetcher,
         private readonly GuidProvider|null $guidProvider,
         private readonly MetaDataManager   $metaDataManager,
@@ -49,8 +50,7 @@ class Persister
     private function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
-        $serializer = storage($metaData->entity->storage)->controller()->serializer();
-        $serializedValues = [];
+        $values = [];
 
         foreach ($metaData->properties as $property) {
             $foundValue = false;
@@ -76,14 +76,16 @@ class Persister
             }
 
             if ($foundValue) {
-                $serializedValues[$property->name] = $serializer->serialize($property->type, $value);
+                $values[$property->name] = $value;
             }
         }
+
+        $this->dataSerializer->serialize($metaData, $values);
 
         $this->unitOfWorkManager->queueCreate(
             $unitOfWork,
             $this->getStore($metaData),
-            $serializedValues,
+            $values,
             $this->generatedValueSetter($metaData, $entity)
         );
     }
@@ -109,31 +111,26 @@ class Persister
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
-        $serializer = storage($metaData->entity->storage)->controller()->serializer();
-        $serializedValues = [];
-
         foreach ($metaData->properties as $property) {
             if ($property->isModificationTimestamp) {
                 $value = new \DateTime();
-                $serializedValues[$property->name] = $serializer->serialize($property->type, $value);
+                $changedValues[$property->name] = $value;
                 $property->reflection->setValue($entity, $value);
             }
         }
 
-        foreach ($changedValues as $name => $value) {
-            $serializedValues[$name] = $serializer->serialize($metaData->property($name)->type, $value);
-        }
-
         $idValues = $this->valueGetter->get($entity, $metaData->idProperties);
+        $this->dataSerializer->serialize($metaData, $idValues);
+        $this->dataSerializer->serialize($metaData, $changedValues);
 
         $this->unitOfWorkManager->queueUpdate(
             $unitOfWork,
             $this->getStore($metaData),
-            $serializedValues,
+            $changedValues,
             $idValues
         );
 
-        $this->fetcher->updateRecord($metaData, $serializedValues, $idValues);
+        $this->fetcher->updateRecord($metaData, $changedValues, $idValues);
     }
 
     public function prepareDelete(object $entity, UnitOfWork $unitOfWork): void
@@ -141,6 +138,7 @@ class Persister
         $metaData = $this->metaDataManager->get($entity::class);
 
         $idValues = $this->valueGetter->get($entity, $metaData->idProperties);
+        $this->dataSerializer->serialize($metaData, $idValues);
 
         $this->unitOfWorkManager->queueDelete(
             $unitOfWork,
