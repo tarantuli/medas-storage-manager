@@ -18,15 +18,10 @@ class StoredEntityWithId implements Selector
 {
     use AsSingleton;
 
-    public function get(): Definition
+    public function definition(): Definition
     {
-        return Definition::create($this->entity())
+        return Definition::create(StoredEntity::class)
             ->add(new Parameter('id'))
             ->add(new WhereIs(new Property('id'), new Argument('id')));
-    }
-
-    public function entity(): string
-    {
-        return StoredEntity::class;
     }
 }

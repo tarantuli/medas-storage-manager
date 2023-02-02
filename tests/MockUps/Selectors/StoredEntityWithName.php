@@ -18,15 +18,10 @@ class StoredEntityWithName implements Selector
 {
     use AsSingleton;
 
-    public function get(): Definition
+    public function definition(): Definition
     {
-        return Definition::create($this->entity())
+        return Definition::create(StoredEntity::class)
             ->add(new Parameter('name'))
             ->add(new WhereIs(new Property('name'), new Argument('name')));
-    }
-
-    public function entity(): string
-    {
-        return StoredEntity::class;
     }
 }

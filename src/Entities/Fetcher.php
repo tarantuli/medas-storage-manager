@@ -11,6 +11,7 @@ use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHavePropertyException;
+use Medas\StorageManagerTest\MockUps\Migrations\StoredEntity;
 use Medas\StorageManager\Interfaces\{Store, StoreRecord};
 
 #[Service]
@@ -96,7 +97,7 @@ class Fetcher implements FetcherInterface
 
     public function fetch(Selector $selector = null, array $arguments = []): array
     {
-        $metaData = $this->metaDataManager->get($selector->entity());
+        $metaData = $this->metaDataManager->get(StoredEntity::class);
         $query = storage($metaData->entity->storage)->controller()->actionBuilder()
             ->fromSelector($selector, $arguments);
 
