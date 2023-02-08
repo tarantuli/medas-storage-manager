@@ -10,6 +10,7 @@ class ForeignKey
         public string $field,
         public string $foreignEntity,
         public string $foreignField,
+        public bool   $onDeleteCascade = false,
     )
     {
     }

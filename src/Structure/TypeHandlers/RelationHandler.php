@@ -58,7 +58,8 @@ class RelationHandler extends BaseHandler
         return new ForeignKey(
             $property->name,
             $this->metaDataManager->get($type->entity)->entity->store,
-            $this->getIdProperty($type->entity)->name
+            $this->getIdProperty($type->entity)->name,
+            $property->onDeleteCascade,
         );
     }
 }
