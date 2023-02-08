@@ -8,11 +8,16 @@ class Index
 {
     /** @param Field[] $fields */
     public function __construct(
-        public array $fields = [],
-        public bool  $isPrimary = false,
-        public bool  $isUnique = false,
+        private array $fields = [],
+        public bool   $isPrimary = false,
+        public bool   $isUnique = false,
     )
     {
+    }
+
+    public function addField(Field $field): void
+    {
+        $this->fields[] = $field;
     }
 
     public function hash(): string

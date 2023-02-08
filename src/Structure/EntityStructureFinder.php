@@ -111,7 +111,7 @@ class EntityStructureFinder
         $index = new Blueprint\Index([], true);
 
         foreach ($this->metaData->idProperties as $property) {
-            $index->fields[] = $this->blueprint->fieldByName($property->name);
+            $index->addField($this->blueprint->fieldByName($property->name));
         }
 
         $this->blueprint->addIndex($index);
