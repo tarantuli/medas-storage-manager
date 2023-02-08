@@ -20,6 +20,11 @@ class Index
         $this->fields[] = $field;
     }
 
+    public function fields(): array
+    {
+        return $this->fields;
+    }
+
     public function hash(): string
     {
         return array_reduce($this->fields, fn(string $carry, Field $field) => $carry . $field->name . "\0", '')
