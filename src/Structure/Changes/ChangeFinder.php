@@ -10,30 +10,74 @@ use Medas\StorageManager\Structure\Blueprint;
 #[Service]
 class ChangeFinder
 {
+    private Blueprint $expected;
+    private Blueprint $existing;
+
+    private bool $foundChanges;
+    private Changes $changes;
+
     public function find(Blueprint $expected, Blueprint $existing): Changes|null
     {
-        $foundChanges = false;
-        $changes = new Changes($expected->name());
+        $this->expected = $expected;
+        $this->existing = $existing;
+        $this->foundChanges = false;
+        $this->changes = new Changes($expected->name());
 
-        foreach ($expected->fields() as $field) {
-            if ($current = $existing->fieldByName($field->name)) {
-                if ($this->areComparable($field, $current)) {
+        $this->checkFields();
+        $this->checkIndexes();
+        $this->checkForeignKeys();
+
+        return $this->foundChanges ? $this->changes : null;
+    }
+
+    private function checkFields(): void
+    {
+        foreach ($this->expected->fields() as $field) {
+            if ($current = $this->existing->fieldByName($field->name)) {
+                if ($this->areFieldsComparable($field, $current)) {
                     continue;
                 }
 
-                $changes->changeFields[] = $field;
+                $this->changes->changeFields[] = $field;
             }
             else {
-                $changes->addFields[] = $field;
+                $this->changes->addFields[] = $field;
             }
 
-            $foundChanges = true;
+            $this->foundChanges = true;
         }
-
-        return $foundChanges ? $changes : null;
     }
 
-    private function areComparable(Blueprint\Field $field, Blueprint\Field $current): bool
+    private function checkIndexes(): void
+    {
+        foreach ($this->expected->indexes() as $index) {
+            if (!$this->existing->indexByHash($index->hash())) {
+                $this->changes->indexes[] = $index;
+            }
+
+            $this->foundChanges = true;
+        }
+    }
+
+    private function checkForeignKeys(): void
+    {
+        foreach ($this->expected->foreignKeys() as $foreignKey) {
+            if ($current = $this->existing->foreignKeyByHash($foreignKey->hash())) {
+                if ($this->areForeignKeysComparable($foreignKey, $current)) {
+                    continue;
+                }
+
+                $this->changes->changeForeignKey[] = $foreignKey;
+            }
+            else {
+                $this->changes->addForeignKey[] = $foreignKey;
+            }
+
+            $this->foundChanges = true;
+        }
+    }
+
+    private function areFieldsComparable(Blueprint\Field $field, Blueprint\Field $current): bool
     {
         $diff = array_udiff_assoc((array) $field, (array) $current, fn($a, $b) => $a <=> $b);
 
@@ -74,5 +118,10 @@ class ChangeFinder
         }
 
         return $diff === [];
+    }
+
+    private function areForeignKeysComparable(Blueprint\ForeignKey $foreignKey, Blueprint\ForeignKey $current): bool
+    {
+        return $foreignKey->onDeleteCascade === $current->onDeleteCascade;
     }
 }

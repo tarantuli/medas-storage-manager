@@ -57,6 +57,16 @@ class Blueprint
         return $this->indexes;
     }
 
+    public function indexByHash(string $hash): Blueprint\Index|null
+    {
+        return $this->indexesByHash([$hash])[0] ?? null;
+    }
+
+    public function indexesByHash(array $hashes): array
+    {
+        return array_values(array_filter($this->indexes, fn($index) => in_array($index->hash(), $hashes, true)));
+    }
+
     public function addForeignKey(Blueprint\ForeignKey $foreignKey): void
     {
         $this->foreignKeys[] = $foreignKey;
@@ -65,5 +75,15 @@ class Blueprint
     public function foreignKeys(): array
     {
         return $this->foreignKeys;
+    }
+
+    public function foreignKeyByHash(string $hash): Blueprint\ForeignKey|null
+    {
+        return $this->foreignKeysByHash([$hash])[0] ?? null;
+    }
+
+    public function foreignKeysByHash(array $hashes): array
+    {
+        return array_values(array_filter($this->foreignKeys, fn($foreignKey) => in_array($foreignKey->hash(), $hashes, true)));
     }
 }

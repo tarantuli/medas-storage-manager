@@ -17,6 +17,12 @@ class Changes
     /** @var Blueprint\Index[] */
     public array $indexes = [];
 
+    /** @var Blueprint\ForeignKey[] */
+    public array $changeForeignKey = [];
+
+    /** @var Blueprint\ForeignKey[] */
+    public array $addForeignKey = [];
+
     public function __construct(public string $name)
     {
     }
