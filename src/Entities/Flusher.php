@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\EntityManager\Entities\Flusher as FlusherInterface;
+use Medas\EntityManager\Entities\{Changes, Flusher as FlusherInterface};
 use Medas\ServiceManager\Attributes\Service;
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 
@@ -18,19 +18,19 @@ class Flusher implements FlusherInterface
     {
     }
 
-    public function flush(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): void
+    public function flush(Changes $changes): void
     {
         $unitOfWork = new UnitOfWork();
 
-        foreach ($entities as $entity) {
-            $this->entityPersister->prepare(
-                $entity,
-                $savedStates[$entity] ?? null,
-                $unitOfWork
-            );
+        foreach ($changes->creates() as $entity) {
+            $this->entityPersister->prepareCreate($entity, $unitOfWork);
         }
 
-        foreach ($entitiesToDelete as $entity) {
+        foreach ($changes->updates() as [$entity, $diff]) {
+            $this->entityPersister->prepareUpdate($entity, $diff, $unitOfWork);
+        }
+
+        foreach ($changes->deletes() as $entity) {
             $this->entityPersister->prepareDelete($entity, $unitOfWork);
         }
 

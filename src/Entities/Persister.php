@@ -7,7 +7,6 @@ namespace Medas\StorageManager\Entities;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Snapshots\{Snapshot, SnapshotManager};
 use Medas\EntityManager\Types\Guid;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Values\Interfaces\GuidProvider;
@@ -22,32 +21,13 @@ class Persister
         private readonly Fetcher           $fetcher,
         private readonly GuidProvider|null $guidProvider,
         private readonly MetaDataManager   $metaDataManager,
-        private readonly SnapshotManager   $snapshotManager,
         private readonly UnitOfWorkManager $unitOfWorkManager,
         private readonly ValueGetter       $valueGetter,
     )
     {
     }
 
-    public function prepare(object $entity, Snapshot|null $initialState, UnitOfWork $unitOfWork): void
-    {
-        if ($initialState === null) {
-            // The entity is new
-            $this->prepareCreate($entity, $unitOfWork);
-            return;
-        }
-
-        $changedValues = $this->snapshotManager->findChanges($entity, $initialState);
-
-        if ($changedValues === []) {
-            // The entity hasn't changed
-            return;
-        }
-
-        $this->prepareUpdate($entity, $changedValues, $unitOfWork);
-    }
-
-    private function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
+    public function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
         $values = [];
@@ -107,7 +87,7 @@ class Persister
         };
     }
 
-    private function prepareUpdate(object $entity, array $changedValues, UnitOfWork $unitOfWork): void
+    public function prepareUpdate(object $entity, array $changedValues, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
@@ -120,6 +100,7 @@ class Persister
         }
 
         $idValues = $this->valueGetter->get($entity, $metaData->idProperties);
+
         $this->dataSerializer->serialize($metaData, $idValues);
         $this->dataSerializer->serialize($metaData, $changedValues);
 
