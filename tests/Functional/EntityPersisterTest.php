@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional;
 
 use Medas\EntityManager\Repository;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\{Migrations\StoredEntity,
     Selectors\StoredEntityWithId,
     Selectors\StoredEntityWithName
 };
 
-class EntityPersisterTest extends BaseTest
+class EntityPersisterTest extends BaseTestClass
 {
     public function testCreateAndFetch(): void
     {

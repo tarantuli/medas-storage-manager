@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional;
 
 use Medas\PdoStorage\Table;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\Attributes\TimestampedPost;
 
-class TimestampsTest extends BaseTest
+class TimestampsTest extends BaseTestClass
 {
     private const TABLE_NAME = 'timestamped_posts';
 

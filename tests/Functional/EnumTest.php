@@ -6,9 +6,9 @@ namespace Medas\StorageManagerTest\Functional;
 
 use Medas\PdoStorage\Table;
 use Medas\StorageManager\Exceptions\EnumIsNotBackedException;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 
-class EnumTest extends BaseTest
+class EnumTest extends BaseTestClass
 {
     public function testUnbackedEnum(): void
     {

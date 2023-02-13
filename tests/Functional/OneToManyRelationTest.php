@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\StorageManagerTest\Functional;
 
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\Relations\{Group, Person};
 
-class OneToManyRelationTest extends BaseTest
+class OneToManyRelationTest extends BaseTestClass
 {
     public function testCreateMigration(): void
     {

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional\Migrations;
 
 use Medas\PdoStorage\Queries\Query;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 
-class MigrationBuildTest extends BaseTest
+class MigrationBuildTest extends BaseTestClass
 {
     public function testCreateMigration(): void
     {

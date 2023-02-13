@@ -7,7 +7,7 @@ namespace Medas\StorageManagerTest;
 use Medas\StorageManager\Migrations\{MigrationBuildManager, MigrationManager};
 use PHPUnit\Framework\TestCase;
 
-abstract class BaseTest extends TestCase
+abstract class BaseTestClass extends TestCase
 {
     protected function createMigrationClassContent(string $directory): string|null
     {

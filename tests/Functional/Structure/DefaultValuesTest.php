@@ -6,10 +6,10 @@ namespace Medas\StorageManagerTest\Functional\Structure;
 
 use Medas\StorageManager\Structure\Blueprint;
 use Medas\StorageManager\Structure\EntityStructureFinder;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\Structure\EntityWithDefaultValues;
 
-class DefaultValuesTest extends BaseTest
+class DefaultValuesTest extends BaseTestClass
 {
     public function testStructureFinder(): Blueprint
     {

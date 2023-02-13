@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional;
 
 use Medas\EntityManager\EntityManager;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\Migrations\StoredEntity;
 use function service;
 
-class HydratorTest extends BaseTest
+class HydratorTest extends BaseTestClass
 {
     public function testHydrateEntity(): void
     {

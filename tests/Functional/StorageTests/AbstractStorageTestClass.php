@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional\StorageTests;
 
 use Medas\StorageManager\Interfaces\Storage;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\Relations\Group;
 use Medas\StorageManagerTest\MockUps\Relations\Person;
 
-abstract class AbstractStorageTest extends BaseTest
+abstract class AbstractStorageTestClass extends BaseTestClass
 {
     protected Storage $storage;
 

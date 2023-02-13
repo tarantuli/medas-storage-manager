@@ -6,9 +6,9 @@ namespace Medas\StorageManagerTest\Functional;
 
 use Medas\PdoStorage\Database;
 use Medas\PdoStorage\Table;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 
-class DatabaseManagerTest extends BaseTest
+class DatabaseManagerTest extends BaseTestClass
 {
     public function testConnect(): void
     {

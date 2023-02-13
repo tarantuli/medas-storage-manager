@@ -6,11 +6,11 @@ namespace Medas\StorageManagerTest\Functional;
 
 use Medas\PdoStorage\Table;
 use Medas\ServiceManager\Values\Interfaces\Guid;
-use Medas\StorageManagerTest\BaseTest;
+use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\Attributes\GuidPost;
 use Medas\StorageManagerTest\MockUps\Attributes\GuidPropertyPost;
 
-class GuidTest extends BaseTest
+class GuidTest extends BaseTestClass
 {
     private const TABLE_NAME = 'guid_posts';
 
