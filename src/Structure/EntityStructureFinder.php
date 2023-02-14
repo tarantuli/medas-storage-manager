@@ -92,7 +92,7 @@ class EntityStructureFinder
 
         if ($type instanceof Integer) {
             $field->minValue = $type->minValue;
-            $field->maxValue = $type->minValue;
+            $field->maxValue = $type->maxValue;
         }
 
         if ($type instanceof Binary) {
