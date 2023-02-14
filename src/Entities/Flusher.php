@@ -22,15 +22,15 @@ class Flusher implements FlusherInterface
     {
         $unitOfWork = new UnitOfWork();
 
-        foreach ($changes->creates() as $entity) {
+        foreach ($changes->createdEntities() as $entity) {
             $this->entityPersister->prepareCreate($entity, $unitOfWork);
         }
 
-        foreach ($changes->updates() as [$entity, $diff]) {
-            $this->entityPersister->prepareUpdate($entity, $diff, $unitOfWork);
+        foreach ($changes->updatedEntities() as $entity) {
+            $this->entityPersister->prepareUpdate($entity, $changes->entityChanges($entity), $unitOfWork);
         }
 
-        foreach ($changes->deletes() as $entity) {
+        foreach ($changes->deletedEntities() as $entity) {
             $this->entityPersister->prepareDelete($entity, $unitOfWork);
         }
 

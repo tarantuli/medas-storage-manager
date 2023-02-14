@@ -147,16 +147,17 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "8978d9747fc28fd47864485583ebb909b8e045f1"
+                "reference": "45906d1a611934c8a71459b45864854ef3e450c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/8978d9747fc28fd47864485583ebb909b8e045f1",
-                "reference": "8978d9747fc28fd47864485583ebb909b8e045f1",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/45906d1a611934c8a71459b45864854ef3e450c2",
+                "reference": "45906d1a611934c8a71459b45864854ef3e450c2",
                 "shasum": ""
             },
             "require": {
                 "ext-pdo": "*",
+                "morphp/medas-file-system": "dev-dev",
                 "morphp/medas-service-manager": "dev-dev"
             },
             "require-dev": {
@@ -184,7 +185,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2023-02-13T14:29:09+00:00"
+            "time": "2023-02-14T12:08:22+00:00"
         },
         {
             "name": "morphp/medas-file-builder",
@@ -640,12 +641,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "ab8b2719e089c5099b5626918c282c7ba16f8454"
+                "reference": "ef283bb653252e0b65d752aa07392df3d7d6d59b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/ab8b2719e089c5099b5626918c282c7ba16f8454",
-                "reference": "ab8b2719e089c5099b5626918c282c7ba16f8454",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/ef283bb653252e0b65d752aa07392df3d7d6d59b",
+                "reference": "ef283bb653252e0b65d752aa07392df3d7d6d59b",
                 "shasum": ""
             },
             "require": {
@@ -677,7 +678,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2023-02-08T15:36:15+00:00"
+            "time": "2023-02-13T14:48:14+00:00"
         },
         {
             "name": "morphp/medas-ramsey-uuid-bridge",
