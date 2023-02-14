@@ -47,6 +47,10 @@ abstract class AbstractStorageTestClass extends BaseTestClass
         self::assertTrue(storage()->store('groups')->exists());
         self::assertTrue(storage()->store('people')->exists());
         self::assertTrue(storage()->store('other_people')->exists());
+
+        // Another migration should be empty
+        $migration = $this->createMigrationClassContent('Relations');
+        self::assertNull($migration);
     }
 
     /**
