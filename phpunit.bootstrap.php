@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
 use Medas\ConsolePrinter\ConsolePrinterPackage;
-use Medas\PdoStorage\Database;
-use Medas\PdoStorage\PdoStoragePackage;
+use Medas\PdoStorage\{Database, PdoStoragePackage};
 use Medas\RamseyUuidBridge\RamseyUuidBridgePackage;
-use Medas\ServiceManager\ServiceConfig;
-use Medas\ServiceManager\ServiceManager;
+use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 use Medas\StorageManager\Entities\{Fetcher, Flusher};
 use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\StorageManagerPackage;
