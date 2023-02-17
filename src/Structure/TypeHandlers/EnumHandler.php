@@ -6,7 +6,7 @@ namespace Medas\StorageManager\Structure\TypeHandlers;
 
 use Medas\EntityManager\Types\{Integer, Text, Type as EntityType};
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\Exceptions\EnumIsNotBackedException;
+use Medas\StorageManager\Exceptions\EnumIsNotBacked;
 use Medas\StorageManager\Structure\Blueprint\Type as BlueprintType;
 
 #[Service]
@@ -29,7 +29,7 @@ class EnumHandler
         $enumReflection = new \ReflectionEnum($enum);
 
         if (!$enumReflection->isBacked()) {
-            throw new EnumIsNotBackedException($enum);
+            throw new EnumIsNotBacked($enum);
         }
 
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */

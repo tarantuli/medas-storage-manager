@@ -10,7 +10,7 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHavePropertyException;
+use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHaveProperty;
 use Medas\StorageManager\Interfaces\{Store, StoreRecord};
 
 #[Service]
@@ -40,7 +40,7 @@ class Fetcher implements FetcherInterface
             return new FetchResult(true, $record[$property->name]);
         }
 
-        throw new StoreDoesNotHavePropertyException($this->getStore($metaData), $property->name);
+        throw new StoreDoesNotHaveProperty($this->getStore($metaData), $property->name);
     }
 
     private function getRecord(MetaData $metaData, object $entity): ?StoreRecord

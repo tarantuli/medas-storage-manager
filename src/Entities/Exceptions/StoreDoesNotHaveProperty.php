@@ -8,7 +8,7 @@ use Medas\Core\Exceptions\BaseException;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\StorageManager;
 
-class StoreDoesNotHavePropertyException extends BaseException
+class StoreDoesNotHaveProperty extends BaseException
 {
     public function __construct(Store $store, string $property)
     {

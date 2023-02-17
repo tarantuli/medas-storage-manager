@@ -7,7 +7,7 @@ namespace Medas\StorageManager\Exceptions;
 use Medas\Core\Exceptions\BaseException;
 use Medas\EntityManager\Types\Type;
 
-class UnhandledTypeException extends BaseException
+class UnhandledType extends BaseException
 {
     public function __construct(Type $type)
     {

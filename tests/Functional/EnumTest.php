@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional;
 
 use Medas\PdoStorage\Table;
-use Medas\StorageManager\Exceptions\EnumIsNotBackedException;
+use Medas\StorageManager\Exceptions\EnumIsNotBacked;
 use Medas\StorageManagerTest\BaseTestClass;
 
 class EnumTest extends BaseTestClass
 {
     public function testUnbackedEnum(): void
     {
-        self::expectException(EnumIsNotBackedException::class);
+        self::expectException(EnumIsNotBacked::class);
         $this->createMigrationClassContent('UnbackedEnums');
     }
 

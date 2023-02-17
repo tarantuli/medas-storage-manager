@@ -6,7 +6,7 @@ namespace Medas\StorageManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class EnumIsNotBackedException extends BaseException
+class EnumIsNotBacked extends BaseException
 {
     public function __construct(string $enum)
     {
