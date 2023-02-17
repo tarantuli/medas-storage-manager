@@ -15,6 +15,7 @@ class ConsoleCommandsTest extends TestCase
 {
     public function testMakeMigrationCommand(): void
     {
+        storage()->controller()->deleteStore('new_stored_entities');
         $directory = $this->getDirectory();
         $initialCount = count(glob($directory . '/*'));
 

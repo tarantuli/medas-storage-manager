@@ -7,6 +7,7 @@ use Medas\ConsolePrinter\ConsolePrinterPackage;
 use Medas\PdoStorage\Database;
 use Medas\PdoStorage\PdoStoragePackage;
 use Medas\RamseyUuidBridge\RamseyUuidBridgePackage;
+use Medas\ServiceManager\ServiceConfig;
 use Medas\ServiceManager\ServiceManager;
 use Medas\StorageManager\Entities\{Fetcher, Flusher};
 use Medas\StorageManager\StorageManager;
@@ -14,22 +15,27 @@ use Medas\StorageManager\StorageManagerPackage;
 
 chdir(__DIR__);
 
-$sm = ServiceManager::get();
+new ServiceManager(function (): ServiceConfig {
+    $config = new ServiceConfig();
 
-$sm->addPackage(StorageManagerPackage::instance())
-    ->addPackage(ConfigManagerPackage::instance())
-    ->addPackage(ConsolePrinterPackage::instance())
-    ->addPackage(PdoStoragePackage::instance())
-    ->addPackage(RamseyUuidBridgePackage::instance());
+    $config->addPackages([
+        StorageManagerPackage::instance(),
+        ConfigManagerPackage::instance(),
+        ConsolePrinterPackage::instance(),
+        PdoStoragePackage::instance(),
+        RamseyUuidBridgePackage::instance(),
+    ]);
+
+    return $config;
+});
 
 /** @var ConfigManager $config */
-$config = $sm->resolve(ConfigManager::class);
-$config->readEnv(__DIR__);
-$config->addDirectory(__DIR__ . '/config');
+service(ConfigManager::class)
+    ->readEnv(__DIR__)
+    ->addDirectory(__DIR__ . '/config');
 
-$sm->bindService($sm->resolve(Fetcher::class), \Medas\EntityManager\Entities\Fetcher::class);
-$sm->bindService($sm->resolve(Flusher::class), \Medas\EntityManager\Entities\Flusher::class);
+sm()->bindService(service(Fetcher::class), \Medas\EntityManager\Entities\Fetcher::class);
+sm()->bindService(service(Flusher::class), \Medas\EntityManager\Entities\Flusher::class);
 
-service(StorageManager::class)->add(
-    sm()->instantiate(Database::class)
-);
+service(StorageManager::class)
+    ->add(sm()->instantiate(Database::class));

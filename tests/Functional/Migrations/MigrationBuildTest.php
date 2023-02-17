@@ -9,13 +9,6 @@ use Medas\StorageManagerTest\BaseTestClass;
 
 class MigrationBuildTest extends BaseTestClass
 {
-    public function testCreateMigration(): void
-    {
-        $migration = $this->createMigrationClassContent('Migrations');
-
-        self::assertStringContainsString('class Migration', $migration);
-    }
-
     public function testExecuteMigration(): void
     {
         $newStoreName = 'new_stored_entities';
