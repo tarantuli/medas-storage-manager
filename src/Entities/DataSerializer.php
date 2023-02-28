@@ -23,7 +23,7 @@ class DataSerializer
         foreach ($data as $key => $value) {
             $type = $metaData->property($key)->type;
 
-            if ($type instanceof Relation) {
+            if ($type instanceof Relation && !enum_exists($type->entity)) {
                 // Deserialize using the type of the referenced ID property of the related class
                 $type = $this->metaDataManager->get($type->entity)->idProperty->type;
             }
