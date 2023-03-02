@@ -6,6 +6,7 @@ namespace Medas\StorageManager\Entities;
 
 use Medas\EntityManager\{MetaData, MetaDataManager, Types\Relation};
 use Medas\ServiceManager\Attributes\Service;
+use Medas\StorageManager\Interfaces\StoreRecord;
 
 #[Service]
 class DataSerializer
@@ -16,7 +17,7 @@ class DataSerializer
     {
     }
 
-    public function deserialize(MetaData $metaData, iterable &$data): void
+    public function deserialize(MetaData $metaData, StoreRecord &$data): void
     {
         $serializer = storage($metaData->entity->storage)->controller()->serializer();
 
