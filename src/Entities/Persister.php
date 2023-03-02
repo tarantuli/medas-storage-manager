@@ -77,12 +77,15 @@ class Persister
 
     private function generatedValueSetter(MetaData $metaData, object $entity): ?\Closure
     {
-        if (!$metaData->idProperty?->isGeneratedValue) {
+        if (!$metaData->idProperty) {
             return null;
         }
 
         return function (Storage $storage) use ($metaData, $entity) {
-            $metaData->idProperty->reflection->setValue($entity, $storage->controller()->lastGeneratedValue());
+            if ($metaData->idProperty->isGeneratedValue) {
+                $metaData->idProperty->reflection->setValue($entity, $storage->controller()->lastGeneratedValue());
+            }
+
             em()->resetKey($entity);
         };
     }
