@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\EntityManager\Entities\{Fetcher as FetcherInterface, FetchResult, KeyMaker};
+use Medas\EntityManager\Entities\{Fetcher as FetcherInterface, FetchResult, IdValues, KeyMaker};
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
@@ -21,6 +21,7 @@ class Fetcher implements FetcherInterface
 
     public function __construct(
         private readonly DataSerializer  $dataSerializer,
+        private readonly IdValues        $idValues,
         private readonly KeyMaker        $keyMaker,
         private readonly MetaDataManager $metaDataManager,
         private readonly ValueGetter     $entityValueGetter,
@@ -51,27 +52,20 @@ class Fetcher implements FetcherInterface
 
         if (!array_key_exists($key, $this->records)) {
             $record = $this->getStore($metaData)->fetchRecord($idValues);
-            $this->addToCache($metaData, $record, $key);
+            $this->deserializeAndCache($metaData, $record, $key);
         }
 
         return $this->records[$key];
     }
 
-    private function addToCache(MetaData $metaData, StoreRecord|null $record, string|null $key = null): StoreRecord|null
+    private function deserializeAndCache(MetaData $metaData, StoreRecord|null $record, string $key): StoreRecord|null
     {
         if ($record === null) {
-            if ($key !== null) {
-                $this->records[$key] = null;
-            }
-
+            $this->records[$key] = null;
             return null;
         }
 
         $this->dataSerializer->deserialize($metaData, $record);
-
-        if ($key === null) {
-            $key = $this->getKeyFromRecord($metaData, $record->data());
-        }
 
         $this->records[$key] = $record;
 
@@ -96,7 +90,8 @@ class Fetcher implements FetcherInterface
 
     public function fetch(Selector $selector = null, array $arguments = []): array
     {
-        $metaData = $this->metaDataManager->get($selector->definition()->entity);
+        $entity = $selector->definition()->entity;
+        $metaData = $this->metaDataManager->get($entity);
         $query = storage($metaData->entity->storage)->controller()->actionBuilder()
             ->fromSelector($selector, $arguments);
 
@@ -104,7 +99,8 @@ class Fetcher implements FetcherInterface
         $records = $query->recordSet()->fetchRecords();
 
         foreach ($records as &$record) {
-            $record = $this->addToCache($metaData, $record);
+            $key = $this->keyMaker->get($entity, $this->idValues->extract($record, $metaData));
+            $record = $this->deserializeAndCache($metaData, $record, $key);
         }
 
         return $records;
