@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\EntityManager\Entities\{Fetcher as FetcherInterface, FetchResult, IdValues, KeyMaker};
+use Medas\EntityManager\Entities\{Fetcher as FetcherInterface, FetchResult, IdValue, KeyMaker};
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
@@ -21,7 +21,7 @@ class Fetcher implements FetcherInterface
 
     public function __construct(
         private readonly DataSerializer  $dataSerializer,
-        private readonly IdValues        $idValues,
+        private readonly IdValue         $idValue,
         private readonly KeyMaker        $keyMaker,
         private readonly MetaDataManager $metaDataManager,
         private readonly ValueGetter     $entityValueGetter,
@@ -46,12 +46,12 @@ class Fetcher implements FetcherInterface
 
     private function getRecord(MetaData $metaData, object $entity): ?StoreRecord
     {
-        $idValues = $this->entityValueGetter->get($entity, $metaData->idProperties);
-        $this->dataSerializer->serialize($metaData, $idValues);
-        $key = $this->keyMaker->get($entity::class, $idValues);
+        $idValue = $this->entityValueGetter->getValue($entity, $metaData->idProperty);
+        $this->dataSerializer->serialize($metaData, $idValue);
+        $key = $this->keyMaker->get($entity::class, $idValue);
 
         if (!array_key_exists($key, $this->records)) {
-            $record = $this->getStore($metaData)->fetchRecord($idValues);
+            $record = $this->getStore($metaData)->fetchRecord($idValue);
             $this->deserializeAndCache($metaData, $record, $key);
         }
 
@@ -74,13 +74,7 @@ class Fetcher implements FetcherInterface
 
     private function getKeyFromRecord(MetaData $metaData, array $data): string
     {
-        $idValues = [];
-
-        foreach ($metaData->idProperties as $idProperty) {
-            $idValues[$idProperty->name] = $data[$idProperty->name];
-        }
-
-        return $this->keyMaker->get($metaData->className, $idValues);
+        return $this->keyMaker->get($metaData->className, $data[$metaData->idProperty->name]);
     }
 
     private function getStore(MetaData $metaData): Store
@@ -99,7 +93,7 @@ class Fetcher implements FetcherInterface
         $records = $query->recordSet()->fetchRecords();
 
         foreach ($records as &$record) {
-            $key = $this->keyMaker->get($entity, $this->idValues->extract($record, $metaData));
+            $key = $this->keyMaker->get($entity, $this->idValue->extract($record, $metaData));
             $record = $this->deserializeAndCache($metaData, $record, $key);
         }
 

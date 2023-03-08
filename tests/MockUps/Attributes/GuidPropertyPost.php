@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\MockUps\Attributes;
 
 use Medas\EntityManager\Attributes\{Entity, HasId, Id, IsGeneratedValue, Property};
-use Medas\ServiceManager\Values\Interfaces\Guid;
+use Medas\ServiceManager\Interfaces\Guid;
 
 #[Entity(store: 'guid_property_posts')]
 class GuidPropertyPost implements HasId

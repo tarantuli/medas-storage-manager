@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional;
 
 use Medas\PdoStorage\Table;
-use Medas\ServiceManager\Values\Interfaces\Guid;
+use Medas\ServiceManager\Interfaces\Guid;
 use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\Attributes\GuidPost;
 use Medas\StorageManagerTest\MockUps\Attributes\GuidPropertyPost;

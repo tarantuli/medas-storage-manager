@@ -9,8 +9,9 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\Guid;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Values\Interfaces\GuidProvider;
-use Medas\StorageManager\Interfaces\{Storage, Store};
+use Medas\ServiceManager\Interfaces\{GuidProvider};
+use Medas\StorageManager\Interfaces\Storage;
+use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
 
 #[Service]
@@ -102,7 +103,8 @@ class Persister
             }
         }
 
-        $idValues = $this->valueGetter->get($entity, $metaData->idProperties);
+        $idValue = $this->valueGetter->getValue($entity, $metaData->idProperty);
+        $idValues = [$metaData->idProperty->name => $idValue];
 
         $this->dataSerializer->serialize($metaData, $idValues);
         $this->dataSerializer->serialize($metaData, $changedValues);
@@ -121,7 +123,9 @@ class Persister
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
-        $idValues = $this->valueGetter->get($entity, $metaData->idProperties);
+        $idValue = $this->valueGetter->getValue($entity, $metaData->idProperty);
+        $idValues = [$metaData->idProperty->name => $idValue];
+
         $this->dataSerializer->serialize($metaData, $idValues);
 
         $this->unitOfWorkManager->queueDelete(

@@ -109,10 +109,7 @@ class EntityStructureFinder
     private function findPrimaryKey(): void
     {
         $index = new Blueprint\Index([], true);
-
-        foreach ($this->metaData->idProperties as $property) {
-            $index->addField($this->blueprint->fieldByName($property->name));
-        }
+        $index->addField($this->blueprint->fieldByName($this->metaData->idProperty->name));
 
         $this->blueprint->addIndex($index);
     }

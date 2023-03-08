@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure\TypeHandlers;
 
-use Medas\EntityManager\Types\{Integer, Text, Type as EntityType};
+use Medas\EntityManager\Types\{Integer, Text};
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Interfaces\Type;
 use Medas\StorageManager\Exceptions\EnumIsNotBacked;
 use Medas\StorageManager\Structure\Blueprint\Type as BlueprintType;
 
@@ -15,7 +16,7 @@ class EnumHandler
     /**
      * Returns a pseudo Type object that covers the backed cases of the enumeration
      */
-    public function getPseudoType(string $enum): EntityType
+    public function getPseudoType(string $enum): Type
     {
         return match ($this->getBlueprintType($enum)) {
             BlueprintType::Integer => $this->getIntegerType($enum),
@@ -39,7 +40,7 @@ class EnumHandler
         };
     }
 
-    private function getIntegerType(string $enum): EntityType
+    private function getIntegerType(string $enum): Type
     {
         $minValue = null;
         $maxValue = null;
@@ -59,7 +60,7 @@ class EnumHandler
         return new Integer($minValue, $maxValue);
     }
 
-    private function getStringType(string $enum): EntityType
+    private function getStringType(string $enum): Type
     {
         $minLength = null;
         $maxLength = null;
