@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces;
 
-use Medas\StorageManager\Entities\TypeSerializer;
+use Medas\ServiceManager\Interfaces\Serializer;
 use Medas\StorageManager\Migrations\MigrationBuilder;
 
 interface StorageController
@@ -15,7 +15,7 @@ interface StorageController
 
     public function lastGeneratedValue(): int|null;
 
-    public function serializer(): TypeSerializer;
+    public function serializer(): Serializer;
 
     public function actionBuilder(): ActionBuilder;
 

@@ -17,7 +17,7 @@ class DataSerializer
     {
     }
 
-    public function deserialize(MetaData $metaData, StoreRecord &$data): void
+    public function unserialize(MetaData $metaData, StoreRecord &$data): void
     {
         $serializer = storage($metaData->entity->storage)->controller()->serializer();
 
@@ -25,11 +25,11 @@ class DataSerializer
             $type = $metaData->property($key)->type;
 
             if ($type instanceof Relation && !enum_exists($type->entity)) {
-                // Deserialize using the type of the referenced ID property of the related class
+                // Unserialize using the type of the referenced ID property of the related class
                 $type = $this->metaDataManager->get($type->entity)->idProperty->type;
             }
 
-            $data[$key] = $serializer->deserialize($type, $value);
+            $data[$key] = $serializer->unserialize($type, $value);
         }
     }
 
@@ -38,8 +38,7 @@ class DataSerializer
         $serializer = storage($metaData->entity->storage)->controller()->serializer();
 
         foreach ($data as $key => $value) {
-            $type = $metaData->property($key)->type;
-            $data[$key] = $serializer->serialize($type, $value);
+            $data[$key] = $serializer->serialize($value);
         }
     }
 }

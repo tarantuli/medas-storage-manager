@@ -65,7 +65,7 @@ class Fetcher implements FetcherInterface
             return null;
         }
 
-        $this->dataSerializer->deserialize($metaData, $record);
+        $this->dataSerializer->unserialize($metaData, $record);
 
         $this->records[$key] = $record;
 
