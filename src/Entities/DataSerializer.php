@@ -29,7 +29,7 @@ class DataSerializer
                 $type = $this->metaDataManager->get($type->entity)->idProperty->type;
             }
 
-            $data[$key] = $serializer->unserialize($type, $value);
+            $data[$key] = $serializer->unserialize($value, $type);
         }
     }
 
