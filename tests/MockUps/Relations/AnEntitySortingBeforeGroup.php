@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManagerTest\MockUps\Relations;
 
-use Medas\EntityManager\Attributes\Entity;
-use Medas\EntityManager\Attributes\HasId;
-use Medas\EntityManager\Attributes\Id;
-use Medas\EntityManager\Attributes\IsGeneratedValue;
-use Medas\EntityManager\Attributes\IsUnique;
-use Medas\EntityManager\Attributes\Property;
+use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique, Property};
+use Medas\ServiceManager\Interfaces\HasId;
 
 #[Entity(store: 'other_people')]
 class AnEntitySortingBeforeGroup implements HasId

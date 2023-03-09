@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManagerTest\MockUps\Relations;
 
-use Medas\EntityManager\Attributes\{Entity, HasId, Id, IsGeneratedValue, IsUnique, Property};
+use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique, Property};
+use Medas\ServiceManager\Interfaces\HasId;
 
 #[Entity(store: 'groups')]
 class Group implements HasId
