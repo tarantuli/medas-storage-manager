@@ -9,6 +9,7 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\Guid;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Exceptions\GuidProviderIsNotAvailable;
 use Medas\ServiceManager\Interfaces\{GuidProvider};
 use Medas\StorageManager\Interfaces\Storage;
 use Medas\StorageManager\Interfaces\Store;
@@ -48,7 +49,7 @@ class Persister
             }
             elseif ($property->type instanceof Guid) {
                 if ($this->guidProvider === null) {
-                    throw new \Exception('no GuidProvider registered, but it is needed. Try for instance morphp/medas-ramsey-uuid-bridge');
+                    throw new GuidProviderIsNotAvailable();
                 }
 
                 $value = $this->guidProvider->create();
