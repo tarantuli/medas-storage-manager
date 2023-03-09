@@ -54,7 +54,7 @@ class Fetcher implements FetcherInterface
         $key = $this->keyMaker->get($entity::class, $idValue);
 
         if (!array_key_exists($key, $this->records)) {
-            $record = $this->getStore($metaData)->fetchRecord($idValue);
+            $record = $this->getStore($metaData)->fetchRecord([$metaData->idProperty->name => $idValue]);
             $this->deserializeAndCache($metaData, $record, $key);
         }
 
