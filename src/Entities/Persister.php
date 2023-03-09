@@ -61,7 +61,7 @@ class Persister
             }
         }
 
-        $this->dataSerializer->serialize($metaData, $values);
+        $this->dataSerializer->serializeArray($metaData, $values);
 
         $this->unitOfWorkManager->queueCreate(
             $unitOfWork,
@@ -103,11 +103,8 @@ class Persister
             }
         }
 
-        $idValue = $this->valueGetter->getValue($entity, $metaData->idProperty);
-        $idValues = [$metaData->idProperty->name => $idValue];
-
-        $this->dataSerializer->serialize($metaData, $idValues);
-        $this->dataSerializer->serialize($metaData, $changedValues);
+        $this->dataSerializer->serializeArray($metaData, $changedValues);
+        $idValues = $this->getIdValues($entity, $metaData);
 
         $this->unitOfWorkManager->queueUpdate(
             $unitOfWork,
@@ -122,11 +119,7 @@ class Persister
     public function prepareDelete(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
-
-        $idValue = $this->valueGetter->getValue($entity, $metaData->idProperty);
-        $idValues = [$metaData->idProperty->name => $idValue];
-
-        $this->dataSerializer->serialize($metaData, $idValues);
+        $idValues = $this->getIdValues($entity, $metaData);
 
         $this->unitOfWorkManager->queueDelete(
             $unitOfWork,
@@ -135,5 +128,13 @@ class Persister
         );
 
         $this->fetcher->removeRecord($metaData, $idValues);
+    }
+
+    private function getIdValues(object $entity, MetaData $metaData): array
+    {
+        $idValue = $this->valueGetter->getValue($entity, $metaData->idProperty);
+        $serializeValue = $this->dataSerializer->serializeDatum($metaData, $idValue);
+
+        return [$metaData->idProperty->name => $serializeValue];
     }
 }

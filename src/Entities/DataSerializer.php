@@ -6,6 +6,7 @@ namespace Medas\StorageManager\Entities;
 
 use Medas\EntityManager\{MetaData, MetaDataManager, Types\Relation};
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Interfaces\Serializer;
 use Medas\StorageManager\Interfaces\StoreRecord;
 
 #[Service]
@@ -19,7 +20,7 @@ class DataSerializer
 
     public function unserialize(MetaData $metaData, StoreRecord &$data): void
     {
-        $serializer = storage($metaData->entity->storage)->controller()->serializer();
+        $serializer = $this->getSerializer($metaData);
 
         foreach ($data as $key => $value) {
             $type = $metaData->property($key)->type;
@@ -33,12 +34,22 @@ class DataSerializer
         }
     }
 
-    public function serialize(MetaData $metaData, iterable &$data): void
+    public function serializeArray(MetaData $metaData, iterable &$data): void
     {
-        $serializer = storage($metaData->entity->storage)->controller()->serializer();
+        $serializer = $this->getSerializer($metaData);
 
         foreach ($data as $key => $value) {
             $data[$key] = $serializer->serialize($value);
         }
+    }
+
+    public function serializeDatum(MetaData $metaData, mixed $datum): mixed
+    {
+        return $this->getSerializer($metaData)->serialize($datum);
+    }
+
+    private function getSerializer(MetaData $metaData): Serializer
+    {
+        return storage($metaData->entity->storage)->controller()->serializer();
     }
 }

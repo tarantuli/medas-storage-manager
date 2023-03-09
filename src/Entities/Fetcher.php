@@ -46,8 +46,11 @@ class Fetcher implements FetcherInterface
 
     private function getRecord(MetaData $metaData, object $entity): ?StoreRecord
     {
-        $idValue = $this->entityValueGetter->getValue($entity, $metaData->idProperty);
-        $this->dataSerializer->serialize($metaData, $idValue);
+        $idValue = $this->dataSerializer->serializeDatum(
+            $metaData,
+            $this->entityValueGetter->getValue($entity, $metaData->idProperty),
+        );
+
         $key = $this->keyMaker->get($entity::class, $idValue);
 
         if (!array_key_exists($key, $this->records)) {
