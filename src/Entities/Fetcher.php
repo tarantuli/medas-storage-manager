@@ -93,7 +93,7 @@ class Fetcher implements FetcherInterface
         $records = $query->recordSet()->fetchRecords();
 
         foreach ($records as &$record) {
-            $key = $this->keyMaker->get($entity, $this->idValue->extract($record, $metaData));
+            $key = $this->keyMaker->get($entity, $this->idValue->get($record, $metaData));
             $record = $this->deserializeAndCache($metaData, $record, $key);
         }
 
