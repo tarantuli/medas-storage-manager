@@ -10,9 +10,8 @@ use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\Guid;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Exceptions\GuidProviderIsNotAvailable;
-use Medas\ServiceManager\Interfaces\{GuidProvider};
-use Medas\StorageManager\Interfaces\Storage;
-use Medas\StorageManager\Interfaces\Store;
+use Medas\ServiceManager\Interfaces\GuidProvider;
+use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
 
 #[Service]
