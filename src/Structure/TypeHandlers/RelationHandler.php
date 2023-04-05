@@ -31,16 +31,6 @@ class RelationHandler extends BaseHandler
         };
     }
 
-    private function getEntityType(string $entity): Type
-    {
-        $idProperty = $this->getIdProperty($entity);
-
-        // We can't inject it in the constructor due to circular dependencies
-        $typeHandlerFinder = service(TypeHandlerFinder::class);
-
-        return $typeHandlerFinder->for($idProperty->type)->fieldType($idProperty);
-    }
-
     public function getIdProperty(string $entity): ?Property
     {
         return $this->metaDataManager->get($entity)->idProperty;
@@ -61,5 +51,15 @@ class RelationHandler extends BaseHandler
             $this->getIdProperty($type->entity)->name,
             $property->onDeleteCascade,
         );
+    }
+
+    private function getEntityType(string $entity): Type
+    {
+        $idProperty = $this->getIdProperty($entity);
+
+        // We can't inject it in the constructor due to circular dependencies
+        $typeHandlerFinder = service(TypeHandlerFinder::class);
+
+        return $typeHandlerFinder->for($idProperty->type)->fieldType($idProperty);
     }
 }
