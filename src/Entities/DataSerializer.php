@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\EntityManager\{MetaData, MetaDataManager, Types\Relation};
+use Medas\EntityManager\{Exceptions\PropertyDoesNotExist, MetaData, MetaDataManager, Types\Relation};
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Interfaces\Serializer;
 use Medas\StorageManager\Interfaces\StoreRecord;
@@ -23,7 +23,12 @@ class DataSerializer
         $serializer = $this->getSerializer($metaData);
 
         foreach ($data as $key => $value) {
-            $type = $metaData->property($key)->type;
+            try {
+                $type = $metaData->property($key)->type;
+            }
+            catch (PropertyDoesNotExist) {
+                continue;
+            }
 
             if ($type instanceof Relation && !enum_exists($type->entity)) {
                 // Unserialize using the type of the referenced ID property of the related class
@@ -32,6 +37,11 @@ class DataSerializer
 
             $data[$key] = $serializer->unserialize($value, $type);
         }
+    }
+
+    private function getSerializer(MetaData $metaData): Serializer
+    {
+        return storage($metaData->entity->storage)->controller()->serializer();
     }
 
     public function serializeArray(MetaData $metaData, iterable &$data): void
@@ -46,10 +56,5 @@ class DataSerializer
     public function serializeDatum(MetaData $metaData, mixed $datum): mixed
     {
         return $this->getSerializer($metaData)->serialize($datum);
-    }
-
-    private function getSerializer(MetaData $metaData): Serializer
-    {
-        return storage($metaData->entity->storage)->controller()->serializer();
     }
 }
