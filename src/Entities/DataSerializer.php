@@ -28,15 +28,17 @@ class DataSerializer
         $serializer = $this->getSerializer($metaData);
 
         foreach ($data as $key => $value) {
-            if ($class = $metaData->property($key)->handler) {
-                // This property has been assigned a handler, let it unserialize first
-                /** @var Handler $handler */
-                $handler = service($class);
-                $value = $handler->unserialize($value);
-            }
-
             try {
-                $type = $metaData->property($key)->type;
+                $property = $metaData->property($key);
+
+                if ($class = $property->handler) {
+                    // This property has been assigned a handler, let it unserialize first
+                    /** @var Handler $handler */
+                    $handler = service($class);
+                    $value = $handler->unserialize($value);
+                }
+
+                $type = $property->type;
             }
             catch (PropertyDoesNotExist) {
                 continue;
