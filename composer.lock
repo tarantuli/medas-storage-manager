@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-config-options.git",
-                "reference": "d1088b27d4066f5f16cbd18771b1754d095cfdb2"
+                "reference": "a2d87e245ba65f36adc89c2620a87564d2963161"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/d1088b27d4066f5f16cbd18771b1754d095cfdb2",
-                "reference": "d1088b27d4066f5f16cbd18771b1754d095cfdb2",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/a2d87e245ba65f36adc89c2620a87564d2963161",
+                "reference": "a2d87e245ba65f36adc89c2620a87564d2963161",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "source": "https://github.com/tarantuli/medas-config-options/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-config-options/issues"
             },
-            "time": "2023-03-09T09:24:15+00:00"
+            "time": "2023-03-24T10:08:37+00:00"
         },
         {
             "name": "morphp/medas-console",
@@ -100,12 +100,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "9badbc336ed283c4ff622923e8cb5e2a45af51fc"
+                "reference": "43ca3b96b2d9246b871daff44c6f53f15066e656"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/9badbc336ed283c4ff622923e8cb5e2a45af51fc",
-                "reference": "9badbc336ed283c4ff622923e8cb5e2a45af51fc",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/43ca3b96b2d9246b871daff44c6f53f15066e656",
+                "reference": "43ca3b96b2d9246b871daff44c6f53f15066e656",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2023-02-28T09:54:13+00:00"
+            "time": "2023-03-30T14:36:10+00:00"
         },
         {
             "name": "morphp/medas-entity-manager",
@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "a703db083e9726d5a9c1bb8ee8a99171502495f4"
+                "reference": "349d47573b4e598777dd5f37f0fbfd84480fc9ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/a703db083e9726d5a9c1bb8ee8a99171502495f4",
-                "reference": "a703db083e9726d5a9c1bb8ee8a99171502495f4",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/349d47573b4e598777dd5f37f0fbfd84480fc9ce",
+                "reference": "349d47573b4e598777dd5f37f0fbfd84480fc9ce",
                 "shasum": ""
             },
             "require": {
@@ -185,7 +185,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2023-03-09T12:44:56+00:00"
+            "time": "2023-04-05T12:17:21+00:00"
         },
         {
             "name": "morphp/medas-file-builder",
@@ -641,12 +641,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "329b8dd1199aa21dc765f478ca96de2eaaf2767f"
+                "reference": "ab8d82035732217a18c996c34197e66405a2f57d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/329b8dd1199aa21dc765f478ca96de2eaaf2767f",
-                "reference": "329b8dd1199aa21dc765f478ca96de2eaaf2767f",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/ab8d82035732217a18c996c34197e66405a2f57d",
+                "reference": "ab8d82035732217a18c996c34197e66405a2f57d",
                 "shasum": ""
             },
             "require": {
@@ -678,7 +678,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2023-03-09T12:29:48+00:00"
+            "time": "2023-03-25T11:03:39+00:00"
         },
         {
             "name": "morphp/medas-ramsey-uuid-bridge",
@@ -1343,16 +1343,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.5",
+            "version": "9.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5"
+                "reference": "b65d59a059d3004a040c16a82e07bbdf6cfdd115"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/86e761949019ae83f49240b2f2123fb5ab3b2fc5",
-                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b65d59a059d3004a040c16a82e07bbdf6cfdd115",
+                "reference": "b65d59a059d3004a040c16a82e07bbdf6cfdd115",
                 "shasum": ""
             },
             "require": {
@@ -1425,7 +1425,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.5"
+                "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.6"
             },
             "funding": [
                 {
@@ -1441,7 +1442,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-09T06:34:10+00:00"
+            "time": "2023-03-27T11:43:46+00:00"
         },
         {
             "name": "ramsey/collection",

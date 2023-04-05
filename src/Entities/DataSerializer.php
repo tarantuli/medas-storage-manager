@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\EntityManager\{Exceptions\PropertyDoesNotExist, MetaData, MetaDataManager, Types\Relation};
+use Medas\EntityManager\{Exceptions\PropertyDoesNotExist,
+    MetaData,
+    MetaDataManager,
+    Properties\Handler,
+    Types\Relation
+};
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Interfaces\Serializer;
 use Medas\StorageManager\Interfaces\StoreRecord;
@@ -23,6 +28,13 @@ class DataSerializer
         $serializer = $this->getSerializer($metaData);
 
         foreach ($data as $key => $value) {
+            if ($class = $metaData->property($key)->handler) {
+                // This property has been assigned a handler, let it unserialize first
+                /** @var Handler $handler */
+                $handler = service($class);
+                $value = $handler->unserialize($value);
+            }
+
             try {
                 $type = $metaData->property($key)->type;
             }
@@ -49,6 +61,13 @@ class DataSerializer
         $serializer = $this->getSerializer($metaData);
 
         foreach ($data as $key => $value) {
+            if ($class = $metaData->property($key)->handler) {
+                // This property has been assigned a handler, let it serialize first
+                /** @var Handler $handler */
+                $handler = service($class);
+                $value = $handler->serialize($value);
+            }
+
             $data[$key] = $serializer->serialize($value);
         }
     }

@@ -6,6 +6,8 @@ namespace Medas\StorageManagerTest\Functional\StorageTests;
 
 use Medas\StorageManager\Interfaces\Storage;
 use Medas\StorageManagerTest\BaseTestClass;
+use Medas\StorageManagerTest\MockUps\PropertyHandlers\EntityWithHandler;
+use Medas\StorageManagerTest\MockUps\PropertyHandlers\PropertyClass;
 use Medas\StorageManagerTest\MockUps\Relations\Group;
 use Medas\StorageManagerTest\MockUps\Relations\Person;
 
@@ -119,5 +121,22 @@ abstract class AbstractStorageTestClass extends BaseTestClass
     public function testFetchRelation(Person $person): void
     {
         self::assertInstanceOf(Group::class, em()->get(Person::class, $person->id())->group());
+    }
+
+    public function testStoreHandledPRoperty(): void
+    {
+        // Assert storage existence
+        $migration = $this->createMigrationClassContent('PropertyHandlers');
+        $this->executeMigration($migration);
+
+        $entity = em()->create(EntityWithHandler::class, ['propertyClass' => new PropertyClass(1, 10)]);
+        em()->persist($entity);
+        em()->flush();
+        em()->clear();
+
+        // Fetch it again
+        $refetchedEntity = em()->get(EntityWithHandler::class, $entity->guid);
+
+        self::assertEquals(1, $refetchedEntity->propertyClass->min);
     }
 }
