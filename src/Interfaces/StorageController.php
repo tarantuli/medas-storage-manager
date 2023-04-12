@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces;
 
-use Medas\ServiceManager\Interfaces\Serializer;
+use Medas\Core\Interfaces\Serializer;
 use Medas\StorageManager\Migrations\MigrationBuilder;
 
 interface StorageController

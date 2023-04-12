@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
 use Medas\ConsolePrinter\ConsolePrinterPackage;
+use Medas\FileBuilder\FileBuilderPackage;
 use Medas\PdoStorage\{Database, PdoStoragePackage};
 use Medas\RamseyUuidBridge\RamseyUuidBridgePackage;
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
@@ -22,6 +23,7 @@ new ServiceManager(function (): ServiceConfig {
         ConsolePrinterPackage::instance(),
         PdoStoragePackage::instance(),
         RamseyUuidBridgePackage::instance(),
+        FileBuilderPackage::instance(),
     ]);
 
     return $config;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure\Changes;
 
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 use Medas\StorageManager\Structure\Blueprint;
 
 #[Service]

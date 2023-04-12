@@ -9,7 +9,7 @@ use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHaveProperty;
 use Medas\StorageManager\Interfaces\{Store, StoreRecord};
 

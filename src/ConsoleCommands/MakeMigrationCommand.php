@@ -9,7 +9,7 @@ use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
 use Medas\Console\Formats\Color;
 use Medas\Console\Text;
 use Medas\ConsolePrinter\ConsolePrinter;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 use Medas\StorageManager\ConfigOptions\{EntityDirectory, MigrationDirectory};
 use Medas\StorageManager\Migrations\MigrationBuildManager;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions;
 
+use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 use Medas\ServiceManager\AsSingleton;
-use Medas\ServiceManager\ConfigOptions\{ConfigGroup, ConfigOption};
 
 class EntityDirectory implements ConfigOption
 {

@@ -7,7 +7,7 @@ namespace Medas\StorageManager\Structure;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\{Binary, Boolean, Integer, Relation};
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
 
 #[Service]

@@ -6,7 +6,7 @@ namespace Medas\StorageManagerTest\MockUps\Attributes;
 
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, Property};
 use Medas\EntityManager\Traits\Timestamps;
-use Medas\ServiceManager\Interfaces\HasId;
+use Medas\Core\Interfaces\HasId;
 
 #[Entity(store: 'timestamped_posts')]
 class TimestampedPost implements HasId

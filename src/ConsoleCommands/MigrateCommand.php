@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConsoleCommands;
 
 use Medas\ConfigOptions\OptionController;
-use Medas\Console\Commands\BaseConsoleCommand;
-use Medas\Console\Commands\ConsoleCommandGroup;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
+use Medas\ServiceManager\Service;
 use Medas\StorageManager\ConfigOptions\MigrationDirectory;
 use Medas\StorageManager\Migrations\MigrationManager;
 

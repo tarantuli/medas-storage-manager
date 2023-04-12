@@ -6,7 +6,7 @@ namespace Medas\StorageManagerTest\MockUps\Attributes;
 
 use Medas\EntityManager\Attributes\{Entity, Id};
 use Medas\EntityManager\Types\Guid;
-use Medas\ServiceManager\Interfaces\HasId;
+use Medas\Core\Interfaces\HasId;
 
 #[Entity(store: 'guid_posts')]
 class GuidPost implements HasId

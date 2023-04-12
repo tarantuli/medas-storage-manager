@@ -8,7 +8,7 @@ use Medas\EntityManager\Attributes\Entity;
 use Medas\FileBuilder\PhpClass\{MethodDefinition, ParameterDefinition, PhpClassDefinition};
 use Medas\FileBuilder\PhpClassBuilder;
 use Medas\FileSystem\DirectoryManager;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 use Medas\StorageManager\UnitOfWork\UnitOfWork;
 
 #[Service]

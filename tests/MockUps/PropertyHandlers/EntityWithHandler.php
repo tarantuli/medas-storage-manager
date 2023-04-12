@@ -6,7 +6,7 @@ namespace Medas\StorageManagerTest\MockUps\PropertyHandlers;
 
 use Medas\EntityManager\Attributes\{Entity, Id, Property};
 use Medas\EntityManager\Properties\SerializingHandler;
-use Medas\ServiceManager\Interfaces\Guid;
+use Medas\Core\Interfaces\Guid;
 
 #[Entity(store: 'entities_with_handler')]
 class EntityWithHandler

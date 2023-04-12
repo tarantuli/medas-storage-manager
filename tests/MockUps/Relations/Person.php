@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\MockUps\Relations;
 
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique, Property};
-use Medas\ServiceManager\Interfaces\HasId;
+use Medas\Core\Interfaces\HasId;
 
 #[Entity(store: 'people')]
 class Person implements HasId

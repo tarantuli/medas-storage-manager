@@ -6,7 +6,7 @@ namespace Medas\StorageManagerTest\MockUps\Migrations;
 
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique, Property};
 use Medas\EntityManager\Types\DateTime;
-use Medas\ServiceManager\Interfaces\Guid;
+use Medas\Core\Interfaces\Guid;
 
 #[Entity(store: 'stored_entities')]
 class StoredEntity

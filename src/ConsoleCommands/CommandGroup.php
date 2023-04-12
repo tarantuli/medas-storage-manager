@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConsoleCommands;
 
-use Medas\Console\Commands\BaseConsoleCommandGroup;
-use Medas\Console\Commands\ConsoleCommandGroup;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\Console\Commands\{BaseConsoleCommandGroup, ConsoleCommandGroup};
+use Medas\ServiceManager\Service;
 
 #[Service]
 class CommandGroup extends BaseConsoleCommandGroup

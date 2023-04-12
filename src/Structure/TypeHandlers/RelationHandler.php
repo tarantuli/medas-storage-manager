@@ -7,7 +7,7 @@ namespace Medas\StorageManager\Structure\TypeHandlers;
 use Medas\EntityManager\MetaData\Property;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\Relation;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 use Medas\StorageManager\Structure\{Blueprint\ForeignKey, Blueprint\Type, TypeHandlerFinder};
 
 #[Service]

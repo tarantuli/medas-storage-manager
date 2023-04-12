@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure;
 
+use Medas\Core\Interfaces\Type;
 use Medas\EntityManager\Types\{Binary, Boolean, DateTime, FloatingPoint, Integer, Relation, Text};
-use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Interfaces\Type;
+use Medas\ServiceManager\Service;
 use Medas\StorageManager\Exceptions\UnhandledType;
 use Medas\StorageManager\Structure\TypeHandlers\TypeHandler;
 
