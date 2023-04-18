@@ -275,12 +275,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-formatter.git",
-                "reference": "d49b702e1682570ec348eeb5d0209a03da2600a5"
+                "reference": "deaec24fce49d134c24e647d55f900b4d1d912f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/d49b702e1682570ec348eeb5d0209a03da2600a5",
-                "reference": "d49b702e1682570ec348eeb5d0209a03da2600a5",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/deaec24fce49d134c24e647d55f900b4d1d912f9",
+                "reference": "deaec24fce49d134c24e647d55f900b4d1d912f9",
                 "shasum": ""
             },
             "require": {
@@ -311,7 +311,7 @@
                 "source": "https://github.com/tarantuli/medas-php-formatter/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-formatter/issues"
             },
-            "time": "2023-04-12T14:53:01+00:00"
+            "time": "2023-04-18T14:21:34+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
@@ -641,12 +641,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "11b2ca24e90287839b9e2d98a70ffa55a0f424be"
+                "reference": "886ce2ad1a9a39772c5811d8685f159e972ca305"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/11b2ca24e90287839b9e2d98a70ffa55a0f424be",
-                "reference": "11b2ca24e90287839b9e2d98a70ffa55a0f424be",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/886ce2ad1a9a39772c5811d8685f159e972ca305",
+                "reference": "886ce2ad1a9a39772c5811d8685f159e972ca305",
                 "shasum": ""
             },
             "require": {
@@ -678,7 +678,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2023-04-12T14:59:59+00:00"
+            "time": "2023-04-18T14:26:17+00:00"
         },
         {
             "name": "morphp/medas-ramsey-uuid-bridge",

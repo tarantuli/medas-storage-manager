@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
 use Medas\ConsolePrinter\ConsolePrinterPackage;
+use Medas\Core\GlobalRepository;
 use Medas\FileBuilder\FileBuilderPackage;
 use Medas\PdoStorage\{Database, PdoStoragePackage};
 use Medas\RamseyUuidBridge\RamseyUuidBridgePackage;
@@ -34,8 +35,8 @@ service(ConfigManager::class)
     ->readEnv(__DIR__)
     ->addDirectory(__DIR__ . '/config');
 
-sm()->bindService(service(Fetcher::class), \Medas\EntityManager\Entities\Fetcher::class);
-sm()->bindService(service(Flusher::class), \Medas\EntityManager\Entities\Flusher::class);
+sm()->bindImplementation(service(Fetcher::class), \Medas\EntityManager\Entities\Fetcher::class);
+sm()->bindImplementation(service(Flusher::class), \Medas\EntityManager\Entities\Flusher::class);
 
 service(StorageManager::class)
-    ->add(sm()->instantiate(Database::class));
+    ->add(GlobalRepository::objectInstantiator()->instantiate(Database::class));
