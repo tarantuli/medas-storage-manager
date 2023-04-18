@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure\TypeHandlers;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData\Property;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\Relation;
-use Medas\ServiceManager\Service;
 use Medas\StorageManager\Structure\{Blueprint\ForeignKey, Blueprint\Type, TypeHandlerFinder};
 
 #[Service]

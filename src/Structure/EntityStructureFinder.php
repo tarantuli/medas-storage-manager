@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\{Binary, Boolean, Integer, Relation};
-use Medas\ServiceManager\Service;
 use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
 
 #[Service]

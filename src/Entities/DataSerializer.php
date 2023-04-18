@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\Serializer;
 use Medas\EntityManager\{Exceptions\PropertyDoesNotExist,
     MetaData,
     MetaDataManager,
     Properties\Handler,
     Types\Relation};
-use Medas\ServiceManager\Service;
 use Medas\StorageManager\Interfaces\StoreRecord;
 
 #[Service]

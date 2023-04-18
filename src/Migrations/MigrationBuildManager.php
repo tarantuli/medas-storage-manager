@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Migrations;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Attributes\Entity;
 use Medas\FileBuilder\PhpClass\{MethodDefinition, ParameterDefinition, PhpClassDefinition};
 use Medas\FileBuilder\PhpClassBuilder;
 use Medas\FileSystem\DirectoryManager;
-use Medas\ServiceManager\Service;
 use Medas\StorageManager\UnitOfWork\UnitOfWork;
 
 #[Service]

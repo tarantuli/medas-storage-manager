@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager;
 
-use Medas\ServiceManager\Service;
+use Medas\Core\Attributes\Service;
 use Medas\StorageManager\Interfaces\Storage;
 
 #[Service]

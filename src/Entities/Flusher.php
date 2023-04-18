@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{Changes, Flusher as FlusherInterface};
-use Medas\ServiceManager\Service;
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 
 #[Service]

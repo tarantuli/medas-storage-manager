@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Migrations;
 
 use Medas\ConfigOptions\OptionController;
-use Medas\ServiceManager\Service;
+use Medas\Core\Attributes\Service;
 use Medas\StorageManager\ConfigOptions\MigrationsStore;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index, Blueprint\Type};

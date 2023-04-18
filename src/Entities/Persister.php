@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\GuidProvider;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\Guid;
 use Medas\ServiceManager\Exceptions\GuidProviderIsNotAvailable;
-use Medas\ServiceManager\Service;
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
 
