@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bfc265cce68c359ad992b5d4ddfa332",
+    "content-hash": "39c17916c5835550bc842fa3df255e04",
     "packages": [
         {
             "name": "morphp/medas-config-options",
@@ -98,12 +98,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "683b78a09b25a7bdcfeef2cd3daccea43be77bfe"
+                "reference": "60db263e67f9dd619c3838a623f9469c964e2254"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/683b78a09b25a7bdcfeef2cd3daccea43be77bfe",
-                "reference": "683b78a09b25a7bdcfeef2cd3daccea43be77bfe",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/60db263e67f9dd619c3838a623f9469c964e2254",
+                "reference": "60db263e67f9dd619c3838a623f9469c964e2254",
                 "shasum": ""
             },
             "require": {
@@ -137,7 +137,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2023-04-28T14:37:55+00:00"
+            "time": "2023-05-01T10:56:20+00:00"
         },
         {
             "name": "morphp/medas-entity-manager",
@@ -634,17 +634,60 @@
             "time": "2023-05-01T09:20:53+00:00"
         },
         {
+            "name": "morphp/medas-pdo-mysql",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-pdo-mysql.git",
+                "reference": "18d988d009075e22d6f4de6a130f6b639c607313"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-mysql/zipball/18d988d009075e22d6f4de6a130f6b639c607313",
+                "reference": "18d988d009075e22d6f4de6a130f6b639c607313",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-pdo-storage": "dev-dev"
+            },
+            "require-dev": {
+                "morphp/medas-config-manager": "dev-dev",
+                "morphp/medas-ramsey-uuid-bridge": "dev-dev",
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\PdoMysql\\": "src/",
+                    "Medas\\PdoMysqlTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas pdo mysql",
+            "support": {
+                "source": "https://github.com/tarantuli/medas-pdo-mysql/tree/dev",
+                "issues": "https://github.com/tarantuli/medas-pdo-mysql/issues"
+            },
+            "time": "2023-05-01T12:43:22+00:00"
+        },
+        {
             "name": "morphp/medas-pdo-storage",
             "version": "dev-dev",
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "d1aa93db0d6463b9cc3a8e3931ef2fcfa3c6d8ab"
+                "reference": "a86a177b52b87c9aac46275cd7f8f6f0e4c8dfd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/d1aa93db0d6463b9cc3a8e3931ef2fcfa3c6d8ab",
-                "reference": "d1aa93db0d6463b9cc3a8e3931ef2fcfa3c6d8ab",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/a86a177b52b87c9aac46275cd7f8f6f0e4c8dfd6",
+                "reference": "a86a177b52b87c9aac46275cd7f8f6f0e4c8dfd6",
                 "shasum": ""
             },
             "require": {
@@ -677,7 +720,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2023-05-01T10:23:16+00:00"
+            "time": "2023-05-01T12:59:32+00:00"
         },
         {
             "name": "morphp/medas-ramsey-uuid-bridge",
@@ -3122,6 +3165,7 @@
         "morphp/medas-file-builder": 20,
         "morphp/medas-config-manager": 20,
         "morphp/medas-console-printer": 20,
+        "morphp/medas-pdo-mysql": 20,
         "morphp/medas-pdo-storage": 20,
         "morphp/medas-ramsey-uuid-bridge": 20
     },

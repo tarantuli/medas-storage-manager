@@ -6,7 +6,8 @@ use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
 use Medas\ConsolePrinter\ConsolePrinterPackage;
 use Medas\Core\GlobalRepository;
 use Medas\FileBuilder\FileBuilderPackage;
-use Medas\PdoStorage\{Database, PdoStoragePackage};
+use Medas\PdoMysql\PdoMysqlPackage;
+use Medas\PdoStorage\{Database};
 use Medas\RamseyUuidBridge\RamseyUuidBridgePackage;
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 use Medas\StorageManager\Entities\{Fetcher, Flusher};
@@ -22,7 +23,7 @@ new ServiceManager(function (): ServiceConfig {
         StorageManagerPackage::instance(),
         ConfigManagerPackage::instance(),
         ConsolePrinterPackage::instance(),
-        PdoStoragePackage::instance(),
+        PdoMysqlPackage::instance(),
         RamseyUuidBridgePackage::instance(),
         FileBuilderPackage::instance(),
     ]);
