@@ -11,7 +11,7 @@ use Medas\EntityManager\Selector\{Conditions\WhereIs,
     Parameter,
     Selector
 };
-use Medas\ServiceManager\AsSingleton;
+use Medas\Core\AsSingleton;
 use Medas\StorageManagerTest\MockUps\Migrations\StoredEntity;
 
 class StoredEntityWithId implements Selector

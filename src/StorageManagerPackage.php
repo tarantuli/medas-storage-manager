@@ -7,7 +7,7 @@ namespace Medas\StorageManager;
 use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\EntityManager\EntityManagerPackage;
 use Medas\FileBuilder\FileBuilderPackage;
-use Medas\ServiceManager\AsSingleton;
+use Medas\Core\AsSingleton;
 use Medas\ServiceManager\BasePackage;
 use Medas\ServiceManager\ServiceConfig;
 

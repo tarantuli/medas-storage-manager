@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConfigOptions;
 
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
-use Medas\ServiceManager\AsSingleton;
+use Medas\Core\AsSingleton;
 use Medas\StorageManager\Interfaces\Store;
 
 class MigrationsStore implements ConfigOption
