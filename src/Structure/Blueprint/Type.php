@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure\Blueprint;
 
-enum Type
+enum Type: string
 {
-    case Binary;
-    case Boolean;
-    case DateTime;
-    case Float;
-    case Integer;
-    case Text;
+    case Binary = 'binary';
+    case Boolean = 'boolean';
+    case DateTime = 'dateTime';
+    case Float = 'float';
+    case Integer = 'integer';
+    case Text = 'text';
 }
