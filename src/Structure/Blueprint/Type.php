@@ -12,4 +12,5 @@ enum Type: string
     case Float = 'float';
     case Integer = 'integer';
     case Text = 'text';
+    case Collection = 'collection';
 }

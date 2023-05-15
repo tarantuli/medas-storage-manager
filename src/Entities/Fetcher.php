@@ -103,7 +103,7 @@ class Fetcher implements FetcherInterface
         return $records;
     }
 
-    public function updateRecord(MetaData $metaData, array $values, array $idValues)
+    public function updateRecord(MetaData $metaData, array $values, array $idValues): void
     {
         $key = $this->getKeyFromRecord($metaData, $idValues);
 
@@ -112,7 +112,7 @@ class Fetcher implements FetcherInterface
         }
     }
 
-    public function removeRecord(MetaData $metaData, array $idValues)
+    public function removeRecord(MetaData $metaData, array $idValues): void
     {
         $key = $this->getKeyFromRecord($metaData, $idValues);
 

@@ -6,7 +6,7 @@ namespace Medas\StorageManager\Structure;
 
 use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\Type;
-use Medas\EntityManager\Types\{Binary, Boolean, DateTime, FloatingPoint, Integer, Relation, Text};
+use Medas\EntityManager\Types\{Binary, Boolean, Collection, DateTime, FloatingPoint, Integer, Relation, Text};
 use Medas\StorageManager\Exceptions\UnhandledType;
 use Medas\StorageManager\Structure\TypeHandlers\TypeHandler;
 
@@ -14,13 +14,14 @@ use Medas\StorageManager\Structure\TypeHandlers\TypeHandler;
 class TypeHandlerFinder
 {
     public function __construct(
-        private readonly TypeHandlers\BinaryHandler   $binaryHandler,
-        private readonly TypeHandlers\BooleanHandler  $booleanHandler,
-        private readonly TypeHandlers\DateTimeHandler $dateTimeHandler,
-        private readonly TypeHandlers\IntegerHandler  $integerHandler,
-        private readonly TypeHandlers\FloatHandler    $floatHandler,
-        private readonly TypeHandlers\RelationHandler $relationHandler,
-        private readonly TypeHandlers\TextHandler     $textHandler,
+        private readonly TypeHandlers\BinaryHandler     $binaryHandler,
+        private readonly TypeHandlers\BooleanHandler    $booleanHandler,
+        private readonly TypeHandlers\CollectionHandler $collectionHandler,
+        private readonly TypeHandlers\DateTimeHandler   $dateTimeHandler,
+        private readonly TypeHandlers\IntegerHandler    $integerHandler,
+        private readonly TypeHandlers\FloatHandler      $floatHandler,
+        private readonly TypeHandlers\RelationHandler   $relationHandler,
+        private readonly TypeHandlers\TextHandler       $textHandler,
     )
     {
     }
@@ -28,13 +29,14 @@ class TypeHandlerFinder
     public function for(Type $type): TypeHandler
     {
         return match (true) {
-            $type instanceof Text => $this->textHandler,
             $type instanceof Binary => $this->binaryHandler,
-            $type instanceof DateTime => $this->dateTimeHandler,
-            $type instanceof Relation => $this->relationHandler,
-            $type instanceof Integer => $this->integerHandler,
             $type instanceof Boolean => $this->booleanHandler,
+            $type instanceof Collection => $this->collectionHandler,
+            $type instanceof DateTime => $this->dateTimeHandler,
             $type instanceof FloatingPoint => $this->floatHandler,
+            $type instanceof Integer => $this->integerHandler,
+            $type instanceof Relation => $this->relationHandler,
+            $type instanceof Text => $this->textHandler,
             default => throw new UnhandledType($type),
         };
     }
