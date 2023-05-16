@@ -10,6 +10,7 @@ use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
+use Medas\EntityManager\Types\{Collection, Relation};
 use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHaveProperty;
 use Medas\StorageManager\Interfaces\{Store, StoreRecord};
 
@@ -29,8 +30,40 @@ class Fetcher implements FetcherInterface
     {
     }
 
+    private function fetchCollectionItems(MetaData $metaData, object $entity, MetaData\Property $property): array
+    {
+        /** @var Collection $propertyType */
+        $propertyType = $property->type;
+        $rawItemType = $propertyType->contentType;
+
+        if (class_exists($rawItemType)) {
+            $itemType = new Relation($rawItemType);
+        }
+        else {
+            throw new \Exception('unhandled raw item type ' . $rawItemType);
+        }
+
+        $serializer = storage($metaData->entity->storage)->controller()->serializer();
+        $records = $this->getStore($metaData)->fetchCollectionRecord($entity, $property);
+        $items = [];
+
+        foreach ($records as $record) {
+            $items[] = $serializer->unserialize($record['value'], $itemType);
+        }
+
+        return $items;
+    }
+
     public function fetchValue(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult
     {
+        if ($property->type instanceof Collection) {
+            $collection = new $property->type->collectionType(
+                fn() => $this->fetchCollectionItems($metaData, $entity, $property)
+            );
+
+            return new FetchResult(true, $collection);
+        }
+
         $record = $this->getRecord($metaData, $entity);
 
         if ($record === null) {

@@ -20,7 +20,7 @@ class RelationHandler extends BaseHandler
     {
     }
 
-    public function fieldType(Property $property): Type
+    public function fieldType(Property|null $property): Type
     {
         /** @var Relation $type */
         $type = $property->type;

@@ -11,7 +11,7 @@ use Medas\StorageManager\Structure\Blueprint\Type;
 #[Service]
 class DateTimeHandler extends BaseHandler
 {
-    public function fieldType(Property $property): Type
+    public function fieldType(Property|null $property): Type
     {
         return Type::DateTime;
     }

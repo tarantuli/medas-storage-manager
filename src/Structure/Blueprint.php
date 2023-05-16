@@ -62,6 +62,17 @@ class Blueprint
         return $this->indexesByHash([$hash])[0] ?? null;
     }
 
+    public function primaryIndex(): Blueprint\Index|null
+    {
+        foreach ($this->indexes as $index) {
+            if ($index->isPrimary) {
+                return $index;
+            }
+        }
+
+        return null;
+    }
+
     public function indexesByHash(array $hashes): array
     {
         return array_values(array_filter($this->indexes, fn($index) => in_array($index->hash(), $hashes, true)));

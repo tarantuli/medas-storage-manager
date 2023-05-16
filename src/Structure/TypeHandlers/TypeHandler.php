@@ -11,5 +11,5 @@ interface TypeHandler
 {
     public function foreignKey(Property $property): ForeignKey|null;
 
-    public function fieldType(Property $property): Type;
+    public function fieldType(Property|null $property): Type;
 }

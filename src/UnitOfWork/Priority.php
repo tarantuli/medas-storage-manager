@@ -9,13 +9,16 @@ enum Priority: int
     case CreateStore = 1;
     case DeleteStoreRelations = 2;
     case AlterStore = 3;
-    case AddStoreRelations = 4;
-    case DeleteStore = 5;
+    case AddCollectionStore = 4;
+    case AddStoreRelations = 5;
+    case DeleteStore = 6;
 
-    case CreateRecord = 6;
-    case UpdateRecord = 7;
+    case CreateRecord = 7;
+    case UpdateRecord = 8;
 
-    case Default = 8;
+    case UpdateCollection = 9;
 
-    case DeleteRecord = 9;
+    case Default = 10;
+
+    case DeleteRecord = 11;
 }

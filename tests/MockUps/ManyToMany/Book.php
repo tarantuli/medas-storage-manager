@@ -14,7 +14,7 @@ class Book implements HasId
     private int $id;
 
     #[Property]
-    private Labels $labels;
+    public Labels $labels;
 
     public function id(): int
     {

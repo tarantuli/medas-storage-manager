@@ -40,4 +40,13 @@ class TypeHandlerFinder
             default => throw new UnhandledType($type),
         };
     }
+
+    public function forString(string $type): TypeHandler
+    {
+        return match (true) {
+            $type === 'bool' => $this->booleanHandler,
+            $type === 'int' => $this->integerHandler,
+            str_starts_with($type, '\\') => $this->relationHandler,
+        };
+    }
 }

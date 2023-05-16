@@ -9,7 +9,7 @@ use Medas\Core\Interfaces\GuidProvider;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Types\Guid;
+use Medas\EntityManager\Types\{Collection, Guid};
 use Medas\ServiceManager\Exceptions\GuidProviderIsNotAvailable;
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
@@ -44,7 +44,20 @@ class Persister
             }
             elseif ($property->reflection->isInitialized($entity)) {
                 $value = $property->reflection->getValue($entity);
-                $foundValue = true;
+
+                if ($property->type instanceof Collection) {
+                    $this->unitOfWorkManager->queueCollectionUpdate(
+                        $unitOfWork,
+                        $this->getStore($metaData),
+                        $entity,
+                        $property->name,
+                        $property->type,
+                        $value
+                    );
+                }
+                else {
+                    $foundValue = true;
+                }
             }
             elseif ($property->type instanceof Guid) {
                 if ($this->guidProvider === null) {

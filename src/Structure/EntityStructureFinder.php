@@ -7,7 +7,8 @@ namespace Medas\StorageManager\Structure;
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Types\{Binary, Boolean, Integer, Relation};
+use Medas\EntityManager\Types\{Binary, Boolean, Collection, Integer, Relation};
+use Medas\StorageManager\Structure\Blueprint\Type;
 use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
 
 #[Service]
@@ -55,6 +56,10 @@ class EntityStructureFinder
     {
         $typeHandler = $this->typeHandlerFinder->for($property->type);
         $field->type = $typeHandler->fieldType($property);
+
+        if ($field->type === Type::Collection) {
+            $this->handleCollectionField($property, $field);
+        }
 
         if (!$property->isGeneratedValue && $property->isNullable) {
             $field->isNullable = true;
@@ -137,5 +142,23 @@ class EntityStructureFinder
                 $this->blueprint->addForeignKey($foreignKey);
             }
         }
+    }
+
+    private function handleCollectionField(MetaData\Property $property, Blueprint\Field $field): void
+    {
+        /** @var Collection $collectionType */
+        $collectionType = $property->type;
+        $collectionTypeHandler = $this->typeHandlerFinder->forString($collectionType->contentType);
+        $collectionField = null;
+
+        if ($collectionTypeHandler instanceof RelationHandler) {
+            $collectionField = $this->metaDataManager
+                ->get($collectionType->contentType)
+                ->idProperty;
+
+            $collectionTypeHandler = $this->typeHandlerFinder->for($collectionField->type);
+        }
+
+        $field->collectionType = $collectionTypeHandler->fieldType($collectionField);
     }
 }
