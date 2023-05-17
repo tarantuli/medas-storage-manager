@@ -43,19 +43,11 @@ class Persister
                 $foundValue = true;
             }
             elseif ($property->reflection->isInitialized($entity)) {
-                $value = $property->reflection->getValue($entity);
-
                 if ($property->type instanceof Collection) {
-                    $this->unitOfWorkManager->queueCollectionUpdate(
-                        $unitOfWork,
-                        $this->getStore($metaData),
-                        $entity,
-                        $property->name,
-                        $property->type,
-                        $value
-                    );
+                    $this->queueCollectionUpdate($unitOfWork, $metaData, $entity, $property);
                 }
                 else {
+                    $value = $property->reflection->getValue($entity);
                     $foundValue = true;
                 }
             }
@@ -114,6 +106,17 @@ class Persister
                 $changedValues[$property->name] = $value;
                 $property->reflection->setValue($entity, $value);
             }
+
+            if ($property->type instanceof Collection) {
+                $this->queueCollectionUpdate($unitOfWork, $metaData, $entity, $property);
+
+                unset($changedValues[$property->name]);
+            }
+        }
+
+        // Stop if there's no values left to update
+        if ($changedValues === []) {
+            return;
         }
 
         $this->dataSerializer->serializeArray($metaData, $changedValues);
@@ -150,4 +153,21 @@ class Persister
 
         return [$metaData->idProperty->name => $serializeValue];
     }
+
+    private function queueCollectionUpdate(UnitOfWork $unitOfWork, MetaData $metaData, object $entity, MetaData\Property $property): void
+    {
+        if (!$property->type instanceof Collection) {
+            throw new \Exception('property type should be a Collection instance');
+        }
+
+        $this->unitOfWorkManager->queueCollectionUpdate(
+            $unitOfWork,
+            $this->getStore($metaData),
+            $entity,
+            $property->name,
+            $property->type,
+            $property->reflection->getValue($entity)
+        );
+    }
 }
+

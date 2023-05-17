@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\TracksChanges;
 use Medas\EntityManager\Entities\{Fetcher as FetcherInterface, FetchResult, IdValue, KeyMaker};
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
@@ -57,9 +58,12 @@ class Fetcher implements FetcherInterface
     public function fetchValue(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult
     {
         if ($property->type instanceof Collection) {
+            /** @var TracksChanges $collection */
             $collection = new $property->type->collectionType(
                 fn() => $this->fetchCollectionItems($metaData, $entity, $property)
             );
+
+            $collection->resetChangeTracking();
 
             return new FetchResult(true, $collection);
         }

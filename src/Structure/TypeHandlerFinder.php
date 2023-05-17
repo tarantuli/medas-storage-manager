@@ -28,7 +28,9 @@ class TypeHandlerFinder
 
     public function for(Type $type): TypeHandler
     {
+        // Order matters, don't sort by name
         return match (true) {
+            $type instanceof Text => $this->textHandler,
             $type instanceof Binary => $this->binaryHandler,
             $type instanceof Boolean => $this->booleanHandler,
             $type instanceof Collection => $this->collectionHandler,
@@ -36,7 +38,6 @@ class TypeHandlerFinder
             $type instanceof FloatingPoint => $this->floatHandler,
             $type instanceof Integer => $this->integerHandler,
             $type instanceof Relation => $this->relationHandler,
-            $type instanceof Text => $this->textHandler,
             default => throw new UnhandledType($type),
         };
     }

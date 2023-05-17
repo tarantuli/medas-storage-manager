@@ -12,6 +12,14 @@ abstract class BaseAction implements Action
     protected Priority $priority = Priority::Default;
     private \Closure|null $onComplete = null;
 
+    public function __serialize(): array
+    {
+        return [
+            'storage' => $this->storage,
+            'priority' => $this->priority,
+        ];
+    }
+
     public function storage(): Storage
     {
         return $this->storage;

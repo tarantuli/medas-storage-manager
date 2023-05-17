@@ -22,7 +22,7 @@ class ManyToManyRelationTest extends BaseTestClass
     }
 
     /** @depends testCreateMigration */
-    public function testStoring(): void
+    public function testStoring(): Book
     {
         $label1 = em()->create(Label::class, ['name' => 'label 1']);
         $label2 = em()->create(Label::class, ['name' => 'label 2']);
@@ -42,5 +42,52 @@ class ManyToManyRelationTest extends BaseTestClass
         self::assertInstanceOf(Labels::class, $book->labels);
         self::assertInstanceOf(Label::class, $book->labels[0]);
         self::assertEquals($label1Id, $book->labels[0]->id());
+
+        return $book;
     }
+
+    /** @depends testStoring */
+    public function testAdding(Book $book): Book
+    {
+        $label3 = em()->create(Label::class, ['name' => 'label 3']);
+        $book->labels[] = $label3;
+        em()->persist($label3);
+        em()->flush();
+        em()->clear();
+
+        $book = em()->get(Book::class, $book->id());
+        self::assertEquals(3, $book->labels->count());
+
+        return $book;
+    }
+
+    /** @depends testAdding */
+    public function testDeleting(Book $book): Book
+    {
+        unset($book->labels[1]);
+        em()->flush();
+        em()->clear();
+
+        $book = em()->get(Book::class, $book->id());
+        self::assertEquals(2, $book->labels->count());
+
+        return $book;
+    }
+
+    /** @depends testDeleting */
+    public function testAddingAndDeleting(Book $book): Book
+    {
+        $label4 = em()->create(Label::class, ['name' => 'label 4']);
+        unset($book->labels[0]);
+        $book->labels[] = $label4;
+        em()->persist($label4);
+        em()->flush();
+        em()->clear();
+
+        $book = em()->get(Book::class, $book->id());
+        self::assertEquals(2, $book->labels->count());
+
+        return $book;
+    }
+
 }
