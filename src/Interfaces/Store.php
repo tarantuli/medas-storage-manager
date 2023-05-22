@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces;
 
-use Medas\Core\Interfaces\TracksAddsDeletions;
+use Medas\Core\Interfaces\ManagedCollection;
 use Medas\EntityManager\MetaData\Property;
 use Medas\EntityManager\Types\Collection;
 use Medas\StorageManager\UnitOfWork\Action;
@@ -28,7 +28,7 @@ interface Store
 
     public function prepareUpdate(array $updates, array $conditions): Action;
 
-    public function prepareCollectionUpdate(object $entity, string $name, Collection $type, TracksAddsDeletions $values);
+    public function prepareCollectionUpdate(object $entity, string $name, Collection $type, ManagedCollection $values);
 
     public function prepareDelete(array $conditions);
 

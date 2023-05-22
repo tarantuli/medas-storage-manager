@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\UnitOfWork;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\TracksAddsDeletions;
+use Medas\Core\Interfaces\ManagedCollection;
 use Medas\EntityManager\Types\Collection;
 use Medas\StorageManager\Interfaces\Store;
 
@@ -33,7 +33,7 @@ class UnitOfWorkManager
         );
     }
 
-    public function queueCollectionUpdate(UnitOfWork $unitOfWork, Store $store, object $entity, string $name, Collection $type, TracksAddsDeletions $values): void
+    public function queueCollectionUpdate(UnitOfWork $unitOfWork, Store $store, object $entity, string $name, Collection $type, ManagedCollection $values): void
     {
         foreach ($store->prepareCollectionUpdate($entity, $name, $type, $values) as $action) {
             $unitOfWork->addAction($action);
