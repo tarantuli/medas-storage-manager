@@ -81,7 +81,7 @@ class Persister
         return storage($metaData->entity->storage)->store($metaData->entity->store);
     }
 
-    private function generatedValueSetter(MetaData $metaData, object $entity): ?\Closure
+    private function generatedValueSetter(MetaData $metaData, object $entity): \Closure|null
     {
         if (!$metaData->idProperty) {
             return null;

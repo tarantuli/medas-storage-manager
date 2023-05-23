@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
 use Medas\ConsolePrinter\ConsolePrinterPackage;
-use Medas\Core\GlobalRepository;
 use Medas\FileBuilder\FileBuilderPackage;
 use Medas\PdoMysql\PdoMysqlPackage;
 use Medas\PdoStorage\{Database};
@@ -40,4 +39,4 @@ sm()->bindImplementation(service(Fetcher::class), \Medas\EntityManager\Entities\
 sm()->bindImplementation(service(Flusher::class), \Medas\EntityManager\Entities\Flusher::class);
 
 service(StorageManager::class)
-    ->add(GlobalRepository::objectInstantiator()->instantiate(Database::class));
+    ->add(medas()->objectInstantiator()->instantiate(Database::class));

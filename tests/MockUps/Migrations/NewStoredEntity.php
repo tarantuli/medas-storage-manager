@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManagerTest\MockUps\Migrations;
 
-use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique, Property};
+use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique};
 use Medas\EntityManager\Types\DateTime;
 
 #[Entity(store: 'new_stored_entities')]
@@ -13,11 +13,11 @@ class NewStoredEntity
     #[Id, IsGeneratedValue]
     private int $id;
 
-    #[Property, IsUnique]
+    #[IsUnique]
     public string $name;
 
-    #[Property, DateTime]
-    public ?\DateTime $createdAt;
+    #[DateTime]
+    public \DateTime|null $createdAt;
 
     public function id(): int|null
     {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManagerTest\MockUps\Attributes;
 
-use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, Property};
-use Medas\EntityManager\Traits\Timestamps;
 use Medas\Core\Interfaces\HasId;
+use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue};
+use Medas\EntityManager\Traits\Timestamps;
 
 #[Entity(store: 'timestamped_posts')]
 class TimestampedPost implements HasId
@@ -16,7 +16,6 @@ class TimestampedPost implements HasId
     #[Id, IsGeneratedValue]
     private int $id;
 
-    #[Property]
     public int $counter = 0;
 
     public function id(): int

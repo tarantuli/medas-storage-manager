@@ -31,7 +31,7 @@ class RelationHandler extends BaseHandler
         };
     }
 
-    public function getIdProperty(string $entity): ?Property
+    public function getIdProperty(string $entity): Property|null
     {
         return $this->metaDataManager->get($entity)->idProperty;
     }

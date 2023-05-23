@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\MockUps\ManyToMany;
 
 use Medas\Core\Interfaces\HasId;
-use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, Property};
+use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue};
 
 #[Entity(store: 'books')]
 class Book implements HasId
@@ -13,7 +13,6 @@ class Book implements HasId
     #[Id, IsGeneratedValue]
     private int $id;
 
-    #[Property]
     public Labels $labels;
 
     public function id(): int

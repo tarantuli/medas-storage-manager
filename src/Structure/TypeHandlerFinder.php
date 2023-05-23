@@ -8,6 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\Type;
 use Medas\EntityManager\Types\{Binary, Boolean, Collection, DateTime, FloatingPoint, Integer, Relation, Text};
 use Medas\StorageManager\Exceptions\UnhandledType;
+use Medas\StorageManager\Exceptions\UnhandledTypeString;
 use Medas\StorageManager\Structure\TypeHandlers\TypeHandler;
 
 #[Service]
@@ -47,7 +48,8 @@ class TypeHandlerFinder
         return match (true) {
             $type === 'bool' => $this->booleanHandler,
             $type === 'int' => $this->integerHandler,
-            str_starts_with($type, '\\') => $this->relationHandler,
+            class_exists($type) => $this->relationHandler,
+            default => throw new UnhandledTypeString($type),
         };
     }
 }

@@ -81,7 +81,7 @@ class Fetcher implements FetcherInterface
         throw new StoreDoesNotHaveProperty($this->getStore($metaData), $property->name);
     }
 
-    private function getRecord(MetaData $metaData, object $entity): ?StoreRecord
+    private function getRecord(MetaData $metaData, object $entity): StoreRecord|null
     {
         $idValue = $this->dataSerializer->serializeDatum(
             $metaData,
