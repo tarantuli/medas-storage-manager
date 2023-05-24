@@ -7,7 +7,7 @@ namespace Medas\StorageManagerTest\MockUps\Relations;
 use Medas\Core\Interfaces\HasId;
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique};
 
-#[Entity(store: 'people')]
+#[Entity(store: 'r_people')]
 class Person implements HasId
 {
     #[Id, IsGeneratedValue]

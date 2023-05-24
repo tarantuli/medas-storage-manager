@@ -7,16 +7,14 @@ namespace Medas\StorageManagerTest\MockUps\Relations;
 use Medas\Core\Interfaces\HasId;
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique};
 
-#[Entity(store: 'r_groups')]
-class Group implements HasId
+#[Entity(store: 'r_labels')]
+class Label implements HasId
 {
     #[Id, IsGeneratedValue]
     private int $id;
 
     #[IsUnique]
     private string $name;
-
-    private Labels $labels;
 
     public function id(): int
     {

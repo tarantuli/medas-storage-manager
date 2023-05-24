@@ -7,7 +7,7 @@ namespace Medas\StorageManagerTest\MockUps\Relations;
 use Medas\Core\Interfaces\HasId;
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsUnique};
 
-#[Entity(store: 'other_people')]
+#[Entity(store: 'r_other_people')]
 class AnEntitySortingBeforeGroup implements HasId
 {
     #[Id, IsGeneratedValue]

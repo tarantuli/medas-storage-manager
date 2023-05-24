@@ -33,10 +33,12 @@ abstract class AbstractStorageTestClass extends BaseTestClass
      */
     public function testMigration(): void
     {
-        // Delete both stores if they still exist
-        storage()->controller()->deleteStore('other_people');
-        storage()->controller()->deleteStore('people');
-        storage()->controller()->deleteStore('groups');
+        // Delete all stores if they still exist
+        storage()->controller()->deleteStore('r_other_people');
+        storage()->controller()->deleteStore('r_people');
+        storage()->controller()->deleteStore('r_groups');
+        storage()->controller()->deleteStore('r_labels');
+        storage()->controller()->deleteStore('r_groups__labels');
 
         // Create and execute a migration
         $migration = $this->createMigrationClassContent('Relations');
@@ -46,9 +48,11 @@ abstract class AbstractStorageTestClass extends BaseTestClass
 
         $this->executeMigration($migration);
 
-        self::assertTrue(storage()->store('groups')->exists());
-        self::assertTrue(storage()->store('people')->exists());
-        self::assertTrue(storage()->store('other_people')->exists());
+        self::assertTrue(storage()->store('r_groups')->exists());
+        self::assertTrue(storage()->store('r_people')->exists());
+        self::assertTrue(storage()->store('r_labels')->exists());
+        self::assertTrue(storage()->store('r_other_people')->exists());
+        self::assertTrue(storage()->store('r_groups__labels')->exists());
 
         // Another migration should be empty
         $migration = $this->createMigrationClassContent('Relations');
