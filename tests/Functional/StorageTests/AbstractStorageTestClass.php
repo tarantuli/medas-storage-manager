@@ -73,11 +73,11 @@ abstract class AbstractStorageTestClass extends BaseTestClass
      */
     public function testCreateRecords(): void
     {
-        $query = storage()->store('groups')->prepareCreate(['id' => 1, 'name' => 'Test group']);
+        $query = storage()->store('r_groups')->prepareCreate(['id' => 1, 'name' => 'Test group']);
         $query->execute();
         self::assertFalse($query->recordSet()->hasRecords());
 
-        $query = storage()->store('people')->prepareCreate(['id' => 1, 'name' => 'Test person', 'group' => 1]);
+        $query = storage()->store('r_people')->prepareCreate(['id' => 1, 'name' => 'Test person', 'group' => 1]);
         $query->execute();
         self::assertFalse($query->recordSet()->hasRecords());
     }
@@ -87,7 +87,7 @@ abstract class AbstractStorageTestClass extends BaseTestClass
      */
     public function testFetchRecords(): void
     {
-        $record = storage()->store('groups')->fetchRecord(['id' => 1]);
+        $record = storage()->store('r_groups')->fetchRecord(['id' => 1]);
 
         self::assertArrayHasKey('name', $record);
         self::assertEquals('Test group', $record['name']);
