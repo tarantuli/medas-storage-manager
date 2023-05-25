@@ -158,11 +158,10 @@ class EntityStructureFinder
             return;
         }
 
-        $collectionProperty = $this->metaDataManager
-            ->get($collectionType->contentType)
-            ->idProperty;
+        $referencedMetaData = $this->metaDataManager
+            ->get($collectionType->contentType);
 
-        $referencedMetaData = $this->metaDataManager->get($collectionProperty->reflection->class);
+        $collectionProperty = $referencedMetaData->idProperty;
 
         $field->collectionField = $this->fieldFromProperty($collectionProperty);
         $field->collectionStore = $referencedMetaData->entity->store;
