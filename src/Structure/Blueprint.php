@@ -22,14 +22,18 @@ class Blueprint
         return $this->name;
     }
 
-    public function setName(string|null $name): void
+    public function setName(string|null $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    public function addField(Blueprint\Field $field): void
+    public function addField(Blueprint\Field $field): self
     {
         $this->fields[] = $field;
+
+        return $this;
     }
 
     public function fields(): array
@@ -47,9 +51,11 @@ class Blueprint
         return array_values(array_filter($this->fields, fn($field) => in_array($field->name, $names, true)));
     }
 
-    public function addIndex(Blueprint\Index $index): void
+    public function addIndex(Blueprint\Index $index): self
     {
         $this->indexes[] = $index;
+
+        return $this;
     }
 
     public function indexes(): array
@@ -78,9 +84,11 @@ class Blueprint
         return array_values(array_filter($this->indexes, fn($index) => in_array($index->hash(), $hashes, true)));
     }
 
-    public function addForeignKey(Blueprint\ForeignKey $foreignKey): void
+    public function addForeignKey(Blueprint\ForeignKey $foreignKey): self
     {
         $this->foreignKeys[] = $foreignKey;
+
+        return $this;
     }
 
     public function foreignKeys(): array

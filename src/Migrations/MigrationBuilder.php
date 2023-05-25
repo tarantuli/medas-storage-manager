@@ -6,6 +6,7 @@ namespace Medas\StorageManager\Migrations;
 
 use Medas\FileBuilder\PhpClass\MethodDefinition;
 use Medas\StorageManager\Interfaces\Storage;
+use Medas\StorageManager\Structure\Blueprint;
 
 interface MigrationBuilder
 {
@@ -13,4 +14,6 @@ interface MigrationBuilder
                           string           $className,
                           MethodDefinition $migrateMethod,
                           MethodDefinition $undoMethod): bool;
+
+    public function buildQueries(Blueprint $expectedStructure): iterable|null;
 }

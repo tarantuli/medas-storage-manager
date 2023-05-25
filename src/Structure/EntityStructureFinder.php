@@ -46,14 +46,16 @@ class EntityStructureFinder
     private function findFields(): void
     {
         foreach ($this->metaData->properties as $property) {
-            $field = new Blueprint\Field($property->name, Blueprint\Type::Text);
-            $this->analyseProperty($property, $field);
-            $this->blueprint->addField($field);
+            $this->blueprint->addField(
+                $this->fieldFromProperty($property)
+            );
         }
     }
 
-    protected function analyseProperty(MetaData\Property $property, Blueprint\Field $field): void
+    public function fieldFromProperty(MetaData\Property $property): Blueprint\Field
     {
+        $field = new Blueprint\Field($property->name, Blueprint\Type::Text);
+
         $typeHandler = $this->typeHandlerFinder->for($property->type);
         $field->type = $typeHandler->fieldType($property);
 
@@ -109,6 +111,8 @@ class EntityStructureFinder
             $field->minValue = 0;
             $field->maxValue = 1;
         }
+
+        return $field;
     }
 
     private function findPrimaryKey(): void
@@ -149,16 +153,18 @@ class EntityStructureFinder
         /** @var Collection $collectionType */
         $collectionType = $property->type;
         $collectionTypeHandler = $this->typeHandlerFinder->forString($collectionType->contentType);
-        $collectionField = null;
 
-        if ($collectionTypeHandler instanceof RelationHandler) {
-            $collectionField = $this->metaDataManager
-                ->get($collectionType->contentType)
-                ->idProperty;
-
-            $collectionTypeHandler = $this->typeHandlerFinder->for($collectionField->type);
+        if (!$collectionTypeHandler instanceof RelationHandler) {
+            return;
         }
 
-        $field->collectionType = $collectionTypeHandler->fieldType($collectionField);
+        $collectionProperty = $this->metaDataManager
+            ->get($collectionType->contentType)
+            ->idProperty;
+
+        $referencedMetaData = $this->metaDataManager->get($collectionProperty->reflection->class);
+
+        $field->collectionField = $this->fieldFromProperty($collectionProperty);
+        $field->collectionStore = $referencedMetaData->entity->store;
     }
 }

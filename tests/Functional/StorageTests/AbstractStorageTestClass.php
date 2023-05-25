@@ -34,11 +34,11 @@ abstract class AbstractStorageTestClass extends BaseTestClass
     public function testMigration(): void
     {
         // Delete all stores if they still exist
+        storage()->controller()->deleteStore('r_groups__labels');
         storage()->controller()->deleteStore('r_other_people');
         storage()->controller()->deleteStore('r_people');
         storage()->controller()->deleteStore('r_groups');
         storage()->controller()->deleteStore('r_labels');
-        storage()->controller()->deleteStore('r_groups__labels');
 
         // Create and execute a migration
         $migration = $this->createMigrationClassContent('Relations');
