@@ -83,8 +83,9 @@ class Fetcher implements FetcherInterface
 
     private function getRecord(MetaData $metaData, object $entity): StoreRecord|null
     {
-        $idValue = $this->dataSerializer->serializeDatum(
+        $idValue = $this->dataSerializer->serializeValue(
             $metaData,
+            $metaData->idProperty,
             $this->entityValueGetter->getValue($entity, $metaData->idProperty),
         );
 
@@ -105,7 +106,7 @@ class Fetcher implements FetcherInterface
             return null;
         }
 
-        $this->dataSerializer->unserialize($metaData, $record);
+        $this->dataSerializer->unserializeArray($metaData, $record);
 
         $this->records[$key] = $record;
 

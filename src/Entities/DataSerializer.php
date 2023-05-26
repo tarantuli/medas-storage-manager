@@ -22,59 +22,60 @@ class DataSerializer
     {
     }
 
-    public function unserialize(MetaData $metaData, StoreRecord &$data): void
+    public function unserializeArray(MetaData $metaData, StoreRecord &$data): void
     {
-        $serializer = $this->getSerializer($metaData);
-
         foreach ($data as $key => $value) {
             try {
-                $property = $metaData->property($key);
-
-                if ($class = $property->handler) {
-                    // This property has been assigned a handler, let it unserialize first
-                    /** @var Handler $handler */
-                    $handler = service($class);
-                    $value = $handler->unserialize($value);
-                }
-
-                $type = $property->type;
+                $data[$key] = $this->unserializeValue($metaData, $metaData->property($key), $value);
             }
             catch (PropertyDoesNotExist) {
                 continue;
             }
-
-            if ($type instanceof Relation && !enum_exists($type->entity)) {
-                // Unserialize using the type of the referenced ID property of the related class
-                $type = $this->metaDataManager->get($type->entity)->idProperty->type;
-            }
-
-            $data[$key] = $serializer->unserialize($value, $type);
         }
     }
 
-    private function getSerializer(MetaData $metaData): Serializer
+    public function unserializeValue(MetaData $metaData, MetaData\Property $property, mixed $value): mixed
+    {
+        $type = $property->type;
+
+        if ($type instanceof Relation && !enum_exists($type->entity)) {
+            // Unserialize using the type of the referenced ID property of the related class
+            $type = $this->metaDataManager->get($type->entity)->idProperty->type;
+        }
+
+        $value = $this->getStorageSerializer($metaData)->unserialize($value, $type);
+
+        if ($class = $property->handler) {
+            // This property has been assigned a handler, let it unserialize afterwards
+            /** @var Handler $handler */
+            $handler = service($class);
+            $value = $handler->unserialize($value);
+        }
+
+        return $value;
+    }
+
+    private function getStorageSerializer(MetaData $metaData): Serializer
     {
         return storage($metaData->entity->storage)->controller()->serializer();
     }
 
     public function serializeArray(MetaData $metaData, iterable &$data): void
     {
-        $serializer = $this->getSerializer($metaData);
-
         foreach ($data as $key => $value) {
-            if ($class = $metaData->property($key)->handler) {
-                // This property has been assigned a handler, let it serialize first
-                /** @var Handler $handler */
-                $handler = service($class);
-                $value = $handler->serialize($value);
-            }
-
-            $data[$key] = $serializer->serialize($value);
+            $data[$key] = $this->serializeValue($metaData, $metaData->property($key), $value);
         }
     }
 
-    public function serializeDatum(MetaData $metaData, mixed $datum): mixed
+    public function serializeValue(MetaData $metaData, MetaData\Property $property, mixed $value): mixed
     {
-        return $this->getSerializer($metaData)->serialize($datum);
+        if ($class = $property->handler) {
+            // This property has been assigned a handler, let it serialize first
+            /** @var Handler $propertyHandler */
+            $propertyHandler = service($class);
+            $value = $propertyHandler->serialize($value);
+        }
+
+        return $this->getStorageSerializer($metaData)->serialize($value);
     }
 }

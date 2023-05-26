@@ -149,7 +149,7 @@ class Persister
     private function getIdValues(object $entity, MetaData $metaData): array
     {
         $idValue = $this->valueGetter->getValue($entity, $metaData->idProperty);
-        $serializeValue = $this->dataSerializer->serializeDatum($metaData, $idValue);
+        $serializeValue = $this->dataSerializer->serializeValue($metaData, $metaData->idProperty, $idValue);
 
         return [$metaData->idProperty->name => $serializeValue];
     }
