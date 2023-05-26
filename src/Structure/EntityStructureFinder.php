@@ -7,6 +7,7 @@ namespace Medas\StorageManager\Structure;
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
+use Medas\EntityManager\Properties\Handler;
 use Medas\EntityManager\Types\{Binary, Boolean, Collection, Integer, Relation};
 use Medas\StorageManager\Structure\Blueprint\Type;
 use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
@@ -82,6 +83,13 @@ class EntityStructureFinder
         if ($property->hasDefault) {
             $field->hasDefault = true;
             $field->default = $property->default;
+
+            if ($class = $property->handler) {
+                // This property has been assigned a handler, let it serialize the value
+                /** @var Handler $propertyHandler */
+                $propertyHandler = service($class);
+                $field->default = $propertyHandler->serialize($field->default);
+            }
         }
 
         $type = $property->type;
