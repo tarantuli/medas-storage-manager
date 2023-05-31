@@ -111,9 +111,16 @@ class ChangeFinder
                 // Compare by backed value
                 if ($fieldValue->value == $currentValue) {
                     unset($diff[$key]);
-                    /** @noinspection PhpUnnecessaryStopStatementInspection */
                     continue;
                 }
+            }
+
+            if ($current->hasDefault === false
+                && $field->hasDefault === true
+                && $field->default === null) {
+                unset($diff[$key]);
+                /** @noinspection PhpUnnecessaryStopStatementInspection */
+                continue;
             }
         }
 
