@@ -129,7 +129,9 @@ abstract class AbstractStorageTestClass extends BaseTestClass
 
     public function testStoreHandledPRoperty(): void
     {
-        // Assert storage existence
+        storage()->controller()->deleteStore('entities_with_handler');
+
+        // Ensure storage existence
         $migration = $this->createMigrationClassContent('PropertyHandlers');
         $this->executeMigration($migration);
 

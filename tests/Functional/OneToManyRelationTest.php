@@ -11,9 +11,10 @@ class OneToManyRelationTest extends BaseTestClass
 {
     public function testCreateMigration(): void
     {
-        storage()->controller()->deleteStore('other_people');
-        storage()->controller()->deleteStore('people');
-        storage()->controller()->deleteStore('groups');
+        storage()->controller()->deleteStore('r_other_people');
+        storage()->controller()->deleteStore('r_groups__labels');
+        storage()->controller()->deleteStore('r_groups');
+        storage()->controller()->deleteStore('r_people');
 
         $migration = $this->createMigrationClassContent('Relations');
 
@@ -25,16 +26,17 @@ class OneToManyRelationTest extends BaseTestClass
         $this->rebuildTables();
 
         // Check that both tables exist and are empty
-        self::assertNull(storage()->store('people')->fetchRecord([]));
-        self::assertNull(storage()->store('groups')->fetchRecord([]));
+        self::assertNull(storage()->store('r_people')->fetchRecord([]));
+        self::assertNull(storage()->store('r_groups')->fetchRecord([]));
     }
 
     private function rebuildTables(): void
     {
         // Delete both stores if they still exist
-        storage()->controller()->deleteStore('other_people');
-        storage()->controller()->deleteStore('people');
-        storage()->controller()->deleteStore('groups');
+        storage()->controller()->deleteStore('r_other_people');
+        storage()->controller()->deleteStore('r_people');
+        storage()->controller()->deleteStore('r_groups__labels');
+        storage()->controller()->deleteStore('r_groups');
 
         // Execute the migration
         $migration = $this->createMigrationClassContent('Relations');

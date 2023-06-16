@@ -11,9 +11,9 @@ class ManyToManyRelationTest extends BaseTestClass
 {
     public function testCreateMigration(): void
     {
+        storage()->controller()->deleteStore('books__labels');
         storage()->controller()->deleteStore('books');
         storage()->controller()->deleteStore('labels');
-        storage()->controller()->deleteStore('books__labels');
 
         $migration = $this->createMigrationClassContent('ManyToMany');
 
