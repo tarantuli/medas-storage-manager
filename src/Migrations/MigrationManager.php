@@ -98,9 +98,12 @@ class MigrationManager
 
     private function registerExecution(Migration $migration): void
     {
-        $this->migrationStoreManager->get()
-            ->prepareCreate(['migration' => $migration::class, 'migrated_at' => date('Y-m-d H:i:s')])
-            ->execute();
+        $actions = $this->migrationStoreManager->get()
+            ->prepareCreate(['migration' => $migration::class, 'migrated_at' => date('Y-m-d H:i:s')]);
+
+        foreach ($actions as $action) {
+            $action->execute();
+        }
     }
 
     public function processedMigrations(): array

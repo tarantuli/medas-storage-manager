@@ -7,7 +7,7 @@ namespace Medas\StorageManager\Interfaces;
 use Medas\Core\Interfaces\ManagedCollection;
 use Medas\EntityManager\MetaData\Property;
 use Medas\EntityManager\Types\Collection;
-use Medas\StorageManager\UnitOfWork\Action;
+use Medas\StorageManager\UnitOfWork\ActionCollection;
 
 interface Store
 {
@@ -22,15 +22,15 @@ interface Store
 
     public function fetchCollectionRecord(object $entity, Property $property): iterable;
 
-    public function prepareCreate(array $values): Action;
+    public function prepareCreate(array $values): ActionCollection;
 
-    public function prepareGet(array $filters): Action;
+    public function prepareGet(array $filters): ActionCollection;
 
-    public function prepareUpdate(array $updates, array $conditions): Action;
+    public function prepareUpdate(array $updates, array $conditions): ActionCollection;
 
-    public function prepareCollectionUpdate(object $entity, string $name, Collection $type, ManagedCollection $values);
+    public function prepareCollectionUpdate(object $entity, string $name, Collection $type, ManagedCollection $values): ActionCollection;
 
-    public function prepareDelete(array $conditions);
+    public function prepareDelete(array $conditions): ActionCollection;
 
     public function exists(): bool;
 }

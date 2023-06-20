@@ -14,9 +14,9 @@ interface Action
 
     public function storage(): Storage;
 
+    public function priority(): Priority;
+
     public function onComplete(): \Closure|null;
 
     public function setOnComplete(\Closure|null $onComplete): self;
-
-    public function priority(): Priority;
 }

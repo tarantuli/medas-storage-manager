@@ -14,23 +14,24 @@ class UnitOfWorkManager
 {
     public function queueUpdate(UnitOfWork $unitOfWork, Store $store, array $updates, array $conditions): void
     {
-        $unitOfWork->addAction(
-            $store->prepareUpdate($updates, $conditions)
-        );
+        foreach ($store->prepareUpdate($updates, $conditions) as $action) {
+            $unitOfWork->addAction($action);
+        }
     }
 
     public function queueCreate(UnitOfWork $unitOfWork, Store $store, array $values, \Closure $onComplete = null): void
     {
-        $unitOfWork->addAction(
-            $store->prepareCreate($values)->setOnComplete($onComplete)
-        );
+        foreach ($store->prepareCreate($values) as $action) {
+            $action->setOnComplete($onComplete);
+            $unitOfWork->addAction($action);
+        }
     }
 
     public function queueDelete(UnitOfWork $unitOfWork, Store $store, array $conditions): void
     {
-        $unitOfWork->addAction(
-            $store->prepareDelete($conditions)
-        );
+        foreach ($store->prepareDelete($conditions) as $action) {
+            $unitOfWork->addAction($action);
+        }
     }
 
     public function queueCollectionUpdate(UnitOfWork $unitOfWork, Store $store, object $entity, string $name, Collection $type, ManagedCollection $values): void
