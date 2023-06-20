@@ -42,6 +42,7 @@ class EntityStructureFinder
     private function findName(): void
     {
         $this->blueprint->setName($this->metaData->entity->store);
+        $this->blueprint->setParent($this->metaData->parent);
     }
 
     private function findFields(): void

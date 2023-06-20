@@ -8,6 +8,8 @@ class Blueprint
 {
     private string|null $name;
 
+    private string|null $parent;
+
     /** @var Blueprint\Field[] */
     private array $fields = [];
 
@@ -104,5 +106,17 @@ class Blueprint
     public function foreignKeysByHash(array $hashes): array
     {
         return array_values(array_filter($this->foreignKeys, fn($foreignKey) => in_array($foreignKey->hash(), $hashes, true)));
+    }
+
+    public function parent(): string|null
+    {
+        return $this->parent;
+    }
+
+    public function setParent(string|null $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
     }
 }
