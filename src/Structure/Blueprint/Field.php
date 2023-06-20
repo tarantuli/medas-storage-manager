@@ -11,6 +11,7 @@ class Field
     public function __construct(
         public string      $name,
         public Type        $type,
+        public string|null $store = null,
         public string|null $collectionStore = null,
         public Field|null  $collectionField = null,
         public bool        $isNullable = false,

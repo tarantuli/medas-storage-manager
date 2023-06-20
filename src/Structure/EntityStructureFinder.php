@@ -20,6 +20,7 @@ class EntityStructureFinder
 
     public function __construct(
         private readonly MetaDataManager   $metaDataManager,
+        private readonly ParentStoreFinder $parentStoreFinder,
         private readonly TypeHandlerFinder $typeHandlerFinder,
         private readonly EnumHandler       $enumHandler,
     )
@@ -47,16 +48,22 @@ class EntityStructureFinder
 
     private function findFields(): void
     {
+        $parents = $this->parentStoreFinder->find($this->metaData);
+
         foreach ($this->metaData->properties as $property) {
             $this->blueprint->addField(
-                $this->fieldFromProperty($property)
+                $this->fieldFromProperty($property, $parents)
             );
         }
     }
 
-    public function fieldFromProperty(MetaData\Property $property): Blueprint\Field
+    public function fieldFromProperty(MetaData\Property $property, ParentStores $parentStores = null): Blueprint\Field
     {
         $field = new Blueprint\Field($property->name, Blueprint\Type::Text);
+
+        if ($parentStores) {
+            $field->store = $parentStores->getStore($property->reflection->getDeclaringClass()->name);
+        }
 
         $typeHandler = $this->typeHandlerFinder->for($property->type);
         $field->type = $typeHandler->fieldType($property);
