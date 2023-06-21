@@ -13,8 +13,8 @@ class OneToManyRelationTest extends BaseTestClass
     {
         storage()->controller()->deleteStore('r_other_people');
         storage()->controller()->deleteStore('r_groups__labels');
-        storage()->controller()->deleteStore('r_groups');
         storage()->controller()->deleteStore('r_people');
+        storage()->controller()->deleteStore('r_groups');
 
         $migration = $this->createMigrationClassContent('Relations');
 

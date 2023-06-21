@@ -81,6 +81,11 @@ class Blueprint
         return null;
     }
 
+    public function idField(): Blueprint\Field|null
+    {
+        return $this->primaryIndex()?->fields()[0];
+    }
+
     public function indexesByHash(array $hashes): array
     {
         return array_values(array_filter($this->indexes, fn($index) => in_array($index->hash(), $hashes, true)));

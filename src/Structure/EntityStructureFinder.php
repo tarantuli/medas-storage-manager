@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Structure;
 
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\CacheManager;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Properties\Handler;
@@ -19,6 +20,7 @@ class EntityStructureFinder
     private Blueprint $blueprint;
 
     public function __construct(
+        private readonly CacheManager      $cacheManager,
         private readonly MetaDataManager   $metaDataManager,
         private readonly ParentStoreFinder $parentStoreFinder,
         private readonly TypeHandlerFinder $typeHandlerFinder,
@@ -28,6 +30,14 @@ class EntityStructureFinder
     }
 
     public function find(string $className): Blueprint
+    {
+        return $this->cacheManager->get()->get(
+            __CLASS__ . ':' . $className,
+            fn() => $this->compile($className)
+        );
+    }
+
+    private function compile(string $className): Blueprint
     {
         $this->metaData = $this->metaDataManager->get($className);
         $this->blueprint = new Blueprint();

@@ -12,18 +12,20 @@ use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\{Collection, Guid};
 use Medas\ServiceManager\Exceptions\GuidProviderIsNotAvailable;
 use Medas\StorageManager\Interfaces\{Storage, Store};
+use Medas\StorageManager\Structure\EntityStructureFinder;
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
 
 #[Service]
 class Persister
 {
     public function __construct(
-        private readonly DataSerializer    $dataSerializer,
-        private readonly Fetcher           $fetcher,
-        private readonly GuidProvider|null $guidProvider,
-        private readonly MetaDataManager   $metaDataManager,
-        private readonly UnitOfWorkManager $unitOfWorkManager,
-        private readonly ValueGetter       $valueGetter,
+        private readonly DataSerializer        $dataSerializer,
+        private readonly EntityStructureFinder $entityStructureFinder,
+        private readonly Fetcher               $fetcher,
+        private readonly GuidProvider|null     $guidProvider,
+        private readonly MetaDataManager       $metaDataManager,
+        private readonly UnitOfWorkManager     $unitOfWorkManager,
+        private readonly ValueGetter           $valueGetter,
     )
     {
     }
@@ -31,6 +33,7 @@ class Persister
     public function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
+        $blueprint = $this->entityStructureFinder->find($entity::class);
         $values = [];
 
         foreach ($metaData->properties as $property) {
@@ -62,18 +65,35 @@ class Persister
             }
 
             if ($foundValue) {
-                $values[$property->name] = $value;
+                $store = $blueprint->fieldByName($property->name)->store;
+                if (!array_key_exists($store, $values)) {
+                    $values[$store] = [];
+                }
+
+                $values[$store][$property->name] = $value;
             }
         }
 
-        $this->dataSerializer->serializeArray($metaData, $values);
+        $idFieldStore = $blueprint->idField()->store;
 
-        $this->unitOfWorkManager->queueCreate(
-            $unitOfWork,
-            $this->getStore($metaData),
-            $values,
-            $this->generatedValueSetter($metaData, $entity)
-        );
+        if (!array_key_exists($idFieldStore, $values)) {
+            $values[$idFieldStore] = [];
+        }
+
+        foreach ($values as $store => $subValues) {
+            $this->dataSerializer->serializeArray($metaData, $subValues);
+
+            if ($store !== $idFieldStore) {
+                $subValues[$blueprint->idField()->name] = new LastInsertIdPlaceholder();
+            }
+
+            $this->unitOfWorkManager->queueCreate(
+                $unitOfWork,
+                storage()->store($store),
+                $subValues,
+                $this->generatedValueSetter($metaData, $entity)
+            );
+        }
     }
 
     private function getStore(MetaData $metaData): Store
@@ -87,9 +107,10 @@ class Persister
             return null;
         }
 
-        return function (Storage $storage) use ($metaData, $entity) {
+        return function (Storage $storage, int|null $lastInsertId) use ($metaData, $entity) {
             if ($metaData->idProperty->isGeneratedValue) {
-                $metaData->idProperty->reflection->setValue($entity, $storage->controller()->lastGeneratedValue());
+                $value = $lastInsertId ?? $storage->controller()->lastGeneratedValue();
+                $metaData->idProperty->reflection->setValue($entity, $value);
             }
 
             em()->resetKey($entity);
