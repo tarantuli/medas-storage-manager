@@ -45,15 +45,13 @@ class OneToManyRelationTest extends BaseTestClass
 
     public function testStoreRelation(): void
     {
+        em()->autoPersistOnCreate();
+
         $this->rebuildTables();
 
         $group = em()->create(Group::class, ['name' => 'test group']);
-        em()->persist($group);
-        em()->flush();
 
         $person = em()->create(Person::class, ['name' => 'test person', 'group' => $group]);
-        em()->persist($person);
-        em()->flush();
 
         self::assertEquals($group, em()->get(Group::class, 1));
         self::assertEquals($person, em()->get(Person::class, 1));

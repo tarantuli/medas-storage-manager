@@ -24,12 +24,12 @@ class ManyToManyRelationTest extends BaseTestClass
     /** @depends testCreateMigration */
     public function testStoring(): Book
     {
+        em()->autoPersistOnCreate();
+
         $label1 = em()->create(Label::class, ['name' => 'label 1']);
         $label2 = em()->create(Label::class, ['name' => 'label 2']);
 
         $book = em()->create(Book::class, ['labels' => new Labels(fn() => [$label1, $label2])]);
-        em()->persist($label1, $label2, $book);
-        em()->flush();
 
         $label1Id = $label1->id();
         $bookId = $book->id();
@@ -49,9 +49,11 @@ class ManyToManyRelationTest extends BaseTestClass
     /** @depends testStoring */
     public function testAdding(Book $book): Book
     {
+        em()->autoPersistOnCreate();
+
         $label3 = em()->create(Label::class, ['name' => 'label 3']);
         $book->labels[] = $label3;
-        em()->persist($label3);
+
         em()->flush();
         em()->clear();
 
@@ -64,7 +66,10 @@ class ManyToManyRelationTest extends BaseTestClass
     /** @depends testAdding */
     public function testDeleting(Book $book): Book
     {
+        em()->autoPersistOnCreate();
+
         unset($book->labels[1]);
+
         em()->flush();
         em()->clear();
 
@@ -77,11 +82,12 @@ class ManyToManyRelationTest extends BaseTestClass
     /** @depends testDeleting */
     public function testAddingAndDeleting(Book $book): Book
     {
+        em()->autoPersistOnCreate();
+
         $label4 = em()->create(Label::class, ['name' => 'label 4']);
         unset($book->labels[0]);
         $book->labels[] = $label4;
-        em()->persist($label4);
-        em()->flush();
+
         em()->clear();
 
         $book = em()->get(Book::class, $book->id());
