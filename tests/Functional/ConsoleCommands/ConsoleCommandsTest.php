@@ -33,7 +33,9 @@ class ConsoleCommandsTest extends TestCase
 
     private function makeMigration(): void
     {
+        ob_start();
         service(MakeMigrationCommand::class)->process([]);
+        ob_end_clean();
     }
 
     private function cleanUp(): void
