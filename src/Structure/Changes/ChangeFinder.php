@@ -81,6 +81,10 @@ class ChangeFinder
     {
         $diff = array_udiff_assoc((array) $field, (array) $current, fn($a, $b) => $a <=> $b);
 
+        if (isset($diff['store'])) {
+            unset($diff['store']);
+        }
+
         // If the diff contains length or value parameters, compare ranges
         if (isset($diff['minLength']) and $current->minLength <= $field->minLength) {
             unset($diff['minLength']);

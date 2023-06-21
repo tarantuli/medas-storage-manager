@@ -754,12 +754,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-mysql.git",
-                "reference": "a29fafd1b1b4d7cd176aeed7c0bb1a4628ab25c8"
+                "reference": "814b013f60f10bd3f89f8e165f6e0f21d0517b58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-mysql/zipball/a29fafd1b1b4d7cd176aeed7c0bb1a4628ab25c8",
-                "reference": "a29fafd1b1b4d7cd176aeed7c0bb1a4628ab25c8",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-mysql/zipball/814b013f60f10bd3f89f8e165f6e0f21d0517b58",
+                "reference": "814b013f60f10bd3f89f8e165f6e0f21d0517b58",
                 "shasum": ""
             },
             "require": {
@@ -788,7 +788,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-mysql/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-mysql/issues"
             },
-            "time": "2023-06-20T13:31:50+00:00"
+            "time": "2023-06-21T13:18:13+00:00"
         },
         {
             "name": "morphp/medas-pdo-storage",
@@ -796,12 +796,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "9fd0661a35e5b69f808d04f347e294a852e7fad9"
+                "reference": "6ebde756f9eff4406015af51719722fa104e50b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/9fd0661a35e5b69f808d04f347e294a852e7fad9",
-                "reference": "9fd0661a35e5b69f808d04f347e294a852e7fad9",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/6ebde756f9eff4406015af51719722fa104e50b0",
+                "reference": "6ebde756f9eff4406015af51719722fa104e50b0",
                 "shasum": ""
             },
             "require": {
@@ -834,7 +834,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2023-06-20T13:30:38+00:00"
+            "time": "2023-06-21T13:14:02+00:00"
         },
         {
             "name": "morphp/medas-ramsey-uuid-bridge",
