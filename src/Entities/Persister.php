@@ -13,7 +13,7 @@ use Medas\EntityManager\Types\{Collection, Guid};
 use Medas\ServiceManager\Exceptions\GuidProviderIsNotAvailable;
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\Structure\EntityStructureFinder;
-use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkManager};
+use Medas\StorageManager\UnitOfWork\{Priority, UnitOfWork, UnitOfWorkManager};
 
 #[Service]
 class Persister
@@ -82,16 +82,19 @@ class Persister
 
         foreach ($values as $store => $subValues) {
             $this->dataSerializer->serializeArray($metaData, $subValues);
+            $priority = null;
 
             if ($store !== $idFieldStore) {
                 $subValues[$blueprint->idField()->name] = new LastInsertIdPlaceholder();
+                $priority = Priority::CreateDependentRecord;
             }
 
             $this->unitOfWorkManager->queueCreate(
                 $unitOfWork,
                 storage()->store($store),
                 $subValues,
-                $this->generatedValueSetter($metaData, $entity)
+                $this->generatedValueSetter($metaData, $entity),
+                $priority,
             );
         }
     }

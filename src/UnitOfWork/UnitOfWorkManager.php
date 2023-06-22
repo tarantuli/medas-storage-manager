@@ -19,10 +19,21 @@ class UnitOfWorkManager
         }
     }
 
-    public function queueCreate(UnitOfWork $unitOfWork, Store $store, array $values, \Closure $onComplete = null): void
+    public function queueCreate(
+        UnitOfWork $unitOfWork,
+        Store      $store,
+        array      $values,
+        \Closure   $onComplete = null,
+        Priority   $priority = null,
+    ): void
     {
         foreach ($store->prepareCreate($values) as $action) {
+            if ($priority) {
+                $action->setPriority($priority);
+            }
+
             $action->setOnComplete($onComplete);
+
             $unitOfWork->addAction($action);
         }
     }

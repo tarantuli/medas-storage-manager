@@ -16,6 +16,8 @@ interface Action
 
     public function priority(): Priority;
 
+    public function setPriority(Priority $priority): self;
+
     public function onComplete(): \Closure|null;
 
     public function setOnComplete(\Closure|null $onComplete): self;
