@@ -33,6 +33,10 @@ class ChangeFinder
     private function checkFields(): void
     {
         foreach ($this->expected->fields() as $field) {
+            if ($field->store !== null && $field->store !== $this->expected->name()) {
+                continue;
+            }
+
             if ($current = $this->existing->fieldByName($field->name)) {
                 if ($this->areFieldsComparable($field, $current)) {
                     continue;
