@@ -36,6 +36,17 @@ class InheritenceTest extends BaseTestClass
             ['name' => 'Wooden shield', 'armorType' => 'shield']
         );
 
-        self::assertNotEquals($armor1->id(), $weapon1->id());
+        $weaponId = $weapon1->id();
+        $armorId = $armor1->id();
+
+        self::assertNotEquals($armorId, $weaponId);
+
+        em()->clear();
+
+        $weapon2 = em()->get(WeaponCard::class, $weaponId);
+        $armor2 = em()->get(ArmorCard::class, $armorId);
+
+        self::assertTrue($weapon2 instanceof WeaponCard);
+        self::assertTrue($armor2 instanceof ArmorCard);
     }
 }

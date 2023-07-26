@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\Collection;
-use Medas\Core\Interfaces\IsLazyLoaded;
-use Medas\Core\Interfaces\SettableCollection;
-use Medas\Core\Interfaces\TracksChanges;
+use Medas\Core\Interfaces\{Collection, IsLazyLoaded, SettableCollection, TracksChanges};
 use Medas\EntityManager\Entities\{Fetcher as FetcherInterface, FetchResult, IdValue, KeyMaker};
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
 use Medas\EntityManager\Types\{Collection as CollectionType, Relation};
-use Medas\StorageManager\Entities\Exceptions\StoreDoesNotHaveProperty;
-use Medas\StorageManager\Interfaces\{Store, StoreRecord};
+use Medas\StorageManager\Entities\Exceptions\StoresDontHaveProperty;
+use Medas\StorageManager\Interfaces\{StoreRecord};
 
 #[Service]
 class Fetcher implements FetcherInterface
@@ -29,6 +26,7 @@ class Fetcher implements FetcherInterface
         private readonly IdValue         $idValue,
         private readonly KeyMaker        $keyMaker,
         private readonly MetaDataManager $metaDataManager,
+        private readonly StoresFinder    $storesFinder,
         private readonly ValueGetter     $entityValueGetter,
     )
     {
@@ -48,11 +46,13 @@ class Fetcher implements FetcherInterface
         }
 
         $serializer = storage($metaData->entity->storage)->controller()->serializer();
-        $records = $this->getStore($metaData)->fetchCollectionRecord($entity, $property);
         $items = [];
+        foreach ($this->storesFinder->find($metaData) as $store) {
+            $records = $store->fetchCollectionRecord($entity, $property);
 
-        foreach ($records as $record) {
-            $items[] = $serializer->unserialize($record['value'], $itemType);
+            foreach ($records as $record) {
+                $items[] = $serializer->unserialize($record['value'], $itemType);
+            }
         }
 
         return $items;
@@ -74,7 +74,7 @@ class Fetcher implements FetcherInterface
             return new FetchResult(true, $record[$property->name]);
         }
 
-        throw new StoreDoesNotHaveProperty($this->getStore($metaData), $property->name);
+        throw new StoresDontHaveProperty($this->storesFinder->find($metaData), $property->name);
     }
 
     private function getRecord(MetaData $metaData, object $entity): StoreRecord|null
@@ -88,7 +88,19 @@ class Fetcher implements FetcherInterface
         $key = $this->keyMaker->get($entity::class, $idValue);
 
         if (!array_key_exists($key, $this->records)) {
-            $record = $this->getStore($metaData)->fetchRecord([$metaData->idProperty->name => $idValue]);
+            $record = null;
+
+            foreach ($this->storesFinder->find($metaData) as $store) {
+                if ($newRecord = $store->fetchRecord([$metaData->idProperty->name => $idValue])) {
+                    if ($record === null) {
+                        $record = $newRecord;
+                    }
+                    else {
+                        $record->patch($newRecord->data());
+                    }
+                }
+            }
+
             $this->deserializeAndCache($metaData, $record, $key);
         }
 
@@ -112,11 +124,6 @@ class Fetcher implements FetcherInterface
     private function getKeyFromRecord(MetaData $metaData, array $data): string
     {
         return $this->keyMaker->get($metaData->className, $data[$metaData->idProperty->name]);
-    }
-
-    private function getStore(MetaData $metaData): Store
-    {
-        return storage($metaData->entity->storage)->store($metaData->entity->store);
     }
 
     public function fetch(Selector $selector = null, array $arguments = []): array
