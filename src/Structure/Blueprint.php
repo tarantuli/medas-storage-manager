@@ -55,7 +55,9 @@ class Blueprint
 
     public function addIndex(Blueprint\Index $index): self
     {
-        $this->indexes[] = $index;
+        if ($this->indexByHash($index->hash()) === null) {
+            $this->indexes[] = $index;
+        }
 
         return $this;
     }
@@ -93,7 +95,9 @@ class Blueprint
 
     public function addForeignKey(Blueprint\ForeignKey $foreignKey): self
     {
-        $this->foreignKeys[] = $foreignKey;
+        if ($this->foreignKeyByHash($foreignKey->hash()) === null) {
+            $this->foreignKeys[] = $foreignKey;
+        }
 
         return $this;
     }
