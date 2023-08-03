@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
+use Medas\Cache\MemoryCache;
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\CacheManager;
+use Medas\Core\Serializers\NoopSerializer;
 use Medas\EntityManager\MetaData;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\Structure\EntityStructureFinder;
@@ -13,18 +14,20 @@ use Medas\StorageManager\Structure\EntityStructureFinder;
 #[Service]
 class StoresFinder
 {
+    private readonly MemoryCache $cache;
+
     public function __construct(
-        private readonly CacheManager          $cacheManager,
         private readonly EntityStructureFinder $entityStructureFinder,
     )
     {
+        $this->cache = new MemoryCache(new NoopSerializer());
     }
 
     /** @return Store[] */
     public function find(MetaData $metaData): array
     {
-        return $this->cacheManager->get()->get(
-            [self::class, $metaData->className],
+        return $this->cache->get(
+            $metaData->className,
             fn() => $this->gather($metaData)
         );
     }

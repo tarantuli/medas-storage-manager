@@ -11,6 +11,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
+        "morphp/medas-cache": "dev-dev",
         "morphp/medas-config-options": "dev-dev",
         "morphp/medas-console": "dev-dev",
         "morphp/medas-console-printer": "dev-dev",

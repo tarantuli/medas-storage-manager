@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager;
 
+use Medas\Cache\CachePackage;
 use Medas\ConfigOptions\ConfigOptionsPackage;
+use Medas\Core\AsSingleton;
 use Medas\EntityManager\EntityManagerPackage;
 use Medas\FileBuilder\FileBuilderPackage;
-use Medas\Core\AsSingleton;
 use Medas\ServiceManager\BasePackage;
 use Medas\ServiceManager\ServiceConfig;
 
@@ -18,6 +19,7 @@ class StorageManagerPackage extends BasePackage
     public function dependencies(): array
     {
         return $this->dependenciesByClass([
+            CachePackage::class,
             ConfigOptionsPackage::class,
             EntityManagerPackage::class,
             FileBuilderPackage::class,
