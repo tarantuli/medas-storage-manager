@@ -28,7 +28,7 @@ class MigrationDirectory implements ConfigOption
 
     public function description(): string
     {
-        return 'The directory where migration files reside.';
+        return 'The directory where migration files reside';
     }
 
     public function isValid(mixed $value): bool

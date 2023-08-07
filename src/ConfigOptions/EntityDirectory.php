@@ -28,7 +28,7 @@ class EntityDirectory implements ConfigOption
 
     public function description(): string
     {
-        return 'The directory where entity files reside.';
+        return 'The directory where entity files reside';
     }
 
     public function isValid(mixed $value): bool
