@@ -125,7 +125,7 @@ class MigrationBuildManager
     {
         $storage = storage($entity->storage);
         $needed = $storage->controller()->migrationBuilder()
-            ->build($storage, $className, $this->migrateMethod, $this->undoMethod);
+            ->build($className, $this->migrateMethod, $this->undoMethod);
 
         $this->migrationNeeded = $this->migrationNeeded || $needed;
     }

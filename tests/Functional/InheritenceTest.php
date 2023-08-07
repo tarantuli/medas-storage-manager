@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\StorageManagerTest\Functional;
 
+use Medas\EntityManager\Repository;
 use Medas\StorageManagerTest\BaseTestClass;
-use Medas\StorageManagerTest\MockUps\Inheritence\ArmorCard;
-use Medas\StorageManagerTest\MockUps\Inheritence\Card;
-use Medas\StorageManagerTest\MockUps\Inheritence\WeaponCard;
+use Medas\StorageManagerTest\MockUps\Inheritence\{ArmorCard, WeaponCard};
+use Medas\StorageManagerTest\MockUps\MockUpIds;
 
 class InheritenceTest extends BaseTestClass
 {
@@ -24,7 +24,7 @@ class InheritenceTest extends BaseTestClass
     }
 
     /** @depends testCreateMigration */
-    public function testStoring(): array
+    public function testStoring(): MockUpIds
     {
         em()->autoPersistOnCreate();
 
@@ -47,7 +47,9 @@ class InheritenceTest extends BaseTestClass
         $weapon2 = em()->get(WeaponCard::class, $weaponId);
         $armor2 = em()->get(ArmorCard::class, $armorId);
 
-        self::assertTrue($weapon2 instanceof WeaponCard);
-        self::assertTrue($armor2 instanceof ArmorCard);
+        self::assertInstanceOf(WeaponCard::class, $weapon2);
+        self::assertInstanceOf(ArmorCard::class, $armor2);
+
+        return new MockUpIds($weaponId, $armorId);
     }
 }
