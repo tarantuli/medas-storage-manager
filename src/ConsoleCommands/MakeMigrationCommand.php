@@ -19,7 +19,9 @@ class MakeMigrationCommand extends BaseConsoleCommand
     public function __construct(
         private readonly CommandGroup          $group,
         private readonly ConsolePrinter        $consolePrinter,
+        private readonly EntityDirectory       $entityDirectory,
         private readonly MigrationBuildManager $migrationBuildManager,
+        private readonly MigrationDirectory    $migrationDirectory,
         private readonly OptionController      $optionController,
     )
     {
@@ -43,8 +45,8 @@ class MakeMigrationCommand extends BaseConsoleCommand
     public function process(array $arguments): void
     {
         $filePath = $this->migrationBuildManager->createMigration(
-            $this->optionController->getValue(EntityDirectory::instance()),
-            $this->optionController->getValue(MigrationDirectory::instance())
+            $this->optionController->getValue($this->entityDirectory),
+            $this->optionController->getValue($this->migrationDirectory)
         );
 
         $this->consolePrinter->printEol();

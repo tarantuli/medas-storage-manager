@@ -14,9 +14,10 @@ use Medas\StorageManager\Migrations\MigrationManager;
 class MigrateCommand extends BaseConsoleCommand
 {
     public function __construct(
-        private readonly CommandGroup     $group,
-        private readonly MigrationManager $migrationManager,
-        private readonly OptionController $optionController,
+        private readonly CommandGroup       $group,
+        private readonly MigrationDirectory $migrationDirectory,
+        private readonly MigrationManager   $migrationManager,
+        private readonly OptionController   $optionController,
     )
     {
     }
@@ -39,7 +40,7 @@ class MigrateCommand extends BaseConsoleCommand
     public function process(array $arguments): void
     {
         $this->migrationManager->migrate(
-            $this->optionController->getValue(MigrationDirectory::instance())
+            $this->optionController->getValue($this->migrationDirectory)
         );
     }
 }

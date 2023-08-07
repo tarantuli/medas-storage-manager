@@ -16,6 +16,7 @@ class MigrationStoreManager
     private Store $store;
 
     public function __construct(
+        private readonly MigrationsStore  $migrationsStore,
         private readonly OptionController $optionController,
     )
     {
@@ -24,7 +25,7 @@ class MigrationStoreManager
     public function get(): Store
     {
         if (!isset($this->store)) {
-            $this->store = $this->optionController->getValue(MigrationsStore::instance());
+            $this->store = $this->optionController->getValue($this->migrationsStore);
 
             if (!$this->store->exists()) {
                 $this->build($this->store);
