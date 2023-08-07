@@ -32,7 +32,7 @@ class EntityStructureFinder
     public function find(string $className): Blueprint
     {
         return $this->cacheManager->get()->get(
-            __CLASS__ . ':' . $className,
+            [__CLASS__, $className],
             fn() => $this->compile($className)
         );
     }

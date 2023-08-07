@@ -28,7 +28,7 @@ class ConsoleCommandsTest extends TestCase
 
     private function getDirectory(): string
     {
-        return service(OptionController::class)->getValue(MigrationDirectory::instance());
+        return service(OptionController::class)->getValue(service(MigrationDirectory::class));
     }
 
     private function makeMigration(): void

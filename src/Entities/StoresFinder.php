@@ -37,9 +37,11 @@ class StoresFinder
     {
         $blueprint = $this->entityStructureFinder->find($metaData->className);
         $storeNames = [];
+
         foreach ($blueprint->fields() as $field) {
             $storeNames[] = $field->store;
         }
+
         $stores = [];
 
         foreach (array_unique($storeNames) as $name) {

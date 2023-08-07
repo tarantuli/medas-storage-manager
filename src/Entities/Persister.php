@@ -21,9 +21,9 @@ class Persister
     public function __construct(
         private readonly DataSerializer        $dataSerializer,
         private readonly EntityStructureFinder $entityStructureFinder,
-        private readonly Fetcher               $fetcher,
         private readonly GuidProvider|null     $guidProvider,
         private readonly MetaDataManager       $metaDataManager,
+        private readonly RecordManager         $recordManager,
         private readonly UnitOfWorkManager     $unitOfWorkManager,
         private readonly ValueGetter           $valueGetter,
     )
@@ -153,7 +153,7 @@ class Persister
             $idValues
         );
 
-        $this->fetcher->updateRecord($metaData, $changedValues, $idValues);
+        $this->recordManager->updateRecord($metaData, $changedValues, $idValues);
     }
 
     public function prepareDelete(object $entity, UnitOfWork $unitOfWork): void
@@ -167,7 +167,7 @@ class Persister
             $idValues
         );
 
-        $this->fetcher->removeRecord($metaData, $idValues);
+        $this->recordManager->removeRecord($metaData, $idValues);
     }
 
     private function getIdValues(object $entity, MetaData $metaData): array

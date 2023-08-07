@@ -5,63 +5,37 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{Collection, IsLazyLoaded, SettableCollection, TracksChanges};
-use Medas\EntityManager\Entities\{Fetcher as FetcherInterface, FetchResult, IdValue, KeyMaker};
+use Medas\EntityManager\Entities\{Fetcher, FetchResult, IdValue, KeyMaker};
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
-use Medas\EntityManager\Types\{Collection as CollectionType, Relation};
+use Medas\EntityManager\Types\{Collection as CollectionType};
 use Medas\StorageManager\Entities\Exceptions\StoresDontHaveProperty;
 use Medas\StorageManager\Interfaces\{StoreRecord};
 
 #[Service]
-class Fetcher implements FetcherInterface
+class RecordManager implements Fetcher
 {
     /** @var StoreRecord[] */
     private array $records = [];
 
     public function __construct(
-        private readonly DataSerializer  $dataSerializer,
-        private readonly IdValue         $idValue,
-        private readonly KeyMaker        $keyMaker,
-        private readonly MetaDataManager $metaDataManager,
-        private readonly StoresFinder    $storesFinder,
-        private readonly ValueGetter     $entityValueGetter,
+        private readonly CollectionFetcher $collectionFetcher,
+        private readonly DataSerializer    $dataSerializer,
+        private readonly IdValue           $idValue,
+        private readonly KeyMaker          $keyMaker,
+        private readonly MetaDataManager   $metaDataManager,
+        private readonly StoresFinder      $storesFinder,
+        private readonly ValueGetter       $entityValueGetter,
     )
     {
-    }
-
-    private function fetchCollectionItems(MetaData $metaData, object $entity, MetaData\Property $property): array
-    {
-        /** @var CollectionType $propertyType */
-        $propertyType = $property->type;
-        $rawItemType = $propertyType->contentType;
-
-        if (class_exists($rawItemType)) {
-            $itemType = new Relation($rawItemType);
-        }
-        else {
-            throw new \Exception('unhandled raw item type ' . $rawItemType);
-        }
-
-        $serializer = storage($metaData->entity->storage)->controller()->serializer();
-        $items = [];
-        foreach ($this->storesFinder->find($metaData) as $store) {
-            $records = $store->fetchCollectionRecord($entity, $property);
-
-            foreach ($records as $record) {
-                $items[] = $serializer->unserialize($record['value'], $itemType);
-            }
-        }
-
-        return $items;
     }
 
     public function fetchValue(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult
     {
         if ($property->type instanceof CollectionType) {
-            return $this->fetchCollection($property, $metaData, $entity);
+            return $this->collectionFetcher->fetch($property, $metaData, $entity);
         }
 
         $record = $this->getRecord($metaData, $entity);
@@ -121,11 +95,6 @@ class Fetcher implements FetcherInterface
         return $record;
     }
 
-    private function getKeyFromRecord(MetaData $metaData, array $data): string
-    {
-        return $this->keyMaker->get($metaData->className, $data[$metaData->idProperty->name]);
-    }
-
     public function fetch(Selector $selector = null, array $arguments = []): array
     {
         $entity = $selector->definition()->entity;
@@ -160,32 +129,9 @@ class Fetcher implements FetcherInterface
         unset($this->records[$key]);
     }
 
-    private function fetchCollection(MetaData\Property $property, MetaData $metaData, object $entity): FetchResult
+    private function getKeyFromRecord(MetaData $metaData, array $data): string
     {
-        /** @var CollectionType $propertyType */
-        $propertyType = $property->type;
-
-        /** @var Collection $collection */
-        $collection = new $propertyType->collectionType();
-
-        if ($collection instanceof IsLazyLoaded) {
-            $collection->setLoader(
-                fn() => $this->fetchCollectionItems($metaData, $entity, $property)
-            );
-        }
-        elseif ($collection instanceof SettableCollection) {
-            $collection->setData($this->fetchCollectionItems($metaData, $entity, $property));
-        }
-        else {
-            foreach ($this->fetchCollectionItems($metaData, $entity, $property) as $item) {
-                $collection[] = $item;
-            }
-        }
-
-        if ($collection instanceof TracksChanges) {
-            $collection->resetChangeTracking();
-        }
-
-        return new FetchResult(true, $collection);
+        return $this->keyMaker->get($metaData->className, $data[$metaData->idProperty->name]);
     }
+
 }

@@ -1,0 +1,80 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Medas\StorageManager\Entities;
+
+use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\Collection;
+use Medas\Core\Interfaces\IsLazyLoaded;
+use Medas\Core\Interfaces\SettableCollection;
+use Medas\Core\Interfaces\TracksChanges;
+use Medas\EntityManager\Entities\FetchResult;
+use Medas\EntityManager\MetaData;
+use Medas\EntityManager\Types\Collection as CollectionType;
+use Medas\EntityManager\Types\Relation;
+
+#[Service]
+class CollectionFetcher
+{
+    public function __construct(
+        private readonly StoresFinder $storesFinder,
+    )
+    {
+    }
+
+    public function fetch(MetaData\Property $property, MetaData $metaData, object $entity): FetchResult
+    {
+        /** @var CollectionType $propertyType */
+        $propertyType = $property->type;
+
+        /** @var Collection $collection */
+        $collection = new $propertyType->collectionType();
+
+        if ($collection instanceof IsLazyLoaded) {
+            $collection->setLoader(
+                fn() => $this->fetchCollectionItems($metaData, $entity, $property)
+            );
+        }
+        elseif ($collection instanceof SettableCollection) {
+            $collection->setData($this->fetchCollectionItems($metaData, $entity, $property));
+        }
+        else {
+            foreach ($this->fetchCollectionItems($metaData, $entity, $property) as $item) {
+                $collection[] = $item;
+            }
+        }
+
+        if ($collection instanceof TracksChanges) {
+            $collection->resetChangeTracking();
+        }
+
+        return new FetchResult(true, $collection);
+    }
+
+    private function fetchCollectionItems(MetaData $metaData, object $entity, MetaData\Property $property): array
+    {
+        /** @var CollectionType $propertyType */
+        $propertyType = $property->type;
+        $rawItemType = $propertyType->contentType;
+
+        if (class_exists($rawItemType)) {
+            $itemType = new Relation($rawItemType);
+        }
+        else {
+            throw new \Exception('unhandled raw item type ' . $rawItemType);
+        }
+
+        $serializer = storage($metaData->entity->storage)->controller()->serializer();
+        $items = [];
+        foreach ($this->storesFinder->find($metaData) as $store) {
+            $records = $store->fetchCollectionRecord($entity, $property);
+
+            foreach ($records as $record) {
+                $items[] = $serializer->unserialize($record['value'], $itemType);
+            }
+        }
+
+        return $items;
+    }
+}

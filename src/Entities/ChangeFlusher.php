@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{Changes, Flusher as FlusherInterface};
+use Medas\EntityManager\Entities\{Changes, Flusher};
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 
 #[Service]
-class Flusher implements FlusherInterface
+class ChangeFlusher implements Flusher
 {
     public function __construct(
         private readonly Persister          $entityPersister,

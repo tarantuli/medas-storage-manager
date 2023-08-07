@@ -6,15 +6,16 @@ namespace Medas\StorageManagerTest\Functional;
 
 use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\Inheritence\ArmorCard;
+use Medas\StorageManagerTest\MockUps\Inheritence\Card;
 use Medas\StorageManagerTest\MockUps\Inheritence\WeaponCard;
 
 class InheritenceTest extends BaseTestClass
 {
     public function testCreateMigration(): void
     {
-        storage()->controller()->deleteStore('i_cards');
         storage()->controller()->deleteStore('i_weapon_cards');
         storage()->controller()->deleteStore('i_armor_cards');
+        storage()->controller()->deleteStore('i_cards');
 
         $migration = $this->createMigrationClassContent('Inheritence');
 
@@ -23,7 +24,7 @@ class InheritenceTest extends BaseTestClass
     }
 
     /** @depends testCreateMigration */
-    public function testStoring(): void
+    public function testStoring(): array
     {
         em()->autoPersistOnCreate();
 
