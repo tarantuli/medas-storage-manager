@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions;
 
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
-use Medas\Core\AsSingleton;
 use Medas\StorageManager\Interfaces\Store;
 
+#[Service]
 class MigrationsStore implements ConfigOption
 {
-    use AsSingleton;
+    public function __construct(
+        private readonly RootGroup $group,
+    )
+    {
+    }
 
     public function group(): ConfigGroup
     {
-        return RootGroup::instance();
+        return $this->group;
     }
 
     public function name(): string

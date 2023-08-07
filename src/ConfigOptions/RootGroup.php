@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions;
 
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\ConfigGroup;
-use Medas\Core\AsSingleton;
 
+#[Service]
 class RootGroup implements ConfigGroup
 {
-    use AsSingleton;
-
     public function parent(): ConfigGroup|null
     {
         return null;
