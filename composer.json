@@ -18,14 +18,14 @@
         "morphp/medas-core": "dev-dev",
         "morphp/medas-entity-manager": "dev-dev",
         "morphp/medas-file-builder": "dev-dev",
-        "morphp/medas-file-system": "dev-dev",
-        "morphp/medas-service-manager": "dev-dev"
+        "morphp/medas-file-system": "dev-dev"
     },
     "require-dev": {
         "morphp/medas-config-manager": "dev-dev",
         "morphp/medas-pdo-mysql": "dev-dev",
         "morphp/medas-pdo-storage": "dev-dev",
         "morphp/medas-ramsey-uuid-bridge": "dev-dev",
+        "morphp/medas-service-manager": "dev-dev",
         "phpunit/phpunit": "^9.5"
     },
     "extra": {
