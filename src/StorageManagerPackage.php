@@ -9,8 +9,7 @@ use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\Core\AsSingleton;
 use Medas\EntityManager\EntityManagerPackage;
 use Medas\FileBuilder\FileBuilderPackage;
-use Medas\ServiceManager\BasePackage;
-use Medas\ServiceManager\ServiceConfig;
+use Medas\ServiceManager\{BasePackage, ServiceConfig};
 
 class StorageManagerPackage extends BasePackage
 {
@@ -18,12 +17,12 @@ class StorageManagerPackage extends BasePackage
 
     public function dependencies(): array
     {
-        return $this->dependenciesByClass([
-            CachePackage::class,
-            ConfigOptionsPackage::class,
-            EntityManagerPackage::class,
-            FileBuilderPackage::class,
-        ]);
+        return [
+            CachePackage::instance(),
+            ConfigOptionsPackage::instance(),
+            EntityManagerPackage::instance(),
+            FileBuilderPackage::instance(),
+        ];
     }
 
     public function sourceDirectory(): string

@@ -52,4 +52,23 @@ class InheritenceTest extends BaseTestClass
 
         return new MockUpIds($weaponId, $armorId);
     }
+
+    /** @depends testStoring */
+    public function testRetrievingByChildClass(MockUpIds $ids): void
+    {
+        $armorCards = service(Repository::class)->fetchAll(ArmorCard::class);
+
+        self::assertCount(1, $armorCards);
+        self::assertEquals($ids->armorId, $armorCards[0]->id());
+    }
+    /*
+        /** @depends testStoring * /
+        public function testRetrievingByParent(MockUpIds $ids): void
+        {
+            $weapon = em()->get(Card::class, $ids->weaponId);
+            $armor = em()->get(Card::class, $ids->armorId);
+
+            self::assertInstanceOf(WeaponCard::class, $weapon);
+            self::assertInstanceOf(ArmorCard::class, $armor);
+     }*/
 }
