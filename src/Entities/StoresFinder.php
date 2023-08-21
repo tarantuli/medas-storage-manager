@@ -9,6 +9,7 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Serializers\NoopSerializer;
 use Medas\EntityManager\MetaData;
 use Medas\StorageManager\Interfaces\Store;
+use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\EntityStructureFinder;
 
 #[Service]
@@ -18,6 +19,7 @@ class StoresFinder
 
     public function __construct(
         private readonly EntityStructureFinder $entityStructureFinder,
+        private readonly StorageManager        $storageManager,
     )
     {
         $this->cache = new MemoryCache(new NoopSerializer());
@@ -45,7 +47,7 @@ class StoresFinder
         $stores = [];
 
         foreach (array_unique($storeNames) as $name) {
-            $stores[] = storage($metaData->entity->storage)->store($name);
+            $stores[] = $this->storageManager->controller($metaData->entity->storage)->store($name);
         }
 
         return $stores;

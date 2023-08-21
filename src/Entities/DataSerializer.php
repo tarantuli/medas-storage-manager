@@ -12,12 +12,14 @@ use Medas\EntityManager\{Exceptions\PropertyDoesNotExist,
     Properties\Handler,
     Types\Relation};
 use Medas\StorageManager\Interfaces\StoreRecord;
+use Medas\StorageManager\StorageManager;
 
 #[Service]
 class DataSerializer
 {
     public function __construct(
         private readonly MetaDataManager $metaDataManager,
+        private readonly StorageManager  $storageManager,
     )
     {
     }
@@ -57,7 +59,7 @@ class DataSerializer
 
     private function getStorageSerializer(MetaData $metaData): Serializer
     {
-        return storage($metaData->entity->storage)->controller()->serializer();
+        return $this->storageManager->controller($metaData->entity->storage)->serializer();
     }
 
     public function serializeArray(MetaData $metaData, iterable &$data): void

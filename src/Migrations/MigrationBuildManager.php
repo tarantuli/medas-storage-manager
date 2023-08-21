@@ -9,6 +9,7 @@ use Medas\EntityManager\Attributes\Entity;
 use Medas\FileBuilder\PhpClass\{MethodDefinition, ParameterDefinition, PhpClassDefinition};
 use Medas\FileBuilder\PhpClassBuilder;
 use Medas\FileSystem\DirectoryManager;
+use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\UnitOfWork\UnitOfWork;
 
 #[Service]
@@ -25,6 +26,7 @@ class MigrationBuildManager
     public function __construct(
         private readonly DirectoryManager $directoryManager,
         private readonly PhpClassBuilder  $phpClassBuilder,
+        private readonly StorageManager   $storageManager,
     )
     {
     }
@@ -123,8 +125,7 @@ class MigrationBuildManager
 
     private function processEntity(string $className, Entity $entity): void
     {
-        $storage = storage($entity->storage);
-        $needed = $storage->controller()->migrationBuilder()
+        $needed = $this->storageManager->controller($entity->storage)->migrationBuilder()
             ->build($className, $this->migrateMethod, $this->undoMethod);
 
         $this->migrationNeeded = $this->migrationNeeded || $needed;

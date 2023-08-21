@@ -12,11 +12,12 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\{Collection, Guid};
 use Medas\StorageManager\Interfaces\{Storage, Store};
+use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\EntityStructureFinder;
 use Medas\StorageManager\UnitOfWork\{Priority, UnitOfWork, UnitOfWorkManager};
 
 #[Service]
-class Persister
+class EntityPersister
 {
     public function __construct(
         private readonly DataSerializer        $dataSerializer,
@@ -24,6 +25,7 @@ class Persister
         private readonly GuidProvider|null     $guidProvider,
         private readonly MetaDataManager       $metaDataManager,
         private readonly RecordManager         $recordManager,
+        private readonly StorageManager        $storageManager,
         private readonly UnitOfWorkManager     $unitOfWorkManager,
         private readonly ValueGetter           $valueGetter,
     )
@@ -91,7 +93,7 @@ class Persister
 
             $this->unitOfWorkManager->queueCreate(
                 $unitOfWork,
-                storage()->store($store),
+                $this->storageManager->controller($metaData->entity->storage)->store($store),
                 $subValues,
                 $this->generatedValueSetter($metaData, $entity),
                 $priority,
@@ -101,7 +103,7 @@ class Persister
 
     private function getStore(MetaData $metaData): Store
     {
-        return storage($metaData->entity->storage)->store($metaData->entity->store);
+        return $this->storageManager->controller($metaData->entity->storage)->store($metaData->entity->store);
     }
 
     private function generatedValueSetter(MetaData $metaData, object $entity): \Closure|null

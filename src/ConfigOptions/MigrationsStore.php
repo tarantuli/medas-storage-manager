@@ -7,12 +7,14 @@ namespace Medas\StorageManager\ConfigOptions;
 use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 use Medas\StorageManager\Interfaces\Store;
+use Medas\StorageManager\StorageManager;
 
 #[Service]
 class MigrationsStore implements ConfigOption
 {
     public function __construct(
-        private readonly RootGroup $group,
+        private readonly RootGroup      $group,
+        private readonly StorageManager $storageManager,
     )
     {
     }
@@ -44,6 +46,6 @@ class MigrationsStore implements ConfigOption
 
     public function default(): Store
     {
-        return storage()->store('medas_migrations');
+        return $this->storageManager->controller()->store('medas_migrations');
     }
 }

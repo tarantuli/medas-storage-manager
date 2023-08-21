@@ -13,6 +13,7 @@ use Medas\EntityManager\Selector\Selector;
 use Medas\EntityManager\Types\{Collection as CollectionType};
 use Medas\StorageManager\Entities\Exceptions\StoresDontHaveProperty;
 use Medas\StorageManager\Interfaces\{StoreRecord};
+use Medas\StorageManager\StorageManager;
 
 #[Service]
 class RecordManager implements Fetcher
@@ -26,6 +27,7 @@ class RecordManager implements Fetcher
         private readonly IdValue           $idValue,
         private readonly KeyMaker          $keyMaker,
         private readonly MetaDataManager   $metaDataManager,
+        private readonly StorageManager    $storageManager,
         private readonly StoresFinder      $storesFinder,
         private readonly ValueGetter       $entityValueGetter,
     )
@@ -75,13 +77,13 @@ class RecordManager implements Fetcher
                 }
             }
 
-            $this->deserializeAndCache($metaData, $record, $key);
+            $this->unserializeAndCache($metaData, $record, $key);
         }
 
         return $this->records[$key];
     }
 
-    private function deserializeAndCache(MetaData $metaData, StoreRecord|null $record, string $key): StoreRecord|null
+    private function unserializeAndCache(MetaData $metaData, StoreRecord|null $record, string $key): StoreRecord|null
     {
         if ($record === null) {
             $this->records[$key] = null;
@@ -99,7 +101,7 @@ class RecordManager implements Fetcher
     {
         $entity = $selector->definition()->entity;
         $metaData = $this->metaDataManager->get($entity);
-        $query = storage($metaData->entity->storage)->controller()->actionBuilder()
+        $query = $this->storageManager->controller($metaData->entity->storage)->actionBuilder()
             ->fromSelector($selector, $arguments);
 
         $query->execute();
@@ -107,7 +109,7 @@ class RecordManager implements Fetcher
 
         foreach ($records as &$record) {
             $key = $this->keyMaker->get($entity, $this->idValue->get($record, $metaData));
-            $record = $this->deserializeAndCache($metaData, $record, $key);
+            $record = $this->unserializeAndCache($metaData, $record, $key);
         }
 
         return $records;
@@ -133,5 +135,4 @@ class RecordManager implements Fetcher
     {
         return $this->keyMaker->get($metaData->className, $data[$metaData->idProperty->name]);
     }
-
 }

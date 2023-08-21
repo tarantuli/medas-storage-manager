@@ -12,7 +12,7 @@ use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 class ChangeFlusher implements Flusher
 {
     public function __construct(
-        private readonly Persister          $entityPersister,
+        private readonly EntityPersister    $entityPersister,
         private readonly UnitOfWorkExecutor $unitOfWorkExecutor,
     )
     {

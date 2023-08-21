@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\Collection;
-use Medas\Core\Interfaces\IsLazyLoaded;
-use Medas\Core\Interfaces\SettableCollection;
-use Medas\Core\Interfaces\TracksChanges;
+use Medas\Core\Interfaces\{Collection, IsLazyLoaded, SettableCollection, TracksChanges};
 use Medas\EntityManager\Entities\FetchResult;
 use Medas\EntityManager\MetaData;
-use Medas\EntityManager\Types\Collection as CollectionType;
-use Medas\EntityManager\Types\Relation;
+use Medas\EntityManager\Types\{Collection as CollectionType, Relation};
+use Medas\StorageManager\StorageManager;
 
 #[Service]
 class CollectionFetcher
 {
     public function __construct(
-        private readonly StoresFinder $storesFinder,
+        private readonly StorageManager $storageManager,
+        private readonly StoresFinder   $storesFinder,
     )
     {
     }
@@ -65,7 +63,7 @@ class CollectionFetcher
             throw new \Exception('unhandled raw item type ' . $rawItemType);
         }
 
-        $serializer = storage($metaData->entity->storage)->controller()->serializer();
+        $serializer = $this->storageManager->controller($metaData->entity->storage)->serializer();
         $items = [];
         foreach ($this->storesFinder->find($metaData) as $store) {
             $records = $store->fetchCollectionRecord($entity, $property);

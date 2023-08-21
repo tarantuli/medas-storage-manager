@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "131c8cf0d9a849efd046c54f5e23974c",
+    "content-hash": "c718e0f13fc54fa4048a0fef37994062",
     "packages": [
         {
             "name": "morphp/medas-cache",
@@ -234,19 +234,18 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "9680b5e50410e5d0f7f5140283b3214bb1758198"
+                "reference": "dfcab250aa8c3a53a5a484c69f8ea2de92d192a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/9680b5e50410e5d0f7f5140283b3214bb1758198",
-                "reference": "9680b5e50410e5d0f7f5140283b3214bb1758198",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/dfcab250aa8c3a53a5a484c69f8ea2de92d192a6",
+                "reference": "dfcab250aa8c3a53a5a484c69f8ea2de92d192a6",
                 "shasum": ""
             },
             "require": {
                 "ext-pdo": "*",
                 "morphp/medas-console": "dev-dev",
                 "morphp/medas-core": "dev-dev",
-                "morphp/medas-object-instantiator": "dev-dev",
                 "morphp/medas-service-manager": "dev-dev"
             },
             "require-dev": {
@@ -273,7 +272,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2023-08-16T14:29:20+00:00"
+            "time": "2023-08-17T07:37:50+00:00"
         },
         {
             "name": "morphp/medas-file-builder",
@@ -281,12 +280,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-file-builder.git",
-                "reference": "326e2c8604818d142bc0a30431fe75b7765cec15"
+                "reference": "7d4e7f6ca7b5099b04d58985c3a45ad09234069a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-file-builder/zipball/326e2c8604818d142bc0a30431fe75b7765cec15",
-                "reference": "326e2c8604818d142bc0a30431fe75b7765cec15",
+                "url": "https://api.github.com/repos/tarantuli/medas-file-builder/zipball/7d4e7f6ca7b5099b04d58985c3a45ad09234069a",
+                "reference": "7d4e7f6ca7b5099b04d58985c3a45ad09234069a",
                 "shasum": ""
             },
             "require": {
@@ -315,7 +314,7 @@
                 "source": "https://github.com/tarantuli/medas-file-builder/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-file-builder/issues"
             },
-            "time": "2023-08-16T14:32:33+00:00"
+            "time": "2023-08-17T07:42:52+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -405,12 +404,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-class-analysis.git",
-                "reference": "c3308eba80358ab11af3483d8efcc8a82ac4d024"
+                "reference": "0cbe8e3c9ac70fe1e63c82e7c12babbe8597ddad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/c3308eba80358ab11af3483d8efcc8a82ac4d024",
-                "reference": "c3308eba80358ab11af3483d8efcc8a82ac4d024",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/0cbe8e3c9ac70fe1e63c82e7c12babbe8597ddad",
+                "reference": "0cbe8e3c9ac70fe1e63c82e7c12babbe8597ddad",
                 "shasum": ""
             },
             "require": {
@@ -439,7 +438,7 @@
                 "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2023-07-13T07:25:19+00:00"
+            "time": "2023-08-17T07:10:35+00:00"
         },
         {
             "name": "morphp/medas-php-formatter",
@@ -447,12 +446,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-formatter.git",
-                "reference": "960c1134f132a058518d6077bb16b580d32a1273"
+                "reference": "c7421139705449c5addbdf6ae41bf15fb9ed22ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/960c1134f132a058518d6077bb16b580d32a1273",
-                "reference": "960c1134f132a058518d6077bb16b580d32a1273",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/c7421139705449c5addbdf6ae41bf15fb9ed22ef",
+                "reference": "c7421139705449c5addbdf6ae41bf15fb9ed22ef",
                 "shasum": ""
             },
             "require": {
@@ -486,7 +485,7 @@
                 "source": "https://github.com/tarantuli/medas-php-formatter/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-formatter/issues"
             },
-            "time": "2023-07-13T07:27:50+00:00"
+            "time": "2023-08-17T07:09:58+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",
@@ -494,13 +493,17 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
-                "reference": "24b7f1d6bd4502c341dc1b9b42d4d228cffe7a26"
+                "reference": "b45f6dd1041f4f632ed8405e5725cab0cf522d15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/24b7f1d6bd4502c341dc1b9b42d4d228cffe7a26",
-                "reference": "24b7f1d6bd4502c341dc1b9b42d4d228cffe7a26",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/b45f6dd1041f4f632ed8405e5725cab0cf522d15",
+                "reference": "b45f6dd1041f4f632ed8405e5725cab0cf522d15",
                 "shasum": ""
+            },
+            "require": {
+                "morphp/medas-console": "dev-dev",
+                "morphp/medas-core": "dev-dev"
             },
             "require-dev": {
                 "morphp/medas-console-printer": "dev-dev",
@@ -525,7 +528,7 @@
                 "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2023-07-13T07:29:44+00:00"
+            "time": "2023-08-17T07:09:11+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
@@ -812,12 +815,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-mysql.git",
-                "reference": "770b20f44b358ce9cf0c4ec5f382f26b72a7ca9a"
+                "reference": "0f5c005df5cdab4ed570ed58997a2b09ebc7a44d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-mysql/zipball/770b20f44b358ce9cf0c4ec5f382f26b72a7ca9a",
-                "reference": "770b20f44b358ce9cf0c4ec5f382f26b72a7ca9a",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-mysql/zipball/0f5c005df5cdab4ed570ed58997a2b09ebc7a44d",
+                "reference": "0f5c005df5cdab4ed570ed58997a2b09ebc7a44d",
                 "shasum": ""
             },
             "require": {
@@ -850,7 +853,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-mysql/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-mysql/issues"
             },
-            "time": "2023-08-07T14:08:59+00:00"
+            "time": "2023-08-18T11:23:53+00:00"
         },
         {
             "name": "morphp/medas-pdo-storage",
@@ -858,12 +861,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-pdo-storage.git",
-                "reference": "bdb12acd66ad8fb22ec1c5f8c8027d1758e29ff7"
+                "reference": "7d0333e93360ce960195ef2910f93150273814a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/bdb12acd66ad8fb22ec1c5f8c8027d1758e29ff7",
-                "reference": "bdb12acd66ad8fb22ec1c5f8c8027d1758e29ff7",
+                "url": "https://api.github.com/repos/tarantuli/medas-pdo-storage/zipball/7d0333e93360ce960195ef2910f93150273814a3",
+                "reference": "7d0333e93360ce960195ef2910f93150273814a3",
                 "shasum": ""
             },
             "require": {
@@ -899,7 +902,7 @@
                 "source": "https://github.com/tarantuli/medas-pdo-storage/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-pdo-storage/issues"
             },
-            "time": "2023-08-07T14:07:57+00:00"
+            "time": "2023-08-17T07:11:24+00:00"
         },
         {
             "name": "morphp/medas-ramsey-uuid-bridge",
@@ -907,12 +910,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-ramsey-uuid-bridge.git",
-                "reference": "29d39a08ec2085397fb71ec93e972918b8618a99"
+                "reference": "9fc5f3691565a4f17c3ba94b5d03dd7679d088ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-ramsey-uuid-bridge/zipball/29d39a08ec2085397fb71ec93e972918b8618a99",
-                "reference": "29d39a08ec2085397fb71ec93e972918b8618a99",
+                "url": "https://api.github.com/repos/tarantuli/medas-ramsey-uuid-bridge/zipball/9fc5f3691565a4f17c3ba94b5d03dd7679d088ea",
+                "reference": "9fc5f3691565a4f17c3ba94b5d03dd7679d088ea",
                 "shasum": ""
             },
             "require": {
@@ -941,7 +944,7 @@
                 "source": "https://github.com/tarantuli/medas-ramsey-uuid-bridge/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-ramsey-uuid-bridge/issues"
             },
-            "time": "2023-07-13T07:30:23+00:00"
+            "time": "2023-08-17T07:08:23+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -3347,11 +3350,11 @@
         "morphp/medas-entity-manager": 20,
         "morphp/medas-file-builder": 20,
         "morphp/medas-file-system": 20,
-        "morphp/medas-service-manager": 20,
         "morphp/medas-config-manager": 20,
         "morphp/medas-pdo-mysql": 20,
         "morphp/medas-pdo-storage": 20,
-        "morphp/medas-ramsey-uuid-bridge": 20
+        "morphp/medas-ramsey-uuid-bridge": 20,
+        "morphp/medas-service-manager": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

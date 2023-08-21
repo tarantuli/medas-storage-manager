@@ -9,7 +9,7 @@ use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\Core\AsSingleton;
 use Medas\EntityManager\EntityManagerPackage;
 use Medas\FileBuilder\FileBuilderPackage;
-use Medas\ServiceManager\{BasePackage, ServiceConfig};
+use Medas\ServiceManager\{BasePackage};
 
 class StorageManagerPackage extends BasePackage
 {
@@ -28,11 +28,5 @@ class StorageManagerPackage extends BasePackage
     public function sourceDirectory(): string
     {
         return __DIR__;
-    }
-
-    public function initialize(ServiceConfig $config): void
-    {
-        require_once __DIR__ . '/GlobalFunctions.php';
-        parent::initialize($config);
     }
 }
