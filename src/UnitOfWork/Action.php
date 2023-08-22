@@ -8,8 +8,6 @@ use Medas\StorageManager\Interfaces\{RecordSet, Storage};
 
 interface Action
 {
-    public function execute(): void;
-
     public function recordSet(): RecordSet;
 
     public function storage(): Storage;
