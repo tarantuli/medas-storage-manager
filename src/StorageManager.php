@@ -35,6 +35,11 @@ class StorageManager
         unset($this->controllerPerStorageName[$storage->name()]);
     }
 
+    public function byName(string $name): Storage
+    {
+        return $this->storages[$name];
+    }
+
     public function controller(Storage|string $storage = null): StorageController
     {
         if ($storage === null) {

@@ -19,11 +19,11 @@ interface StorageController
 
     public function serializer(Storage $storage = null): Serializer;
 
-    public function actionBuilders(Storage $storage = null): ActionBuilders;
+    public function actionBuilders(): ActionBuilders;
 
-    public function recordFetchers(Storage $storage = null): RecordFetchers;
+    public function recordFetchers(): RecordFetchers;
 
-    public function migrationBuilder(Storage $storage = null): MigrationBuilder;
+    public function migrationBuilder(): MigrationBuilder;
 
     public function hasStore(Store $store, Storage $storage = null): bool;
 }

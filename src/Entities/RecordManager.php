@@ -66,7 +66,7 @@ class RecordManager implements Fetcher
         if (!array_key_exists($key, $this->records)) {
             $record = null;
             $filteredFetcher = $this->storageManager->controller($metaData->entity->storage)
-                ->recordFetchers($metaData->entity->storage)->filteredFetcher();
+                ->recordFetchers()->filteredFetcher();
 
             foreach ($this->storesFinder->find($metaData) as $store) {
                 $newRecord = $filteredFetcher->fetchOne($store, [$metaData->idProperty->name => $idValue]);
@@ -105,7 +105,7 @@ class RecordManager implements Fetcher
     {
         $entity = $selector->definition()->entity;
         $metaData = $this->metaDataManager->get($entity);
-        $query = $this->storageManager->controller($metaData->entity->storage)->actionBuilders($metaData->entity->storage)
+        $query = $this->storageManager->controller($metaData->entity->storage)->actionBuilders()
             ->selectorQuery()->build($selector, $arguments);
 
         $query->execute();
