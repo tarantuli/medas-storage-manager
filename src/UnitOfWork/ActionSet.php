@@ -8,7 +8,7 @@ use Medas\Core\Interfaces\Collection;
 use Medas\StorageManager\Interfaces\RecordSet;
 
 /** @extends Collection<Action> */
-interface ActionCollection extends Collection
+interface ActionSet extends Collection
 {
     public function execute(): void;
 

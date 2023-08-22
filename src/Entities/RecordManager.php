@@ -12,13 +12,13 @@ use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
 use Medas\EntityManager\Types\{Collection as CollectionType};
 use Medas\StorageManager\Entities\Exceptions\StoresDontHaveProperty;
-use Medas\StorageManager\Interfaces\{StoreRecord};
+use Medas\StorageManager\Interfaces\{Record};
 use Medas\StorageManager\StorageManager;
 
 #[Service]
 class RecordManager implements Fetcher
 {
-    /** @var StoreRecord[] */
+    /** @var Record[] */
     private array $records = [];
 
     public function __construct(
@@ -53,7 +53,7 @@ class RecordManager implements Fetcher
         throw new StoresDontHaveProperty($this->storesFinder->find($metaData), $property->name);
     }
 
-    private function getRecord(MetaData $metaData, object $entity): StoreRecord|null
+    private function getRecord(MetaData $metaData, object $entity): Record|null
     {
         $idValue = $this->dataSerializer->serializeValue(
             $metaData,
@@ -65,9 +65,13 @@ class RecordManager implements Fetcher
 
         if (!array_key_exists($key, $this->records)) {
             $record = null;
+            $filteredFetcher = $this->storageManager->controller($metaData->entity->storage)
+                ->recordFetchers($metaData->entity->storage)->filteredFetcher();
 
             foreach ($this->storesFinder->find($metaData) as $store) {
-                if ($newRecord = $store->fetchRecord([$metaData->idProperty->name => $idValue])) {
+                $newRecord = $filteredFetcher->fetchOne($store, [$metaData->idProperty->name => $idValue]);
+
+                if ($newRecord) {
                     if ($record === null) {
                         $record = $newRecord;
                     }
@@ -83,7 +87,7 @@ class RecordManager implements Fetcher
         return $this->records[$key];
     }
 
-    private function unserializeAndCache(MetaData $metaData, StoreRecord|null $record, string $key): StoreRecord|null
+    private function unserializeAndCache(MetaData $metaData, Record|null $record, string $key): Record|null
     {
         if ($record === null) {
             $this->records[$key] = null;
@@ -101,8 +105,8 @@ class RecordManager implements Fetcher
     {
         $entity = $selector->definition()->entity;
         $metaData = $this->metaDataManager->get($entity);
-        $query = $this->storageManager->controller($metaData->entity->storage)->actionBuilder()
-            ->fromSelector($selector, $arguments);
+        $query = $this->storageManager->controller($metaData->entity->storage)->actionBuilders($metaData->entity->storage)
+            ->selectorQuery()->build($selector, $arguments);
 
         $query->execute();
         $records = $query->recordSet()->fetchRecords();

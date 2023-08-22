@@ -11,7 +11,7 @@ use Medas\EntityManager\{Exceptions\PropertyDoesNotExist,
     MetaDataManager,
     Properties\Handler,
     Types\Relation};
-use Medas\StorageManager\Interfaces\StoreRecord;
+use Medas\StorageManager\Interfaces\Record;
 use Medas\StorageManager\StorageManager;
 
 #[Service]
@@ -24,7 +24,7 @@ class DataSerializer
     {
     }
 
-    public function unserializeArray(MetaData $metaData, StoreRecord &$data): void
+    public function unserializeArray(MetaData $metaData, Record &$data): void
     {
         foreach ($data as $key => $value) {
             try {

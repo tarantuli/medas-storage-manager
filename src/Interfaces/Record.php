@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces;
 
-interface StoreRecord extends \ArrayAccess, \Iterator
+interface Record extends \ArrayAccess, \Iterator
 {
     public function data(): array;
 

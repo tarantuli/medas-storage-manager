@@ -8,6 +8,7 @@ use Medas\ConfigOptions\OptionController;
 use Medas\Core\Attributes\Service;
 use Medas\StorageManager\ConfigOptions\MigrationsStore;
 use Medas\StorageManager\Interfaces\Store;
+use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index, Blueprint\Type};
 
 #[Service]
@@ -18,6 +19,7 @@ class MigrationStoreManager
     public function __construct(
         private readonly MigrationsStore  $migrationsStore,
         private readonly OptionController $optionController,
+        private readonly StorageManager   $storageManager,
     )
     {
     }
@@ -49,8 +51,11 @@ class MigrationStoreManager
 
         $blueprint->addIndex(new Index([$migrationField]));
 
-        foreach ($store->storage()->controller()->actionBuilder()->createStore($blueprint) as $query) {
-            $query->execute();
+        $actions = $this->storageManager->controller()->actionBuilders()->createStore()
+            ->build($blueprint);
+
+        foreach ($actions as $action) {
+            $action->execute();
         }
     }
 }

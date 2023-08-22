@@ -8,13 +8,23 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\ManagedCollection;
 use Medas\EntityManager\Types\Collection;
 use Medas\StorageManager\Interfaces\Store;
+use Medas\StorageManager\StorageManager;
 
 #[Service]
 class UnitOfWorkManager
 {
+    public function __construct(
+        private readonly StorageManager $storageManager,
+    )
+    {
+    }
+
     public function queueUpdate(UnitOfWork $unitOfWork, Store $store, array $updates, array $conditions): void
     {
-        foreach ($store->prepareUpdate($updates, $conditions) as $action) {
+        $actions = $this->storageManager->controller($store->storage())->actionBuilders()->update()
+            ->build($store, $updates, $conditions);
+
+        foreach ($actions as $action) {
             $unitOfWork->addAction($action);
         }
     }
@@ -27,7 +37,10 @@ class UnitOfWorkManager
         Priority   $priority = null,
     ): void
     {
-        foreach ($store->prepareCreate($values) as $action) {
+        $actions = $this->storageManager->controller($store->storage())->actionBuilders()->insert()
+            ->build($store, $values);
+
+        foreach ($actions as $action) {
             if ($priority) {
                 $action->setPriority($priority);
             }
@@ -40,14 +53,20 @@ class UnitOfWorkManager
 
     public function queueDelete(UnitOfWork $unitOfWork, Store $store, array $conditions): void
     {
-        foreach ($store->prepareDelete($conditions) as $action) {
+        $actions = $this->storageManager->controller($store->storage())->actionBuilders()->delete()
+            ->build($store, $conditions);
+
+        foreach ($actions as $action) {
             $unitOfWork->addAction($action);
         }
     }
 
     public function queueCollectionUpdate(UnitOfWork $unitOfWork, Store $store, object $entity, string $name, Collection $type, ManagedCollection $values): void
     {
-        foreach ($store->prepareCollectionUpdate($entity, $name, $type, $values) as $action) {
+        $actions = $this->storageManager->controller($store->storage())->actionBuilders()->collectionUpdate()
+            ->build($store, $entity, $name, $type, $values);
+
+        foreach ($actions as $action) {
             $unitOfWork->addAction($action);
         }
     }

@@ -8,7 +8,7 @@ interface RecordSet
 {
     public function fetchRecords(): array;
 
-    public function fetchRecord(): StoreRecord|null;
+    public function fetchRecord(): Record|null;
 
     public function hasRecords(): bool;
 }

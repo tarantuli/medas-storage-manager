@@ -66,7 +66,8 @@ class CollectionFetcher
         $serializer = $this->storageManager->controller($metaData->entity->storage)->serializer();
         $items = [];
         foreach ($this->storesFinder->find($metaData) as $store) {
-            $records = $store->fetchCollectionRecord($entity, $property);
+            $fetcher = $this->storageManager->controller($store->storage())->recordFetchers()->collectionRecordFetcher();
+            $records = $fetcher->fetch($store, $entity, $property);
 
             foreach ($records as $record) {
                 $items[] = $serializer->unserialize($record['value'], $itemType);

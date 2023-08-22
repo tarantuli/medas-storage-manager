@@ -6,6 +6,7 @@ namespace Medas\StorageManager\Migrations;
 
 use Medas\Core\Attributes\Service;
 use Medas\FileSystem\DirectoryManager;
+use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 
 #[Service]
@@ -16,6 +17,7 @@ class MigrationManager
     public function __construct(
         private readonly DirectoryManager      $directoryManager,
         private readonly MigrationStoreManager $migrationStoreManager,
+        private readonly StorageManager        $storageManager,
         private readonly UnitOfWorkExecutor    $unitOfWorkExecutor,
     )
     {
@@ -92,14 +94,15 @@ class MigrationManager
 
     private function isExecuted(Migration $migration): bool
     {
-        return $this->migrationStoreManager->get()
-                ->fetchRecord(['migration' => $migration::class]) !== null;
+        return $this->storageManager->controller()->recordFetchers()->filteredFetcher()
+            ->fetch($this->migrationStoreManager->get(), ['migration' => $migration::class])
+            ->hasRecords();
     }
 
     private function registerExecution(Migration $migration): void
     {
-        $actions = $this->migrationStoreManager->get()
-            ->prepareCreate(['migration' => $migration::class, 'migrated_at' => date('Y-m-d H:i:s')]);
+        $actions = $this->storageManager->controller()->actionBuilders()->insert()
+            ->build($this->migrationStoreManager->get(), ['migration' => $migration::class, 'migrated_at' => date('Y-m-d H:i:s')]);
 
         foreach ($actions as $action) {
             $action->execute();

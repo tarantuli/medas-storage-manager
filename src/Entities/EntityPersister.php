@@ -114,7 +114,7 @@ class EntityPersister
 
         return function (Storage $storage, int|null $lastInsertId) use ($metaData, $entity) {
             if ($metaData->idProperty->isGeneratedValue) {
-                $value = $lastInsertId ?? $storage->controller()->lastGeneratedValue();
+                $value = $lastInsertId ?? $this->storageManager->controller($storage)->lastGeneratedValue();
                 $metaData->idProperty->reflection->setValue($entity, $value);
             }
 
