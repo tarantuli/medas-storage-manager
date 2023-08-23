@@ -7,7 +7,7 @@ namespace Medas\StorageManager\Structure\TypeHandlers;
 use Medas\EntityManager\MetaData\Property;
 use Medas\StorageManager\Structure\Blueprint\ForeignKey;
 
-abstract class BaseHandler implements TypeHandler
+readonly abstract class BaseHandler implements TypeHandler
 {
     public function foreignKey(Property $property): ForeignKey|null
     {

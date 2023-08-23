@@ -11,13 +11,13 @@ use Medas\StorageManager\ConfigOptions\MigrationDirectory;
 use Medas\StorageManager\Migrations\MigrationManager;
 
 #[Service]
-class MigrateCommand extends BaseConsoleCommand
+readonly class MigrateCommand extends BaseConsoleCommand
 {
     public function __construct(
-        private readonly CommandGroup       $group,
-        private readonly MigrationDirectory $migrationDirectory,
-        private readonly MigrationManager   $migrationManager,
-        private readonly OptionController   $optionController,
+        private CommandGroup       $group,
+        private MigrationDirectory $migrationDirectory,
+        private MigrationManager   $migrationManager,
+        private OptionController   $optionController,
     )
     {
     }

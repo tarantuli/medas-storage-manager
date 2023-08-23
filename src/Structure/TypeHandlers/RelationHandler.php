@@ -11,11 +11,11 @@ use Medas\EntityManager\Types\Relation;
 use Medas\StorageManager\Structure\{Blueprint\ForeignKey, Blueprint\Type, TypeHandlerFinder};
 
 #[Service]
-class RelationHandler extends BaseHandler
+readonly class RelationHandler extends BaseHandler
 {
     public function __construct(
-        private readonly MetaDataManager $metaDataManager,
-        private readonly EnumHandler     $enumHandler,
+        private MetaDataManager $metaDataManager,
+        private EnumHandler     $enumHandler,
     )
     {
     }

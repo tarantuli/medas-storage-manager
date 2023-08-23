@@ -15,11 +15,11 @@ use Medas\StorageManager\Interfaces\Record;
 use Medas\StorageManager\StorageManager;
 
 #[Service]
-class DataSerializer
+readonly class DataSerializer
 {
     public function __construct(
-        private readonly MetaDataManager $metaDataManager,
-        private readonly StorageManager  $storageManager,
+        private MetaDataManager $metaDataManager,
+        private StorageManager  $storageManager,
     )
     {
     }

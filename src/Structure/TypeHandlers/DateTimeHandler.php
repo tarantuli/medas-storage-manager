@@ -9,7 +9,7 @@ use Medas\EntityManager\MetaData\Property;
 use Medas\StorageManager\Structure\Blueprint\Type;
 
 #[Service]
-class DateTimeHandler extends BaseHandler
+readonly class DateTimeHandler extends BaseHandler
 {
     public function fieldType(Property|null $property): Type
     {

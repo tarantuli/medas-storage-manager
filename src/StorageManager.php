@@ -17,12 +17,7 @@ class StorageManager
 
     /** @var StorageController[] */
     private array $controllers = [];
-
     private array $controllerPerStorageName = [];
-
-    public function __construct()
-    {
-    }
 
     public function add(Storage $storage, bool $isDefault = false): void
     {

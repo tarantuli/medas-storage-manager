@@ -13,7 +13,7 @@ use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\UnitOfWork\UnitOfWork;
 
 #[Service]
-class MigrationBuildManager
+readonly class MigrationBuildManager
 {
     private string $className;
     private string|null $classCode;
@@ -24,9 +24,9 @@ class MigrationBuildManager
     private MethodDefinition $undoMethod;
 
     public function __construct(
-        private readonly DirectoryManager $directoryManager,
-        private readonly PhpClassBuilder  $phpClassBuilder,
-        private readonly StorageManager   $storageManager,
+        private DirectoryManager $directoryManager,
+        private PhpClassBuilder  $phpClassBuilder,
+        private StorageManager   $storageManager,
     )
     {
     }

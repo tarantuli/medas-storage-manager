@@ -11,7 +11,7 @@ use Medas\StorageManager\Exceptions\EnumIsNotBacked;
 use Medas\StorageManager\Structure\Blueprint\Type as BlueprintType;
 
 #[Service]
-class EnumHandler
+readonly class EnumHandler
 {
     /**
      * Returns a pseudo Type object that covers the backed cases of the enumeration
@@ -33,7 +33,6 @@ class EnumHandler
             throw new EnumIsNotBacked($enum);
         }
 
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         return match ($enumReflection->getBackingType()->getName()) {
             'int' => BlueprintType::Integer,
             'string' => BlueprintType::Text,

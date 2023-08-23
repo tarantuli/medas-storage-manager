@@ -12,14 +12,14 @@ use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index, Blueprint\Type};
 
 #[Service]
-class MigrationStoreManager
+readonly class MigrationStoreManager
 {
     private Store $store;
 
     public function __construct(
-        private readonly MigrationsStore  $migrationsStore,
-        private readonly OptionController $optionController,
-        private readonly StorageManager   $storageManager,
+        private MigrationsStore  $migrationsStore,
+        private OptionController $optionController,
+        private StorageManager   $storageManager,
     )
     {
     }

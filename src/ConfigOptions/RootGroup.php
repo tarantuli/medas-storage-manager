@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\ConfigGroup;
 
 #[Service]
-class RootGroup implements ConfigGroup
+readonly class RootGroup implements ConfigGroup
 {
     public function parent(): ConfigGroup|null
     {

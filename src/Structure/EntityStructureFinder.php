@@ -14,17 +14,14 @@ use Medas\StorageManager\Structure\Blueprint\Type;
 use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
 
 #[Service]
-class EntityStructureFinder
+readonly class EntityStructureFinder
 {
-    private MetaData $metaData;
-    private Blueprint $blueprint;
-
     public function __construct(
-        private readonly CacheManager      $cacheManager,
-        private readonly MetaDataManager   $metaDataManager,
-        private readonly ParentStoreFinder $parentStoreFinder,
-        private readonly TypeHandlerFinder $typeHandlerFinder,
-        private readonly EnumHandler       $enumHandler,
+        private CacheManager      $cacheManager,
+        private MetaDataManager   $metaDataManager,
+        private ParentStoreFinder $parentStoreFinder,
+        private TypeHandlerFinder $typeHandlerFinder,
+        private EnumHandler       $enumHandler,
     )
     {
     }
@@ -39,29 +36,32 @@ class EntityStructureFinder
 
     private function compile(string $className): Blueprint
     {
-        $this->metaData = $this->metaDataManager->get($className);
-        $this->blueprint = new Blueprint();
-        $this->findName();
-        $this->findFields();
-        $this->findPrimaryKey();
-        $this->findKeys();
-        $this->findForeignKeys();
+        $job = new EntityStructureFinder\Job(
+            $this->metaDataManager->get($className),
+            new Blueprint()
+        );
 
-        return $this->blueprint;
+        $this->findName($job);
+        $this->findFields($job);
+        $this->findPrimaryKey($job);
+        $this->findKeys($job);
+        $this->findForeignKeys($job);
+
+        return $job->blueprint;
     }
 
-    private function findName(): void
+    private function findName(EntityStructureFinder\Job $job): void
     {
-        $this->blueprint->setName($this->metaData->entity->store);
-        $this->blueprint->setParent($this->metaData->parent);
+        $job->blueprint->setName($job->metaData->entity->store);
+        $job->blueprint->setParent($job->metaData->parent);
     }
 
-    private function findFields(): void
+    private function findFields(EntityStructureFinder\Job $job): void
     {
-        $parents = $this->parentStoreFinder->find($this->metaData);
+        $parents = $this->parentStoreFinder->find($job->metaData);
 
-        foreach ($this->metaData->properties as $property) {
-            $this->blueprint->addField(
+        foreach ($job->metaData->properties as $property) {
+            $job->blueprint->addField(
                 $this->fieldFromProperty($property, $parents)
             );
         }
@@ -141,35 +141,35 @@ class EntityStructureFinder
         return $field;
     }
 
-    private function findPrimaryKey(): void
+    private function findPrimaryKey(EntityStructureFinder\Job $job): void
     {
         $index = new Blueprint\Index([], true);
-        $index->addField($this->blueprint->fieldByName($this->metaData->idProperty->name));
+        $index->addField($job->blueprint->fieldByName($job->metaData->idProperty->name));
 
-        $this->blueprint->addIndex($index);
+        $job->blueprint->addIndex($index);
     }
 
-    private function findKeys(): void
+    private function findKeys(EntityStructureFinder\Job $job): void
     {
         // Unique values
-        foreach ($this->metaData->properties as $property) {
+        foreach ($job->metaData->properties as $property) {
             if (!$property->isUnique) {
                 continue;
             }
 
-            $this->blueprint->addIndex(
-                new Blueprint\Index([$this->blueprint->fieldByName($property->name)], false, true)
+            $job->blueprint->addIndex(
+                new Blueprint\Index([$job->blueprint->fieldByName($property->name)], false, true)
             );
         }
     }
 
-    private function findForeignKeys(): void
+    private function findForeignKeys(EntityStructureFinder\Job $job): void
     {
-        foreach ($this->metaData->properties as $property) {
+        foreach ($job->metaData->properties as $property) {
             $handler = $this->typeHandlerFinder->for($property->type);
 
             if ($foreignKey = $handler->foreignKey($property)) {
-                $this->blueprint->addForeignKey($foreignKey);
+                $job->blueprint->addForeignKey($foreignKey);
             }
         }
     }
@@ -184,8 +184,7 @@ class EntityStructureFinder
             return;
         }
 
-        $referencedMetaData = $this->metaDataManager
-            ->get($collectionType->contentType);
+        $referencedMetaData = $this->metaDataManager->get($collectionType->contentType);
 
         $collectionProperty = $referencedMetaData->idProperty;
 

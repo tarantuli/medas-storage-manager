@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\StorageManager\Structure\Blueprint;
 
 #[Service]
-class ChangeFinder
+readonly class ChangeFinder
 {
     private Blueprint $expected;
     private Blueprint $existing;

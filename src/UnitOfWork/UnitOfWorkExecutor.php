@@ -8,10 +8,10 @@ use Medas\Core\Attributes\Service;
 use Medas\StorageManager\StorageManager;
 
 #[Service]
-class UnitOfWorkExecutor
+readonly class UnitOfWorkExecutor
 {
     public function __construct(
-        private readonly StorageManager $storageManager,
+        private StorageManager $storageManager,
     )
     {
     }

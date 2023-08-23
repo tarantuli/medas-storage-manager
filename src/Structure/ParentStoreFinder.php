@@ -8,10 +8,10 @@ use Medas\Core\Attributes\Service;
 use Medas\EntityManager\{MetaData, MetaDataManager};
 
 #[Service]
-class ParentStoreFinder
+readonly class ParentStoreFinder
 {
     public function __construct(
-        private readonly MetaDataManager $metaDataManager,
+        private MetaDataManager $metaDataManager,
     )
     {
     }

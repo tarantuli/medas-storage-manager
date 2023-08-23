@@ -8,10 +8,10 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 
 #[Service]
-class MigrationDirectory implements ConfigOption
+readonly class MigrationDirectory implements ConfigOption
 {
     public function __construct(
-        private readonly RootGroup $group,
+        private RootGroup $group,
     )
     {
     }

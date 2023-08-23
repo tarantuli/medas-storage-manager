@@ -9,7 +9,7 @@ use Medas\EntityManager\MetaData\Property;
 use Medas\StorageManager\Structure\Blueprint\Type;
 
 #[Service]
-class FloatHandler extends BaseHandler
+readonly class FloatHandler extends BaseHandler
 {
     public function fieldType(Property|null $property): Type
     {

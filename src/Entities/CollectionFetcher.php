@@ -12,11 +12,11 @@ use Medas\EntityManager\Types\{Collection as CollectionType, Relation};
 use Medas\StorageManager\StorageManager;
 
 #[Service]
-class CollectionFetcher
+readonly class CollectionFetcher
 {
     public function __construct(
-        private readonly StorageManager $storageManager,
-        private readonly StoresFinder   $storesFinder,
+        private StorageManager $storageManager,
+        private StoresFinder   $storesFinder,
     )
     {
     }

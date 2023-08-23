@@ -13,13 +13,13 @@ use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\EntityStructureFinder;
 
 #[Service]
-class StoresFinder
+readonly class StoresFinder
 {
-    private readonly MemoryCache $cache;
+    private MemoryCache $cache;
 
     public function __construct(
-        private readonly EntityStructureFinder $entityStructureFinder,
-        private readonly StorageManager        $storageManager,
+        private EntityStructureFinder $entityStructureFinder,
+        private StorageManager        $storageManager,
     )
     {
         $this->cache = new MemoryCache(new NoopSerializer());

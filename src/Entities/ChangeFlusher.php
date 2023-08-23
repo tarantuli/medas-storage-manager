@@ -9,11 +9,11 @@ use Medas\EntityManager\Entities\{Changes, Flusher};
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 
 #[Service]
-class ChangeFlusher implements Flusher
+readonly class ChangeFlusher implements Flusher
 {
     public function __construct(
-        private readonly EntityPersister    $entityPersister,
-        private readonly UnitOfWorkExecutor $unitOfWorkExecutor,
+        private EntityPersister    $entityPersister,
+        private UnitOfWorkExecutor $unitOfWorkExecutor,
     )
     {
     }

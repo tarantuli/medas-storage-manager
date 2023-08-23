@@ -8,7 +8,7 @@ use Medas\Console\Commands\{BaseConsoleCommandGroup, ConsoleCommandGroup};
 use Medas\Core\Attributes\Service;
 
 #[Service]
-class CommandGroup extends BaseConsoleCommandGroup
+readonly class CommandGroup extends BaseConsoleCommandGroup
 {
     public function parent(): ConsoleCommandGroup|null
     {

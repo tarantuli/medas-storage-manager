@@ -11,10 +11,10 @@ use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\StorageManager;
 
 #[Service]
-class UnitOfWorkManager
+readonly class UnitOfWorkManager
 {
     public function __construct(
-        private readonly StorageManager $storageManager,
+        private StorageManager $storageManager,
     )
     {
     }

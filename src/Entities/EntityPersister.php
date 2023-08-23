@@ -17,17 +17,17 @@ use Medas\StorageManager\Structure\EntityStructureFinder;
 use Medas\StorageManager\UnitOfWork\{Priority, UnitOfWork, UnitOfWorkManager};
 
 #[Service]
-class EntityPersister
+readonly class EntityPersister
 {
     public function __construct(
-        private readonly DataSerializer        $dataSerializer,
-        private readonly EntityStructureFinder $entityStructureFinder,
-        private readonly GuidProvider|null     $guidProvider,
-        private readonly MetaDataManager       $metaDataManager,
-        private readonly RecordManager         $recordManager,
-        private readonly StorageManager        $storageManager,
-        private readonly UnitOfWorkManager     $unitOfWorkManager,
-        private readonly ValueGetter           $valueGetter,
+        private DataSerializer        $dataSerializer,
+        private EntityStructureFinder $entityStructureFinder,
+        private GuidProvider|null     $guidProvider,
+        private MetaDataManager       $metaDataManager,
+        private RecordManager         $recordManager,
+        private StorageManager        $storageManager,
+        private UnitOfWorkManager     $unitOfWorkManager,
+        private ValueGetter           $valueGetter,
     )
     {
     }

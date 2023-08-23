@@ -12,17 +12,17 @@ use Medas\StorageManager\Exceptions\UnhandledTypeString;
 use Medas\StorageManager\Structure\TypeHandlers\TypeHandler;
 
 #[Service]
-class TypeHandlerFinder
+readonly class TypeHandlerFinder
 {
     public function __construct(
-        private readonly TypeHandlers\BinaryHandler     $binaryHandler,
-        private readonly TypeHandlers\BooleanHandler    $booleanHandler,
-        private readonly TypeHandlers\CollectionHandler $collectionHandler,
-        private readonly TypeHandlers\DateTimeHandler   $dateTimeHandler,
-        private readonly TypeHandlers\IntegerHandler    $integerHandler,
-        private readonly TypeHandlers\FloatHandler      $floatHandler,
-        private readonly TypeHandlers\RelationHandler   $relationHandler,
-        private readonly TypeHandlers\TextHandler       $textHandler,
+        private TypeHandlers\BinaryHandler     $binaryHandler,
+        private TypeHandlers\BooleanHandler    $booleanHandler,
+        private TypeHandlers\CollectionHandler $collectionHandler,
+        private TypeHandlers\DateTimeHandler   $dateTimeHandler,
+        private TypeHandlers\IntegerHandler    $integerHandler,
+        private TypeHandlers\FloatHandler      $floatHandler,
+        private TypeHandlers\RelationHandler   $relationHandler,
+        private TypeHandlers\TextHandler       $textHandler,
     )
     {
     }

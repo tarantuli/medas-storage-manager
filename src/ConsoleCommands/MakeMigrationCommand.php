@@ -14,15 +14,15 @@ use Medas\StorageManager\ConfigOptions\{EntityDirectory, MigrationDirectory};
 use Medas\StorageManager\Migrations\MigrationBuildManager;
 
 #[Service]
-class MakeMigrationCommand extends BaseConsoleCommand
+readonly class MakeMigrationCommand extends BaseConsoleCommand
 {
     public function __construct(
-        private readonly CommandGroup          $group,
-        private readonly ConsolePrinter        $consolePrinter,
-        private readonly EntityDirectory       $entityDirectory,
-        private readonly MigrationBuildManager $migrationBuildManager,
-        private readonly MigrationDirectory    $migrationDirectory,
-        private readonly OptionController      $optionController,
+        private CommandGroup          $group,
+        private ConsolePrinter        $consolePrinter,
+        private EntityDirectory       $entityDirectory,
+        private MigrationBuildManager $migrationBuildManager,
+        private MigrationDirectory    $migrationDirectory,
+        private OptionController      $optionController,
     )
     {
     }

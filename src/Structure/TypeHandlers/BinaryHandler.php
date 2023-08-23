@@ -9,7 +9,7 @@ use Medas\EntityManager\MetaData\Property;
 use Medas\StorageManager\Structure\Blueprint\Type;
 
 #[Service]
-class BinaryHandler extends BaseHandler
+readonly class BinaryHandler extends BaseHandler
 {
     public function fieldType(Property|null $property): Type
     {

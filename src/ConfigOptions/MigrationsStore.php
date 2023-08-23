@@ -10,11 +10,11 @@ use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\StorageManager;
 
 #[Service]
-class MigrationsStore implements ConfigOption
+readonly class MigrationsStore implements ConfigOption
 {
     public function __construct(
-        private readonly RootGroup      $group,
-        private readonly StorageManager $storageManager,
+        private RootGroup      $group,
+        private StorageManager $storageManager,
     )
     {
     }
