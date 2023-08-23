@@ -13,6 +13,8 @@ interface StorageController
 
     public function store(string $name, Storage $storage = null): Store;
 
+    public function deleteStore(Store $store): void;
+
     public function transaction(Storage $storage = null): Transaction;
 
     public function lastGeneratedValue(Storage $storage = null): int|null;

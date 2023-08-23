@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManagerTest\Functional\StorageTests;
 
 use Medas\StorageManager\Interfaces\Storage;
+use Medas\StorageManager\Interfaces\StorageController;
 use Medas\StorageManagerTest\BaseTestClass;
 use Medas\StorageManagerTest\MockUps\PropertyHandlers\EntityWithHandler;
 use Medas\StorageManagerTest\MockUps\PropertyHandlers\PropertyClass;
@@ -14,17 +15,18 @@ use Medas\StorageManagerTest\MockUps\Relations\Person;
 abstract class AbstractStorageTestClass extends BaseTestClass
 {
     protected Storage $storage;
+    protected StorageController $controller;
 
     public function testPrepare(): void
     {
         em()->clear();
         $this->initialize();
 
-        self::assertInstanceOf(Storage::class, storage());
+        self::assertInstanceOf(Storage::class, $this->storage);
     }
 
     /**
-     * This method should register a default storage
+     * This method must register a storage named 'default'
      */
     abstract protected function initialize(): void;
 
@@ -34,11 +36,11 @@ abstract class AbstractStorageTestClass extends BaseTestClass
     public function testMigration(): void
     {
         // Delete all stores if they still exist
-        storage()->controller()->deleteStore('r_groups__labels');
-        storage()->controller()->deleteStore('r_other_people');
-        storage()->controller()->deleteStore('r_people');
-        storage()->controller()->deleteStore('r_groups');
-        storage()->controller()->deleteStore('r_labels');
+        $this->controller->deleteStore($this->controller->store('r_groups__labels'));
+        $this->controller->deleteStore($this->controller->store('r_other_people'));
+        $this->controller->deleteStore($this->controller->store('r_people'));
+        $this->controller->deleteStore($this->controller->store('r_groups'));
+        $this->controller->deleteStore($this->controller->store('r_labels'));
 
         // Create and execute a migration
         $migration = $this->createMigrationClassContent('Relations');
@@ -48,11 +50,11 @@ abstract class AbstractStorageTestClass extends BaseTestClass
 
         $this->executeMigration($migration);
 
-        self::assertTrue(storage()->store('r_groups')->exists());
-        self::assertTrue(storage()->store('r_people')->exists());
-        self::assertTrue(storage()->store('r_labels')->exists());
-        self::assertTrue(storage()->store('r_other_people')->exists());
-        self::assertTrue(storage()->store('r_groups__labels')->exists());
+        self::assertTrue($this->controller->hasStore($this->controller->store('r_groups')));
+        self::assertTrue($this->controller->hasStore($this->controller->store('r_people')));
+        self::assertTrue($this->controller->hasStore($this->controller->store('r_labels')));
+        self::assertTrue($this->controller->hasStore($this->controller->store('r_other_people')));
+        self::assertTrue($this->controller->hasStore($this->controller->store('r_groups__labels')));
 
         // Another migration should be empty
         $migration = $this->createMigrationClassContent('Relations');
@@ -73,13 +75,23 @@ abstract class AbstractStorageTestClass extends BaseTestClass
      */
     public function testCreateRecords(): void
     {
-        $query = storage()->store('r_groups')->prepareCreate(['id' => 1, 'name' => 'Test group']);
-        $query->execute();
-        self::assertFalse($query->recordSet()->hasRecords());
+        $action = $this->controller->actionBuilders()->insert()->build(
+            $this->controller->store('r_groups'),
+            ['id' => 1, 'name' => 'Test group']
+        );
 
-        $query = storage()->store('r_people')->prepareCreate(['id' => 1, 'name' => 'Test person', 'group' => 1]);
-        $query->execute();
-        self::assertFalse($query->recordSet()->hasRecords());
+        $action->execute();
+
+        self::assertFalse($action->recordSet()->hasRecords());
+
+        $action = $this->controller->actionBuilders()->insert()->build(
+            $this->controller->store('r_people'),
+            ['id' => 1, 'name' => 'Test person', 'group' => 1]
+        );
+
+        $action->execute();
+
+        self::assertFalse($action->recordSet()->hasRecords());
     }
 
     /**
@@ -87,7 +99,10 @@ abstract class AbstractStorageTestClass extends BaseTestClass
      */
     public function testFetchRecords(): void
     {
-        $record = storage()->store('r_groups')->fetchRecord(['id' => 1]);
+        $record = $this->controller->recordFetchers()->filteredFetcher()->fetchOne(
+            $this->controller->store('r_groups'),
+            ['id' => 1]
+        );
 
         self::assertArrayHasKey('name', $record);
         self::assertEquals('Test group', $record['name']);
@@ -129,7 +144,7 @@ abstract class AbstractStorageTestClass extends BaseTestClass
 
     public function testStoreHandledPRoperty(): void
     {
-        storage()->controller()->deleteStore('entities_with_handler');
+        $this->controller->deleteStore($this->controller->store('entities_with_handler'));
 
         // Ensure storage existence
         $migration = $this->createMigrationClassContent('PropertyHandlers');
