@@ -33,6 +33,7 @@ class StorageManager
         }
 
         unset($this->controllerPerStorageName[$storage->name()]);
+        $this->controller($storage);
     }
 
     public function byName(string $name): Storage
