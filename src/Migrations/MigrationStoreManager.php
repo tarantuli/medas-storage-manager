@@ -47,7 +47,7 @@ class MigrationStoreManager
         $blueprint->setName($store->name());
 
         $migrationField = new Field('migration', Type::Text);
-        $datetimeField = new Field('migrated_at', Type::DateTime);
+        $datetimeField = new Field('migratedAt', Type::DateTime);
 
         $blueprint->addField($migrationField);
         $blueprint->addField($datetimeField);
