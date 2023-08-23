@@ -21,6 +21,8 @@ interface StorageController
 
     public function actionBuilders(): ActionBuilders;
 
+    public function actionExecutor(): ActionExecutor;
+
     public function recordFetchers(): RecordFetchers;
 
     public function migrationBuilder(): MigrationBuilder;

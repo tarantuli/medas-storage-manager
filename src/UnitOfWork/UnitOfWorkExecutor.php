@@ -12,7 +12,6 @@ class UnitOfWorkExecutor
 {
     public function __construct(
         private readonly StorageManager $storageManager,
-        private readonly ActionExecutor $actionExecutor,
     )
     {
     }
@@ -25,7 +24,7 @@ class UnitOfWorkExecutor
 
         try {
             foreach ($unitOfWork->actions() as $action) {
-                $this->actionExecutor->execute($action);
+                $this->storageManager->controller($action->storage())->actionExecutor()->execute($action);
             }
         }
         catch (\Exception $exception) {
