@@ -105,11 +105,12 @@ class RecordManager implements Fetcher
     {
         $entity = $selector->definition()->entity;
         $metaData = $this->metaDataManager->get($entity);
-        $query = $this->storageManager->controller($metaData->entity->storage)->actionBuilders()
-            ->selectorQuery()->build($selector, $arguments);
+        $actionSet = $this->storageManager->controller($metaData->entity->storage)->actionBuilders()
+            ->selectorAction()->build($selector, $arguments);
 
-        $query->execute();
-        $records = $query->recordSet()->fetchRecords();
+        $this->storageManager->controller($metaData->entity->storage)->actionExecutor()->executeSet($actionSet);
+
+        $records = $actionSet->recordSet()->fetchRecords();
 
         foreach ($records as &$record) {
             $key = $this->keyMaker->get($entity, $this->idValue->get($record, $metaData));

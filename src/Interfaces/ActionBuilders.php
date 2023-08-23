@@ -13,7 +13,7 @@ interface ActionBuilders
 
     public function deleteStore(): Builders\DeleteStoreBuilder;
 
-    public function selectorQuery(): Builders\SelectorActionBuilder;
+    public function selectorAction(): Builders\SelectorActionBuilder;
 
     public function insert(): Builders\InsertBuilder;
 
