@@ -11,4 +11,6 @@ use Medas\StorageManager\Interfaces\RecordSet;
 interface ActionSet extends Collection
 {
     public function recordSet(): RecordSet;
+
+    public function setRecordSet(RecordSet $recordSet): void;
 }
