@@ -78,7 +78,7 @@ abstract class AbstractStorageTestClass extends BaseTestClass
             ['id' => 1, 'name' => 'Test group']
         );
 
-        $action->execute();
+        $this->controller()->actionExecutor()->executeSet($action);
 
         self::assertFalse($action->recordSet()->hasRecords());
 
@@ -87,7 +87,7 @@ abstract class AbstractStorageTestClass extends BaseTestClass
             ['id' => 1, 'name' => 'Test person', 'group' => 1]
         );
 
-        $action->execute();
+        $this->controller()->actionExecutor()->executeSet($action);
 
         self::assertFalse($action->recordSet()->hasRecords());
     }

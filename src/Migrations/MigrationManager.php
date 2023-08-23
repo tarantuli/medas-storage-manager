@@ -101,12 +101,12 @@ class MigrationManager
 
     private function registerExecution(Migration $migration): void
     {
-        $actions = $this->storageManager->controller()->actionBuilders()->insert()
+        $storageController = $this->storageManager->controller();
+
+        $actions = $storageController->actionBuilders()->insert()
             ->build($this->migrationStoreManager->get(), ['migration' => $migration::class, 'migrated_at' => date('Y-m-d H:i:s')]);
 
-        foreach ($actions as $action) {
-            $action->execute();
-        }
+        $storageController->actionExecutor()->executeSet($actions);
     }
 
     public function processedMigrations(): array
