@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
-use Medas\StorageManager\{Interfaces\Store, StorageManager};
+use Medas\StorageManager\{Interfaces\Store};
 
 class StoresDontHaveProperty extends BaseException
 {
@@ -17,7 +17,7 @@ class StoresDontHaveProperty extends BaseException
 
         foreach ($stores as $store) {
             if ($storage === null) {
-                $storage = service(StorageManager::class)->getName($store->storage());
+                $storage = $store->storage();
             }
 
             $storeNames[] = $store->name();
@@ -26,7 +26,7 @@ class StoresDontHaveProperty extends BaseException
         parent::__construct(
             count($storeNames) === 1 ? '' : 's',
             implode(', ', $storeNames),
-            $storage,
+            $storage->name(),
             $property
         );
     }
