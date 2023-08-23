@@ -27,11 +27,14 @@ class MigrationStoreManager
     public function get(): Store
     {
         if (!isset($this->store)) {
-            $this->store = $this->optionController->getValue($this->migrationsStore);
+            /** @var Store $store */
+            $store = $this->optionController->getValue($this->migrationsStore);
 
-            if (!$this->store->exists()) {
-                $this->build($this->store);
+            if (!$this->storageManager->controller($store->storage())->hasStore($store)) {
+                $this->build($store);
             }
+
+            $this->store = $store;
         }
 
         return $this->store;
