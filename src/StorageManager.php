@@ -53,14 +53,18 @@ class StorageManager
         $name = $storage->name();
 
         if (!array_key_exists($name, $this->controllerPerStorageName)) {
+            $foundController = false;
             foreach ($this->controllers as $controller) {
                 if ($controller->handles($storage)) {
                     $this->controllerPerStorageName[$name] = $controller;
+                    $foundController = true;
                     break;
                 }
             }
 
-            throw new \Exception('no controller found for ' . $name);
+            if (!$foundController) {
+                throw new \Exception('no controller found for ' . $name);
+            }
         }
 
         return $this->controllerPerStorageName[$name];
