@@ -10,74 +10,69 @@ use Medas\StorageManager\Structure\Blueprint;
 #[Service]
 readonly class ChangeFinder
 {
-    private Blueprint $expected;
-    private Blueprint $existing;
-
-    private bool $foundChanges;
-    private Changes $changes;
-
     public function find(Blueprint $expected, Blueprint $existing): Changes|null
     {
-        $this->expected = $expected;
-        $this->existing = $existing;
-        $this->foundChanges = false;
-        $this->changes = new Changes($expected->name());
+        $job = new Job(
+            $expected,
+            $existing,
+            new Changes($expected->name())
+        );
 
-        $this->checkFields();
-        $this->checkIndexes();
-        $this->checkForeignKeys();
+        $this->checkFields($job);
+        $this->checkIndexes($job);
+        $this->checkForeignKeys($job);
 
-        return $this->foundChanges ? $this->changes : null;
+        return $job->foundChanges ? $job->changes : null;
     }
 
-    private function checkFields(): void
+    private function checkFields(Job $job): void
     {
-        foreach ($this->expected->fields() as $field) {
-            if ($field->store !== null && $field->store !== $this->expected->name()) {
+        foreach ($job->expected->fields() as $field) {
+            if ($field->store !== null && $field->store !== $job->expected->name()) {
                 continue;
             }
 
-            if ($current = $this->existing->fieldByName($field->name)) {
+            if ($current = $job->existing->fieldByName($field->name)) {
                 if ($this->areFieldsComparable($field, $current)) {
                     continue;
                 }
 
-                $this->changes->changeFields[] = $field;
+                $job->changes->changeFields[] = $field;
             }
             else {
-                $this->changes->addFields[] = $field;
+                $job->changes->addFields[] = $field;
             }
 
-            $this->foundChanges = true;
+            $job->foundChanges = true;
         }
     }
 
-    private function checkIndexes(): void
+    private function checkIndexes(Job $job): void
     {
-        foreach ($this->expected->indexes() as $index) {
-            if (!$this->existing->indexByHash($index->hash())) {
-                $this->changes->indexes[] = $index;
+        foreach ($job->expected->indexes() as $index) {
+            if (!$job->existing->indexByHash($index->hash())) {
+                $job->changes->indexes[] = $index;
             }
 
-            $this->foundChanges = true;
+            $job->foundChanges = true;
         }
     }
 
-    private function checkForeignKeys(): void
+    private function checkForeignKeys(Job $job): void
     {
-        foreach ($this->expected->foreignKeys() as $foreignKey) {
-            if ($current = $this->existing->foreignKeyByHash($foreignKey->hash())) {
+        foreach ($job->expected->foreignKeys() as $foreignKey) {
+            if ($current = $job->existing->foreignKeyByHash($foreignKey->hash())) {
                 if ($this->areForeignKeysComparable($foreignKey, $current)) {
                     continue;
                 }
 
-                $this->changes->changeForeignKey[] = $foreignKey;
+                $job->changes->changeForeignKey[] = $foreignKey;
             }
             else {
-                $this->changes->addForeignKey[] = $foreignKey;
+                $job->changes->addForeignKey[] = $foreignKey;
             }
 
-            $this->foundChanges = true;
+            $job->foundChanges = true;
         }
     }
 
