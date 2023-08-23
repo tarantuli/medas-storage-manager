@@ -36,9 +36,9 @@ class StorageManager
         $this->controller($storage);
     }
 
-    public function byName(string $name): Storage
+    public function byName(string $name = null): Storage
     {
-        return $this->storages[$name];
+        return $name === null ? $this->default : $this->storages[$name];
     }
 
     public function controller(Storage|string $storage = null): StorageController
