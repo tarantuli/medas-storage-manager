@@ -54,11 +54,11 @@ class MigrationStoreManager
 
         $blueprint->addIndex(new Index([$migrationField]));
 
-        $actions = $this->storageManager->controller()->actionBuilders()->createStore()
+        $storageController = $this->storageManager->controller($store->storage());
+
+        $actions = $storageController->actionBuilders()->createStore()
             ->build($store->storage(), $blueprint);
 
-        foreach ($actions as $action) {
-            $action->execute();
-        }
+        $storageController->actionExecutor()->executeSet($actions);
     }
 }
