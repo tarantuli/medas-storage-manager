@@ -103,7 +103,7 @@ class RecordManager implements Fetcher
 
     public function fetch(Selector $selector = null, array $arguments = []): array
     {
-        $entity = $selector->definition()->entity;
+        $entity = $selector->entity();
         $metaData = $this->metaDataManager->get($entity);
         $actionSet = $this->storageManager->controller($metaData->entity->storage)->actionBuilders()
             ->selectorAction()->build($selector, $arguments);
