@@ -41,7 +41,7 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
 
         foreach ($records as &$record) {
             $idValue = $this->idValue->get($record, $metaData);
-            $record = $this->unserializeAndCache($metaData, $metaData->entity->store, $record, $idValue);
+            $record = $this->unserializeAndCache($metaData, $metaData->entity->store, $idValue, $record);
         }
 
         return $records;
