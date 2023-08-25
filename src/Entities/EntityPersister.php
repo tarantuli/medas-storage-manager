@@ -24,7 +24,7 @@ readonly class EntityPersister
         private EntityStructureFinder $entityStructureFinder,
         private GuidProvider|null     $guidProvider,
         private MetaDataManager       $metaDataManager,
-        private RecordManager         $recordManager,
+        private StoreRecordManager    $recordManager,
         private StorageManager        $storageManager,
         private UnitOfWorkManager     $unitOfWorkManager,
         private ValueGetter           $valueGetter,
