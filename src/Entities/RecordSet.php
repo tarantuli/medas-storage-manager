@@ -12,4 +12,10 @@ use Medas\StorageManager\Interfaces\Record;
  */
 class RecordSet extends GenericCollection
 {
+    public function clear(): void
+    {
+        $this->data = [];
+        $this->hasChanged = true;
+        $this->index = 0;
+    }
 }

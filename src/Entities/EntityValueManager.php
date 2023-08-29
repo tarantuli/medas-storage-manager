@@ -79,4 +79,9 @@ readonly class EntityValueManager implements EntityValueFetcher
 
         return $this->entityRecords[$key];
     }
+
+    public function clearCaches(): void
+    {
+        $this->entityRecords->clear();
+    }
 }
