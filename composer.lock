@@ -188,16 +188,17 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "5135c5c15d8a50458d3205a9c656aa47a29cd296"
+                "reference": "bafc10a773629b7698a0d86d8ccce7ccec0c488c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/5135c5c15d8a50458d3205a9c656aa47a29cd296",
-                "reference": "5135c5c15d8a50458d3205a9c656aa47a29cd296",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/bafc10a773629b7698a0d86d8ccce7ccec0c488c",
+                "reference": "bafc10a773629b7698a0d86d8ccce7ccec0c488c",
                 "shasum": ""
             },
             "require": {
-                "ext-mbstring": "*"
+                "ext-mbstring": "*",
+                "psr/event-dispatcher": "^1.0"
             },
             "require-dev": {
                 "morphp/medas-service-manager": "dev-dev",
@@ -226,7 +227,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2023-08-29T08:23:44+00:00"
+            "time": "2023-08-29T11:44:57+00:00"
         },
         {
             "name": "morphp/medas-entity-manager",
@@ -234,12 +235,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "c03dafa83d146ed0bc9d813ab47b226bbba55bc3"
+                "reference": "a80e446af5b08c4576a9c50db0f16074a815b899"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/c03dafa83d146ed0bc9d813ab47b226bbba55bc3",
-                "reference": "c03dafa83d146ed0bc9d813ab47b226bbba55bc3",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/a80e446af5b08c4576a9c50db0f16074a815b899",
+                "reference": "a80e446af5b08c4576a9c50db0f16074a815b899",
                 "shasum": ""
             },
             "require": {
@@ -273,7 +274,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2023-08-29T08:37:16+00:00"
+            "time": "2023-08-29T11:42:05+00:00"
         },
         {
             "name": "morphp/medas-events",
@@ -281,17 +282,16 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-events.git",
-                "reference": "28fb5f054c224bba7471312fe8a8866f24a3c6e8"
+                "reference": "3678e737b347eae2b879dec741beac4d123297dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/28fb5f054c224bba7471312fe8a8866f24a3c6e8",
-                "reference": "28fb5f054c224bba7471312fe8a8866f24a3c6e8",
+                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/3678e737b347eae2b879dec741beac4d123297dd",
+                "reference": "3678e737b347eae2b879dec741beac4d123297dd",
                 "shasum": ""
             },
             "require": {
-                "morphp/medas-core": "dev-dev",
-                "psr/event-dispatcher": "^1.0"
+                "morphp/medas-core": "dev-dev"
             },
             "require-dev": {
                 "morphp/medas-service-manager": "dev-dev",
@@ -315,7 +315,7 @@
                 "source": "https://github.com/tarantuli/medas-events/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-events/issues"
             },
-            "time": "2023-08-16T14:30:19+00:00"
+            "time": "2023-08-29T11:46:57+00:00"
         },
         {
             "name": "morphp/medas-file-builder",

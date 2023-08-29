@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{EventListener, Service};
 use Medas\EntityManager\Entities\{EntityValueFetcher, FetchResult, KeyMaker};
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\Types\Collection as CollectionType;
-use Medas\Events\Interfaces\EventListener;
 use Medas\StorageManager\Entities\Exceptions\StoresDontHaveProperty;
 use Medas\StorageManager\Interfaces\Record;
 

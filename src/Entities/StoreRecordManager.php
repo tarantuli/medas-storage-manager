@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{EventListener, Service};
 use Medas\EntityManager\Entities\{IdValue, KeyMaker, SelectorRecordsFetcher};
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
-use Medas\Events\Interfaces\EventListener;
 use Medas\StorageManager\Interfaces\{Record, Store};
 use Medas\StorageManager\StorageManager;
 
