@@ -6,9 +6,11 @@ namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{IdValue, KeyMaker, SelectorRecordsFetcher};
+use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
+use Medas\Events\Interfaces\EventListener;
 use Medas\StorageManager\Interfaces\{Record, Store};
 use Medas\StorageManager\StorageManager;
 
@@ -45,6 +47,14 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         }
 
         return $records;
+    }
+
+    #[EventListener]
+    public function clearCaches(
+        /** @noinspection PhpUnusedParameterInspection */ MustClearEntityValueCaches $event,
+    ): void
+    {
+        $this->storeRecords->clear();
     }
 
     public function fetchOne(MetaData $metaData, Store $store, mixed $idValue): Record|null

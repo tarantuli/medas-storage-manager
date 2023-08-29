@@ -6,9 +6,11 @@ namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{EntityValueFetcher, FetchResult, KeyMaker};
+use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\Types\Collection as CollectionType;
+use Medas\Events\Interfaces\EventListener;
 use Medas\StorageManager\Entities\Exceptions\StoresDontHaveProperty;
 use Medas\StorageManager\Interfaces\Record;
 
@@ -48,6 +50,14 @@ readonly class EntityValueManager implements EntityValueFetcher
         throw new StoresDontHaveProperty($this->storesFinder->find($metaData), $property->name);
     }
 
+    #[EventListener]
+    public function clearCaches(
+        /** @noinspection PhpUnusedParameterInspection */ MustClearEntityValueCaches $event,
+    ): void
+    {
+        $this->entityRecords->clear();
+    }
+
     private function getEntityRecord(MetaData $metaData, object $entity): Record|null
     {
         $idValue = $this->dataSerializer->serializeValue(
@@ -78,10 +88,5 @@ readonly class EntityValueManager implements EntityValueFetcher
         }
 
         return $this->entityRecords[$key];
-    }
-
-    public function clearCaches(): void
-    {
-        $this->entityRecords->clear();
     }
 }

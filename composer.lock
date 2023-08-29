@@ -188,12 +188,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "0debff84a62c16032b7e0f8e056a6361de5db50b"
+                "reference": "5135c5c15d8a50458d3205a9c656aa47a29cd296"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/0debff84a62c16032b7e0f8e056a6361de5db50b",
-                "reference": "0debff84a62c16032b7e0f8e056a6361de5db50b",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/5135c5c15d8a50458d3205a9c656aa47a29cd296",
+                "reference": "5135c5c15d8a50458d3205a9c656aa47a29cd296",
                 "shasum": ""
             },
             "require": {
@@ -226,7 +226,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2023-08-21T12:50:33+00:00"
+            "time": "2023-08-29T08:23:44+00:00"
         },
         {
             "name": "morphp/medas-entity-manager",
@@ -234,12 +234,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-entity-manager.git",
-                "reference": "cc0fc38a65e5a39973bce062dbc4c27897666b59"
+                "reference": "c03dafa83d146ed0bc9d813ab47b226bbba55bc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/cc0fc38a65e5a39973bce062dbc4c27897666b59",
-                "reference": "cc0fc38a65e5a39973bce062dbc4c27897666b59",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/c03dafa83d146ed0bc9d813ab47b226bbba55bc3",
+                "reference": "c03dafa83d146ed0bc9d813ab47b226bbba55bc3",
                 "shasum": ""
             },
             "require": {
@@ -273,7 +273,7 @@
                 "source": "https://github.com/tarantuli/medas-entity-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2023-08-29T08:19:58+00:00"
+            "time": "2023-08-29T08:37:16+00:00"
         },
         {
             "name": "morphp/medas-events",
