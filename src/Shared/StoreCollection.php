@@ -10,7 +10,7 @@ use Medas\StorageManager\Interfaces\{Storage, Store};
 abstract class StoreCollection
 {
     /** @return T */
-    abstract protected function createStore($storage, $storeName): Store;
+    abstract protected function createStore(Storage $storage, string $storeName): Store;
 
     private array $stores = [];
 
