@@ -8,7 +8,7 @@ use Medas\StorageManager\Interfaces\{Record, RecordSet, Store};
 
 interface FilteredFetcher
 {
-    public function fetch(Store $store, array $filters): RecordSet;
+    public function fetch(Store $store, array $filters = []): RecordSet;
 
-    public function fetchOne(Store $store, array $filters): Record|null;
+    public function fetchOne(Store $store, array $filters = []): Record|null;
 }
