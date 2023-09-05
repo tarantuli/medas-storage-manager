@@ -10,6 +10,7 @@ use Medas\FileBuilder\PhpClass\{MethodDefinition, ParameterDefinition, PhpClassD
 use Medas\FileBuilder\PhpClassBuilder;
 use Medas\FileSystem\DirectoryManager;
 use Medas\StorageManager\StorageManager;
+use Medas\StorageManager\Structure\EntityStructureFinder;
 use Medas\StorageManager\UnitOfWork\UnitOfWork;
 
 #[Service]
@@ -24,9 +25,10 @@ class MigrationBuildManager
     private MethodDefinition $undoMethod;
 
     public function __construct(
-        private readonly DirectoryManager $directoryManager,
-        private readonly PhpClassBuilder  $phpClassBuilder,
-        private readonly StorageManager   $storageManager,
+        private readonly DirectoryManager      $directoryManager,
+        private readonly EntityStructureFinder $entityStructureFinder,
+        private readonly PhpClassBuilder       $phpClassBuilder,
+        private readonly StorageManager        $storageManager,
     )
     {
     }
@@ -125,8 +127,10 @@ class MigrationBuildManager
 
     private function processEntity(string $className, Entity $entity): void
     {
+        $expectedStructure = $this->entityStructureFinder->find($className);
+
         $needed = $this->storageManager->controller($entity->storage)->migrationBuilder()
-            ->build($this->storageManager->byName($entity->storage), $className, $this->migrateMethod, $this->undoMethod);
+            ->build($this->storageManager->byName($entity->storage), $expectedStructure, $this->migrateMethod, $this->undoMethod);
 
         $this->migrationNeeded = $this->migrationNeeded || $needed;
     }

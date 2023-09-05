@@ -13,9 +13,9 @@ interface MigrationBuilder
 {
     public function build(
         Storage          $storage,
-        string           $className,
+        Blueprint        $expectedStructure,
         MethodDefinition $migrateMethod,
-        MethodDefinition $undoMethod
+        MethodDefinition $undoMethod,
     ): bool;
 
     public function buildQueries(Storage $storage, Blueprint $expectedStructure): ActionSet|null;
