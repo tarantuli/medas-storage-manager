@@ -10,7 +10,7 @@ use Medas\StorageManager\Interfaces\Record;
 /**
  * @extends GenericCollection<Record>
  */
-class RecordSet extends GenericCollection
+class RecordCollection extends GenericCollection
 {
     public function clear(): void
     {

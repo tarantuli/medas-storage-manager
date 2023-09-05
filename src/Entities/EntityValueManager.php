@@ -16,7 +16,7 @@ use Medas\StorageManager\Interfaces\Record;
 #[Service]
 readonly class EntityValueManager implements EntityValueFetcher
 {
-    private RecordSet $entityRecords;
+    private RecordCollection $entityRecords;
 
     public function __construct(
         private CollectionFetcher  $collectionFetcher,
@@ -27,7 +27,7 @@ readonly class EntityValueManager implements EntityValueFetcher
         private ValueGetter        $entityValueGetter,
     )
     {
-        $this->entityRecords = new RecordSet();
+        $this->entityRecords = new RecordCollection();
     }
 
     public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult

@@ -16,7 +16,7 @@ use Medas\StorageManager\StorageManager;
 #[Service]
 readonly class StoreRecordManager implements SelectorRecordsFetcher
 {
-    private RecordSet $storeRecords;
+    private RecordCollection $storeRecords;
 
     public function __construct(
         private DataSerializer  $dataSerializer,
@@ -26,7 +26,7 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         private StorageManager  $storageManager,
     )
     {
-        $this->storeRecords = new RecordSet();
+        $this->storeRecords = new RecordCollection();
     }
 
     public function fetch(Selector $selector = null, array $arguments = []): array
