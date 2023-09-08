@@ -3,10 +3,7 @@
 declare(strict_types=1);
 
 use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
-use Medas\ConsolePrinter\ConsolePrinterPackage;
 use Medas\EntityManager\Entities\{EntityValueFetcher, Flusher, SelectorRecordsFetcher};
-use Medas\FileBuilder\FileBuilderPackage;
-use Medas\RamseyUuidBridge\RamseyUuidBridgePackage;
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 use Medas\StorageManager\Entities\{ChangeFlusher, EntityValueManager, StoreRecordManager};
 use Medas\StorageManager\StorageManagerPackage;
@@ -19,9 +16,6 @@ new ServiceManager(function (): ServiceConfig {
     $config->addPackages([
         StorageManagerPackage::instance(),
         ConfigManagerPackage::instance(),
-        ConsolePrinterPackage::instance(),
-        RamseyUuidBridgePackage::instance(),
-        FileBuilderPackage::instance(),
     ]);
 
     return $config;
