@@ -131,6 +131,11 @@ class Blueprint
         return $this;
     }
 
+    public function storeOriginalEntityType(): bool
+    {
+        return $this->storeOriginalEntityType;
+    }
+
     public function setStoreOriginalEntityType(bool $doStore): self
     {
         $this->storeOriginalEntityType = $doStore;
