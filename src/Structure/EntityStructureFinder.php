@@ -54,6 +54,7 @@ readonly class EntityStructureFinder
     {
         $job->blueprint->setName($job->metaData->entity->store);
         $job->blueprint->setParent($job->metaData->parent);
+        $job->blueprint->setStoreOriginalEntityType($job->metaData->storeOriginalEntityType);
     }
 
     private function findFields(EntityStructureFinder\Job $job): void

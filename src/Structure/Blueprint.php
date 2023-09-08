@@ -10,6 +10,8 @@ class Blueprint
 
     private string|null $parent;
 
+    private bool $storeOriginalEntityType;
+
     /** @var Blueprint\Field[] */
     private array $fields = [];
 
@@ -125,6 +127,13 @@ class Blueprint
     public function setParent(string|null $parent): self
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function setStoreOriginalEntityType(bool $doStore): self
+    {
+        $this->storeOriginalEntityType = $doStore;
 
         return $this;
     }
