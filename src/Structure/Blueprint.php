@@ -6,43 +6,28 @@ namespace Medas\StorageManager\Structure;
 
 class Blueprint
 {
-    private string|null $name;
+    public string $name;
 
-    private string|null $parent;
+    public string|null $parent;
 
-    private bool $storeOriginalEntityType;
+    public bool $storeOriginalEntityType;
+
+    public string $storeRequestingParentClass;
 
     /** @var Blueprint\Field[] */
-    private array $fields = [];
+    public array $fields = [];
 
     /** @var Blueprint\Index[] */
-    private array $indexes = [];
+    public array $indexes = [];
 
     /** @var Blueprint\ForeignKey[] */
-    private array $foreignKeys = [];
-
-    public function name(): string|null
-    {
-        return $this->name;
-    }
-
-    public function setName(string|null $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
+    public array $foreignKeys = [];
 
     public function addField(Blueprint\Field $field): self
     {
         $this->fields[] = $field;
 
         return $this;
-    }
-
-    public function fields(): array
-    {
-        return $this->fields;
     }
 
     public function fieldByName(string $name): Blueprint\Field|null
@@ -62,11 +47,6 @@ class Blueprint
         }
 
         return $this;
-    }
-
-    public function indexes(): array
-    {
-        return $this->indexes;
     }
 
     public function indexByHash(string $hash): Blueprint\Index|null
@@ -104,11 +84,6 @@ class Blueprint
         return $this;
     }
 
-    public function foreignKeys(): array
-    {
-        return $this->foreignKeys;
-    }
-
     public function foreignKeyByHash(string $hash): Blueprint\ForeignKey|null
     {
         return $this->foreignKeysByHash([$hash])[0] ?? null;
@@ -117,29 +92,5 @@ class Blueprint
     public function foreignKeysByHash(array $hashes): array
     {
         return array_values(array_filter($this->foreignKeys, fn($foreignKey) => in_array($foreignKey->hash(), $hashes, true)));
-    }
-
-    public function parent(): string|null
-    {
-        return $this->parent;
-    }
-
-    public function setParent(string|null $parent): self
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    public function storeOriginalEntityType(): bool
-    {
-        return $this->storeOriginalEntityType;
-    }
-
-    public function setStoreOriginalEntityType(bool $doStore): self
-    {
-        $this->storeOriginalEntityType = $doStore;
-
-        return $this;
     }
 }

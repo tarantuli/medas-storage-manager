@@ -36,7 +36,7 @@ readonly class EntityPersister
     {
         $metaData = $this->metaDataManager->get($entity::class);
         $blueprint = $this->entityStructureFinder->find($entity::class);
-        $values = [];
+        $valuesPerStore = [];
 
         foreach ($metaData->properties as $property) {
             $foundValue = false;
@@ -68,21 +68,22 @@ readonly class EntityPersister
 
             if ($foundValue) {
                 $store = $blueprint->fieldByName($property->name)->store;
-                if (!array_key_exists($store, $values)) {
-                    $values[$store] = [];
+
+                if (!array_key_exists($store, $valuesPerStore)) {
+                    $valuesPerStore[$store] = [];
                 }
 
-                $values[$store][$property->name] = $value;
+                $valuesPerStore[$store][$property->name] = $value;
             }
         }
 
         $idFieldStore = $blueprint->idField()->store;
 
-        if (!array_key_exists($idFieldStore, $values)) {
-            $values[$idFieldStore] = [];
+        if (!array_key_exists($idFieldStore, $valuesPerStore)) {
+            $valuesPerStore[$idFieldStore] = [];
         }
 
-        foreach ($values as $store => $subValues) {
+        foreach ($valuesPerStore as $store => $subValues) {
             $this->dataSerializer->serializeArray($metaData, $subValues);
             $priority = null;
 

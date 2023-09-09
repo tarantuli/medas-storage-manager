@@ -40,7 +40,7 @@ readonly class StoresFinder
         $blueprint = $this->entityStructureFinder->find($metaData->className);
         $storeNames = [];
 
-        foreach ($blueprint->fields() as $field) {
+        foreach ($blueprint->fields as $field) {
             $storeNames[] = $field->store;
         }
 

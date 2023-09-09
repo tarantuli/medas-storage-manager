@@ -15,7 +15,7 @@ readonly class ChangeFinder
         $job = new Job(
             $expected,
             $existing,
-            new Changes($expected->name())
+            new Changes($expected->name)
         );
 
         $this->checkFields($job);
@@ -27,8 +27,8 @@ readonly class ChangeFinder
 
     private function checkFields(Job $job): void
     {
-        foreach ($job->expected->fields() as $field) {
-            if ($field->store !== null && $field->store !== $job->expected->name()) {
+        foreach ($job->expected->fields as $field) {
+            if ($field->store !== null && $field->store !== $job->expected->name) {
                 continue;
             }
 
@@ -49,7 +49,7 @@ readonly class ChangeFinder
 
     private function checkIndexes(Job $job): void
     {
-        foreach ($job->expected->indexes() as $index) {
+        foreach ($job->expected->indexes as $index) {
             if (!$job->existing->indexByHash($index->hash())) {
                 $job->changes->indexes[] = $index;
             }
@@ -60,7 +60,7 @@ readonly class ChangeFinder
 
     private function checkForeignKeys(Job $job): void
     {
-        foreach ($job->expected->foreignKeys() as $foreignKey) {
+        foreach ($job->expected->foreignKeys as $foreignKey) {
             if ($current = $job->existing->foreignKeyByHash($foreignKey->hash())) {
                 if ($this->areForeignKeysComparable($foreignKey, $current)) {
                     continue;

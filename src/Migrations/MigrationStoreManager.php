@@ -44,7 +44,7 @@ readonly class MigrationStoreManager
     {
         $blueprint = new Blueprint();
 
-        $blueprint->setName($store->name());
+        $blueprint->name = $store->name();
 
         $migrationField = new Field('migration', Type::Text);
         $datetimeField = new Field('migratedAt', Type::DateTime);
