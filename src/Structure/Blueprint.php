@@ -12,7 +12,7 @@ class Blueprint
 
     public bool $storeOriginalEntityType;
 
-    public string $storeRequestingParentClass;
+    public string $storeRequestingParentTypeStorage;
 
     /** @var Blueprint\Field[] */
     public array $fields = [];

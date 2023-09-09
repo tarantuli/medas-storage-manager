@@ -56,7 +56,7 @@ readonly class EntityStructureFinder
         $job->blueprint->parent = $job->metaData->parent;
 
         if ($job->blueprint->storeOriginalEntityType = $job->metaData->storeOriginalEntityType) {
-            $job->blueprint->storeRequestingParentClass =
+            $job->blueprint->storeRequestingParentTypeStorage =
                 $this->metaDataManager->get($job->metaData->storeRequestingParentClass)->entity->store;
         }
     }
