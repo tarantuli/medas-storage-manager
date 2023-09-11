@@ -11,6 +11,7 @@ use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\{Collection, Guid};
+use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\EntityStructureFinder;
@@ -88,7 +89,7 @@ readonly class EntityPersister
         }
 
         if ($blueprint->storeOriginalClass) {
-            $values = service(OriginalClassFetcher::class)->createValuesToStore($blueprint, $entity);
+            $values = service(OriginalClassStorageStrategy::class)->createValuesToStore($blueprint, $entity);
             $valuesPerStore = array_merge_recursive($valuesPerStore, $values);
         }
 
