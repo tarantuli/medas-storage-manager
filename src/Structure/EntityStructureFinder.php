@@ -42,6 +42,7 @@ readonly class EntityStructureFinder
         );
 
         $this->findName($job);
+        $this->findInheritance($job);
         $this->findFields($job);
         $this->findPrimaryKey($job);
         $this->findKeys($job);
@@ -52,9 +53,16 @@ readonly class EntityStructureFinder
 
     private function findName(EntityStructureFinder\Job $job): void
     {
+        if ($job->metaData->entity->store === null) {
+            return;
+        }
+
         $job->blueprint->name = $job->metaData->entity->store;
         $job->blueprint->parent = $job->metaData->inheritance->parent;
+    }
 
+    private function findInheritance(EntityStructureFinder\Job $job): void
+    {
         if ($job->blueprint->storeOriginalClass = $job->metaData->inheritance->storeOriginalClass) {
             $job->blueprint->storeRequestingOriginalClassStorage =
                 $this->metaDataManager->get($job->metaData->inheritance->sharedParentClass)->entity->store;

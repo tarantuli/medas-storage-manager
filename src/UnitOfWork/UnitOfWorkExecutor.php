@@ -18,6 +18,10 @@ readonly class UnitOfWorkExecutor
 
     public function execute(UnitOfWork $unitOfWork): void
     {
+        if ($unitOfWork->actions() === []) {
+            return;
+        }
+
         foreach ($unitOfWork->storages() as $storage) {
             $this->storageManager->controller($storage)->transaction($storage)->begin();
         }

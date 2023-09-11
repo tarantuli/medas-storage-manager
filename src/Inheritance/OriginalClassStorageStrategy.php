@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\StorageManager\Structure;
+namespace Medas\StorageManager\Inheritance;
 
 use Medas\StorageManager\Interfaces\Storage;
+use Medas\StorageManager\Structure\Blueprint;
 use Medas\StorageManager\UnitOfWork\ActionSet;
 
 interface OriginalClassStorageStrategy

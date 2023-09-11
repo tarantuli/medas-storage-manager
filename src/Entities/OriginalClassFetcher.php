@@ -6,8 +6,8 @@ namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData;
+use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Structure\EntityStructureFinder;
-use Medas\StorageManager\Structure\OriginalClassStorageStrategy;
 
 #[Service]
 readonly class OriginalClassFetcher implements \Medas\EntityManager\Entities\OriginalClassFetcher

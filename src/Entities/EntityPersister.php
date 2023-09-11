@@ -14,7 +14,6 @@ use Medas\EntityManager\Types\{Collection, Guid};
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\EntityStructureFinder;
-use Medas\StorageManager\Structure\OriginalClassStorageStrategy;
 use Medas\StorageManager\UnitOfWork\{Priority, UnitOfWork, UnitOfWorkManager};
 
 #[Service]
@@ -84,27 +83,27 @@ readonly class EntityPersister
             $valuesPerStore[$idFieldStore] = [];
         }
 
-        foreach ($valuesPerStore as $subValues) {
+        foreach ($valuesPerStore as &$subValues) {
             $this->dataSerializer->serializeArray($metaData, $subValues);
         }
 
         if ($blueprint->storeOriginalClass) {
-            $values = service(OriginalClassStorageStrategy::class)->createValuesToStore($blueprint, $entity);
+            $values = service(OriginalClassFetcher::class)->createValuesToStore($blueprint, $entity);
             $valuesPerStore = array_merge_recursive($valuesPerStore, $values);
         }
 
-        foreach ($valuesPerStore as $store => $subValues) {
+        foreach ($valuesPerStore as $store => $values) {
             $priority = null;
 
             if ($store !== $idFieldStore) {
-                $subValues[$blueprint->idField()->name] = new LastInsertIdPlaceholder();
+                $values[$blueprint->idField()->name] = new LastInsertIdPlaceholder();
                 $priority = Priority::CreateDependentRecord;
             }
 
             $this->unitOfWorkManager->queueCreate(
                 $unitOfWork,
                 $this->storageManager->controller($metaData->entity->storage)->store($store),
-                $subValues,
+                $values,
                 $this->generatedValueSetter($metaData, $entity),
                 $priority,
             );
@@ -206,4 +205,3 @@ readonly class EntityPersister
         );
     }
 }
-
