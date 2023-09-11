@@ -14,6 +14,7 @@ use Medas\EntityManager\Types\{Collection, Guid};
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\EntityStructureFinder;
+use Medas\StorageManager\Structure\OriginalClassStorageStrategy;
 use Medas\StorageManager\UnitOfWork\{Priority, UnitOfWork, UnitOfWorkManager};
 
 #[Service]
@@ -87,8 +88,8 @@ readonly class EntityPersister
             $this->dataSerializer->serializeArray($metaData, $subValues);
         }
 
-        if ($blueprint->storeOriginalEntityType) {
-            $values = \service($blueprint->storeRequestingParentTypeStorage)->createValuesToStore($entity, $blueprint);
+        if ($blueprint->storeOriginalClass) {
+            $values = service(OriginalClassStorageStrategy::class)->createValuesToStore($blueprint, $entity);
             $valuesPerStore = array_merge_recursive($valuesPerStore, $values);
         }
 

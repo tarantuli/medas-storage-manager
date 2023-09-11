@@ -21,7 +21,7 @@ readonly class ParentStoreFinder
         $stores = new ParentStores();
         $stores->add($metaData->className, $metaData->entity->store);
 
-        while ($parent = $metaData->parent) {
+        while ($parent = $metaData->inheritance->parent) {
             $metaData = $this->metaDataManager->get($parent);
             $stores->add($metaData->className, $metaData->entity->store);
         }

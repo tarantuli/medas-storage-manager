@@ -18,7 +18,7 @@ readonly class EntityStructureFinder
 {
     public function __construct(
         private CacheManager      $cacheManager,
-        private EnumHandler $enumHandler,
+        private EnumHandler       $enumHandler,
         private MetaDataManager   $metaDataManager,
         private ParentStoreFinder $parentStoreFinder,
         private TypeHandlerFinder $typeHandlerFinder,
@@ -53,11 +53,11 @@ readonly class EntityStructureFinder
     private function findName(EntityStructureFinder\Job $job): void
     {
         $job->blueprint->name = $job->metaData->entity->store;
-        $job->blueprint->parent = $job->metaData->parent;
+        $job->blueprint->parent = $job->metaData->inheritance->parent;
 
-        if ($job->blueprint->storeOriginalEntityType = $job->metaData->storeOriginalEntityType) {
-            $job->blueprint->storeRequestingParentTypeStorage =
-                $this->metaDataManager->get($job->metaData->storeRequestingParentClass)->entity->store;
+        if ($job->blueprint->storeOriginalClass = $job->metaData->inheritance->storeOriginalClass) {
+            $job->blueprint->storeRequestingOriginalClassStorage =
+                $this->metaDataManager->get($job->metaData->inheritance->sharedParentClass)->entity->store;
         }
     }
 

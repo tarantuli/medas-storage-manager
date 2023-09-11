@@ -10,9 +10,9 @@ class Blueprint
 
     public string|null $parent;
 
-    public bool $storeOriginalEntityType;
+    public bool $storeOriginalClass;
 
-    public string $storeRequestingParentTypeStorage;
+    public string $storeRequestingOriginalClassStorage;
 
     public string $originalEntityClassStorageStrategy;
 
