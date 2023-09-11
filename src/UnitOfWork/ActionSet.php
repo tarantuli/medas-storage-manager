@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\UnitOfWork;
 
-use Medas\Core\Interfaces\Collection;
+use Medas\Core\Collections\GenericCollection;
 use Medas\StorageManager\Interfaces\RecordSet;
 
-/** @extends Collection<Action> */
-interface ActionSet extends Collection
+/** @extends GenericCollection<Action> */
+class ActionSet extends GenericCollection
 {
-    public function recordSet(): RecordSet;
-
-    public function setRecordSet(RecordSet $recordSet): void;
+    public RecordSet|null $lastRecordSet = null;
+    public mixed $lastInsertId = null;
 }

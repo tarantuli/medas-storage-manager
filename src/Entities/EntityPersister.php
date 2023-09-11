@@ -83,8 +83,16 @@ readonly class EntityPersister
             $valuesPerStore[$idFieldStore] = [];
         }
 
-        foreach ($valuesPerStore as $store => $subValues) {
+        foreach ($valuesPerStore as $subValues) {
             $this->dataSerializer->serializeArray($metaData, $subValues);
+        }
+
+        if ($blueprint->storeOriginalEntityType) {
+            $values = \service($blueprint->storeRequestingParentTypeStorage)->createValuesToStore($entity, $blueprint);
+            $valuesPerStore = array_merge_recursive($valuesPerStore, $values);
+        }
+
+        foreach ($valuesPerStore as $store => $subValues) {
             $priority = null;
 
             if ($store !== $idFieldStore) {
@@ -113,7 +121,7 @@ readonly class EntityPersister
             return null;
         }
 
-        return function (Storage $storage, int|null $lastInsertId) use ($metaData, $entity) {
+        return function (Storage $storage, mixed $lastInsertId) use ($metaData, $entity) {
             if ($metaData->idProperty->isGeneratedValue) {
                 $value = $lastInsertId ?? $this->storageManager->controller($storage)->lastGeneratedValue();
                 $metaData->idProperty->reflection->setValue($entity, $value);

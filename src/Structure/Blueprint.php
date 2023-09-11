@@ -14,6 +14,8 @@ class Blueprint
 
     public string $storeRequestingParentTypeStorage;
 
+    public string $originalEntityClassStorageStrategy;
+
     /** @var Blueprint\Field[] */
     public array $fields = [];
 

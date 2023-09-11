@@ -23,9 +23,8 @@ readonly class UnitOfWorkExecutor
         }
 
         try {
-            foreach ($unitOfWork->actions() as $action) {
-                $this->storageManager->controller($action->storage())->actionExecutor()->execute($action);
-            }
+            $this->storageManager->controller($unitOfWork->actions()[0]->storage())->actionExecutor()
+                ->executeSet(new ActionSet($unitOfWork->actions()));
         }
         catch (\Exception $exception) {
             foreach ($unitOfWork->storages() as $storage) {
