@@ -35,7 +35,7 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
         );
 
         $valueField = new Blueprint\Field(
-            name: 'entity_class',
+            name: 'entityClass',
             type: Blueprint\Type::Text,
             isGenerated: false,
         );
@@ -60,7 +60,7 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
     {
         $storeName = $this->determineLinkStoreName($blueprint->storeRequestingOriginalClassStorage);
 
-        return [$storeName => ['entity_class' => $entity::class]];
+        return [$storeName => ['entityClass' => $entity::class]];
     }
 
     private function determineLinkStoreName(string $sourceTable): string
@@ -77,6 +77,6 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
 
         $this->actionExecutor->executeSet($actions);
 
-        return $actions->lastRecordSet->fetchRecord()['entity_class'];
+        return $actions->lastRecordSet->fetchRecord()['entityClass'];
     }
 }
