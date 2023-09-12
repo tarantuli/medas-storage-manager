@@ -46,7 +46,6 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
         );
 
         $linkStoreBlueprint->name = $this->determineLinkStoreName($blueprint->name);
-        $linkStoreBlueprint->storeOriginalClass = false;
 
         $linkStoreBlueprint
             ->addField($idField)

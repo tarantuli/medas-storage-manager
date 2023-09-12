@@ -10,7 +10,7 @@ class Blueprint
 
     public string|null $parent;
 
-    public bool $storeOriginalClass;
+    public bool $storeOriginalClass = false;
 
     public string $storeRequestingOriginalClassStorage;
 
