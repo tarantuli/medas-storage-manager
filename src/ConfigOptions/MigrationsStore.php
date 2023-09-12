@@ -46,6 +46,6 @@ readonly class MigrationsStore implements ConfigOption
 
     public function default(): Store
     {
-        return $this->storageManager->controller()->store('medas_migrations');
+        return $this->storageManager->controller()->store('__migrations');
     }
 }

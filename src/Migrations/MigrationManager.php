@@ -104,7 +104,7 @@ class MigrationManager
         $storageController = $this->storageManager->controller();
 
         $actions = $storageController->actionBuilders()->insert()
-            ->build($this->migrationStoreManager->get(), ['migration' => $migration::class, 'migrated_at' => date('Y-m-d H:i:s')]);
+            ->build($this->migrationStoreManager->get(), ['migration' => $migration::class, 'migratedAt' => date('Y-m-d H:i:s')]);
 
         $storageController->actionExecutor()->executeSet($actions);
     }
