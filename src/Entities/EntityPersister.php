@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
+use Medas\Core\Attributes\ConfigValue;
 use Medas\Core\Attributes\Service;
 use Medas\Core\Exceptions\GuidProviderIsNotAvailable;
 use Medas\Core\Interfaces\GuidProvider;
@@ -11,6 +12,7 @@ use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\{Collection, Guid};
+use Medas\StorageManager\ConfigOptions\DefaultOriginalClassStorageStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\StorageManager;
@@ -21,14 +23,17 @@ use Medas\StorageManager\UnitOfWork\{Priority, UnitOfWork, UnitOfWorkManager};
 readonly class EntityPersister
 {
     public function __construct(
-        private DataSerializer        $dataSerializer,
-        private EntityStructureFinder $entityStructureFinder,
-        private GuidProvider|null     $guidProvider,
-        private MetaDataManager       $metaDataManager,
-        private StoreRecordManager    $recordManager,
-        private StorageManager        $storageManager,
-        private UnitOfWorkManager     $unitOfWorkManager,
-        private ValueGetter           $valueGetter,
+        private DataSerializer               $dataSerializer,
+        private EntityStructureFinder        $entityStructureFinder,
+        private GuidProvider|null            $guidProvider,
+        private MetaDataManager              $metaDataManager,
+        private StoreRecordManager           $recordManager,
+        private StorageManager               $storageManager,
+        private UnitOfWorkManager            $unitOfWorkManager,
+        private ValueGetter                  $valueGetter,
+
+        #[ConfigValue(DefaultOriginalClassStorageStrategy::class)]
+        private OriginalClassStorageStrategy $originalClassStorageStrategy,
     )
     {
     }
@@ -89,7 +94,7 @@ readonly class EntityPersister
         }
 
         if ($blueprint->storeOriginalClass) {
-            $values = service(OriginalClassStorageStrategy::class)->createValuesToStore($blueprint, $entity);
+            $values = $this->originalClassStorageStrategy->createValuesToStore($blueprint, $entity);
             $valuesPerStore = array_merge_recursive($valuesPerStore, $values);
         }
 
