@@ -12,7 +12,7 @@ use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Types\{Collection, Guid};
-use Medas\StorageManager\ConfigOptions\DefaultOriginalClassStorageStrategy;
+use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\StorageManager;
@@ -32,7 +32,7 @@ readonly class EntityPersister
         private UnitOfWorkManager            $unitOfWorkManager,
         private ValueGetter                  $valueGetter,
 
-        #[ConfigValue(DefaultOriginalClassStorageStrategy::class)]
+        #[ConfigValue(DefaultStrategy::class)]
         private OriginalClassStorageStrategy $originalClassStorageStrategy,
     )
     {

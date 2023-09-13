@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Inheritance;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\StorageManager\ConfigOptions\OriginalClassStorage\LinkingStore\StoreNamingStrategy;
+use Medas\StorageManager\Inheritance\LinkinStore\NamingStrategy;
 use Medas\StorageManager\Interfaces\{ActionExecutor, Storage, StorageController};
 use Medas\StorageManager\Structure\Blueprint;
 use Medas\StorageManager\UnitOfWork\ActionSet;
@@ -13,8 +15,11 @@ use Medas\StorageManager\UnitOfWork\ActionSet;
 readonly class LinkingStore implements OriginalClassStorageStrategy
 {
     public function __construct(
-        private StorageController $storageController,
         private ActionExecutor    $actionExecutor,
+        private StorageController $storageController,
+
+        #[ConfigValue(StoreNamingStrategy::class)]
+        private NamingStrategy    $namingStrategy,
     )
     {
     }
@@ -45,7 +50,7 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
             true
         );
 
-        $linkStoreBlueprint->name = $this->determineLinkStoreName($blueprint->name);
+        $linkStoreBlueprint->name = $this->namingStrategy->determine($blueprint->name);
 
         $linkStoreBlueprint
             ->addField($idField)
@@ -58,20 +63,15 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
 
     public function createValuesToStore(Blueprint $blueprint, object $entity): array
     {
-        $storeName = $this->determineLinkStoreName($blueprint->storeRequestingOriginalClassStorage);
+        $storeName = $this->namingStrategy->determine($blueprint->storeRequestingOriginalClassStorage);
 
         return [$storeName => ['entityClass' => $entity::class]];
-    }
-
-    private function determineLinkStoreName(string $sourceTable): string
-    {
-        return $sourceTable . '__original_class';
     }
 
     public function getOriginalClass(Blueprint $blueprint, mixed $id): string
     {
         $actions = $this->storageController->actionBuilders()->get()->build(
-            [$this->storageController->store($this->determineLinkStoreName($blueprint->storeRequestingOriginalClassStorage))],
+            [$this->storageController->store($this->namingStrategy->determine($blueprint->storeRequestingOriginalClassStorage))],
             [$blueprint->idField()->name => $id]
         );
 

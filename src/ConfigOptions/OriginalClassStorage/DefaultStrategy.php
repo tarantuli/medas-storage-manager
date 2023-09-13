@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Medas\StorageManager\ConfigOptions;
+namespace Medas\StorageManager\ConfigOptions\OriginalClassStorage;
 
 use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 use Medas\StorageManager\Inheritance\{LinkingStore, OriginalClassStorageStrategy};
 
 #[Service]
-readonly class DefaultOriginalClassStorageStrategy implements ConfigOption
+readonly class DefaultStrategy implements ConfigOption
 {
     public function __construct(
-        private RootGroup $group,
+        private OriginalClassStorageGroup $group,
     )
     {
     }
@@ -24,7 +24,7 @@ readonly class DefaultOriginalClassStorageStrategy implements ConfigOption
 
     public function name(): string
     {
-        return 'default-original-class-storage-strategy';
+        return 'default-strategy';
     }
 
     public function description(): string

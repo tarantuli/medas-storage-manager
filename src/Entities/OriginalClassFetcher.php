@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\Attributes\ConfigValue;
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\EntityManager\MetaData;
-use Medas\StorageManager\ConfigOptions\DefaultOriginalClassStorageStrategy;
+use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Structure\EntityStructureFinder;
 
@@ -17,7 +16,7 @@ readonly class OriginalClassFetcher implements \Medas\EntityManager\Entities\Ori
     public function __construct(
         private EntityStructureFinder        $entityStructureFinder,
 
-        #[ConfigValue(DefaultOriginalClassStorageStrategy::class)]
+        #[ConfigValue(DefaultStrategy::class)]
         private OriginalClassStorageStrategy $originalClassStorageStrategy,
     )
     {
