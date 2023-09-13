@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConfigOptions\OriginalClassStorage\LinkingStore;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
+use Medas\Core\Interfaces\{ConfigGroup, ConfigOption, Validator};
 use Medas\StorageManager\Inheritance\{LinkinStore\AppendFixedSuffix, LinkinStore\NamingStrategy};
 
 #[Service]
-readonly class StoreNamingStrategy implements ConfigOption
+readonly class StoreNamingStrategy implements ConfigOption, Validator
 {
     public function __construct(
         private LinkingStoreGroup $group,
@@ -30,6 +30,11 @@ readonly class StoreNamingStrategy implements ConfigOption
     public function description(): string
     {
         return 'The default strategy implementation to use to create linking store names';
+    }
+
+    public function isValid(mixed $value): bool
+    {
+        return $value instanceof NamingStrategy;
     }
 
     public function hasDefault(): bool

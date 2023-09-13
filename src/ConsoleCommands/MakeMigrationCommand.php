@@ -10,7 +10,8 @@ use Medas\Console\Formats\Color;
 use Medas\Console\Text;
 use Medas\ConsolePrinter\ConsolePrinter;
 use Medas\Core\Attributes\Service;
-use Medas\StorageManager\ConfigOptions\{EntityDirectory, MigrationDirectory};
+use Medas\EntityManager\ConfigOptions\EntityDirectories;
+use Medas\StorageManager\ConfigOptions\MigrationDirectory;
 use Medas\StorageManager\Migrations\MigrationBuildManager;
 
 #[Service]
@@ -19,7 +20,7 @@ readonly class MakeMigrationCommand extends BaseConsoleCommand
     public function __construct(
         private CommandGroup          $group,
         private ConsolePrinter        $consolePrinter,
-        private EntityDirectory       $entityDirectory,
+        private EntityDirectories $entityDirectories,
         private MigrationBuildManager $migrationBuildManager,
         private MigrationDirectory    $migrationDirectory,
         private OptionController      $optionController,
@@ -45,7 +46,7 @@ readonly class MakeMigrationCommand extends BaseConsoleCommand
     public function process(array $arguments): void
     {
         $filePath = $this->migrationBuildManager->createMigration(
-            $this->optionController->getValue($this->entityDirectory),
+            $this->optionController->getValue($this->entityDirectories),
             $this->optionController->getValue($this->migrationDirectory)
         );
 

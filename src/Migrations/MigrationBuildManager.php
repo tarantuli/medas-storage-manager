@@ -33,9 +33,9 @@ class MigrationBuildManager
     {
     }
 
-    public function createMigration(string $sourceDirectory, string $migrationsDirectory): string|null
+    public function createMigration(array $sourceDirectories, string $migrationsDirectory): string|null
     {
-        $this->createMigrationClass(realpath($sourceDirectory));
+        $this->createMigrationClass($sourceDirectories);
 
         if ($this->migrationNeeded) {
             $this->directoryManager->create($migrationsDirectory);
@@ -48,14 +48,16 @@ class MigrationBuildManager
         return null;
     }
 
-    public function createMigrationClass(string $directory): string|null
+    public function createMigrationClass(array $directories): string|null
     {
-        $directory = realpath($directory);
-
         $this->initializeClass();
         $this->initializeMethods();
-        $this->directoryManager->loadPhpFiles($directory);
-        $this->processEntities($directory);
+
+        foreach ($directories as $directory) {
+            $this->directoryManager->loadPhpFiles($directory);
+        }
+
+        $this->processEntities($directories);
 
         return $this->classCode = $this->migrationNeeded ? $this->phpClassBuilder->build($this->migrationClass) : null;
     }
@@ -94,11 +96,12 @@ class MigrationBuildManager
         $this->undoMethod->body = '';
     }
 
-    private function processEntities(string $directory): void
+    private function processEntities(array $directories): void
     {
         $this->migrationNeeded = false;
+
         foreach (get_declared_classes() as $className) {
-            if (null === $entity = $this->determineStoredEntity($className, $directory)) {
+            if (null === $entity = $this->determineStoredEntity($className, $directories)) {
                 continue;
             }
 
@@ -106,11 +109,24 @@ class MigrationBuildManager
         }
     }
 
-    private function determineStoredEntity(string $className, string $directory): Entity|null
+    private function determineStoredEntity(string $className, array $directories): Entity|null
     {
         $class = new \ReflectionClass($className);
 
-        if (!$class->getFileName() || !str_starts_with($class->getFileName(), $directory)) {
+        if (!$class->getFileName()) {
+            return null;
+        }
+
+        $foundDirectory = false;
+
+        foreach ($directories as $directory) {
+            if (str_starts_with($class->getFileName(), $directory)) {
+                $foundDirectory = true;
+                break;
+            }
+        }
+
+        if (!$foundDirectory) {
             return null;
         }
 

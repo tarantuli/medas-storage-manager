@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConfigOptions\OriginalClassStorage;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
+use Medas\Core\Interfaces\{ConfigGroup, ConfigOption, Validator};
 use Medas\StorageManager\Inheritance\{LinkingStore, OriginalClassStorageStrategy};
 
 #[Service]
-readonly class DefaultStrategy implements ConfigOption
+readonly class DefaultStrategy implements ConfigOption, Validator
 {
     public function __construct(
         private OriginalClassStorageGroup $group,
@@ -30,6 +30,11 @@ readonly class DefaultStrategy implements ConfigOption
     public function description(): string
     {
         return 'The default strategy implementation to use when storing the original class of child entities';
+    }
+
+    public function isValid(mixed $value): bool
+    {
+        return $value instanceof OriginalClassStorageStrategy;
     }
 
     public function hasDefault(): bool

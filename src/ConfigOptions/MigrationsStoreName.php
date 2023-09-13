@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConfigOptions;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
+use Medas\Core\Interfaces\{ConfigGroup, ConfigOption, Validator};
 
 #[Service]
-readonly class EntityDirectory implements ConfigOption
+readonly class MigrationsStoreName implements ConfigOption, Validator
 {
     public function __construct(
         private RootGroup $group,
@@ -23,12 +23,12 @@ readonly class EntityDirectory implements ConfigOption
 
     public function name(): string
     {
-        return 'entity-directory';
+        return 'migrations-store-name';
     }
 
     public function description(): string
     {
-        return 'The directory where entity files reside';
+        return 'The name of the store where executed migrations are registered';
     }
 
     public function isValid(mixed $value): bool
@@ -43,6 +43,6 @@ readonly class EntityDirectory implements ConfigOption
 
     public function default(): string
     {
-        return 'src';
+        return '__migrations';
     }
 }

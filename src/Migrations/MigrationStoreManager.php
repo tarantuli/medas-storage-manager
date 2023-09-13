@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Migrations;
 
-use Medas\ConfigOptions\OptionController;
-use Medas\Core\Attributes\Service;
-use Medas\StorageManager\ConfigOptions\MigrationsStore;
+use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\StorageManager\ConfigOptions\MigrationsStoreName;
 use Medas\StorageManager\Interfaces\Store;
 use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index, Blueprint\Type};
@@ -17,9 +16,10 @@ readonly class MigrationStoreManager
     private Store $store;
 
     public function __construct(
-        private MigrationsStore  $migrationsStore,
-        private OptionController $optionController,
-        private StorageManager   $storageManager,
+        private StorageManager $storageManager,
+
+        #[ConfigValue(MigrationsStoreName::class)]
+        private string         $migrationsStoreName,
     )
     {
     }
@@ -27,10 +27,11 @@ readonly class MigrationStoreManager
     public function get(): Store
     {
         if (!isset($this->store)) {
-            /** @var Store $store */
-            $store = $this->optionController->getValue($this->migrationsStore);
+            $storageController = $this->storageManager->controller();
 
-            if (!$this->storageManager->controller($store->storage())->hasStore($store)) {
+            $store = $storageController->store($this->migrationsStoreName);
+
+            if (!$storageController->hasStore($store)) {
                 $this->build($store);
             }
 
@@ -54,7 +55,7 @@ readonly class MigrationStoreManager
 
         $blueprint->addIndex(new Index([$migrationField]));
 
-        $storageController = $this->storageManager->controller($store->storage());
+        $storageController = $this->storageManager->controller();
 
         $actions = $storageController->actionBuilders()->createStore()
             ->build($store->storage(), $blueprint);
