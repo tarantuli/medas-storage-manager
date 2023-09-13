@@ -50,6 +50,10 @@ class MigrationBuildManager
 
     public function createMigrationClass(array $directories): string|null
     {
+        foreach ($directories as $i => $directory) {
+            $directories[$i] = realpath($directory);
+        }
+
         $this->initializeClass();
         $this->initializeMethods();
 
