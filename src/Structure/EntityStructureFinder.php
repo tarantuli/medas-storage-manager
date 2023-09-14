@@ -6,11 +6,11 @@ namespace Medas\StorageManager\Structure;
 
 use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\CacheManager;
+use Medas\Core\Interfaces\Type;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Properties\Handler;
 use Medas\EntityManager\Types\{Binary, Boolean, Collection, Integer, Relation};
-use Medas\StorageManager\Structure\Blueprint\Type;
 use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
 
 #[Service]
@@ -21,6 +21,7 @@ readonly class EntityStructureFinder
         private EnumHandler       $enumHandler,
         private MetaDataManager   $metaDataManager,
         private ParentStoreFinder $parentStoreFinder,
+        private RelationHandler $relationHandler,
         private TypeHandlerFinder $typeHandlerFinder,
     )
     {
@@ -91,7 +92,7 @@ readonly class EntityStructureFinder
         $typeHandler = $this->typeHandlerFinder->for($property->type);
         $field->type = $typeHandler->fieldType($property);
 
-        if ($field->type === Type::Collection) {
+        if ($field->type === Blueprint\Type::Collection) {
             $this->handleCollectionField($property, $field);
         }
 
@@ -126,14 +127,7 @@ readonly class EntityStructureFinder
         $type = $property->type;
 
         if ($type instanceof Relation) {
-            if (enum_exists($type->entity)) {
-                $type = $this->enumHandler->getPseudoType($type->entity);
-            }
-            else {
-                // Use the type of the id property of the related entity
-                /** @var RelationHandler $typeHandler */
-                $type = $typeHandler->getIdProperty($type->entity)->type;
-            }
+            $type = $this->getRelationType($type);
         }
 
         if ($type instanceof Integer) {
@@ -203,5 +197,21 @@ readonly class EntityStructureFinder
 
         $field->collectionField = $this->fieldFromProperty($collectionProperty);
         $field->collectionStore = $referencedMetaData->entity->store;
+    }
+
+    private function getRelationType(Relation $type): Type
+    {
+        if (enum_exists($type->entity)) {
+            return $this->enumHandler->getPseudoType($type->entity);
+        }
+
+        // Use the type of the id property of the related entity
+        $type = $this->relationHandler->getIdProperty($type->entity)->type;
+
+        if ($type instanceof Relation) {
+            return $this->getRelationType($type);
+        }
+
+        return $type;
     }
 }
