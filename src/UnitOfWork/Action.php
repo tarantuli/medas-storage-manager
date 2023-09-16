@@ -8,8 +8,6 @@ use Medas\StorageManager\Interfaces\{RecordSet, Storage};
 
 interface Action
 {
-    public function recordSet(): RecordSet;
-
     public function storage(): Storage;
 
     public function priority(): Priority;
@@ -19,4 +17,6 @@ interface Action
     public function onComplete(): \Closure|null;
 
     public function setOnComplete(\Closure|null $onComplete): self;
+
+    public function recordSet(): RecordSet|null;
 }

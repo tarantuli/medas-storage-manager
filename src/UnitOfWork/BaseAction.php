@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\UnitOfWork;
 
-use Medas\StorageManager\Interfaces\Storage;
+use Medas\StorageManager\Interfaces\{RecordSet, Storage};
 
 abstract class BaseAction implements Action
 {
@@ -47,5 +47,10 @@ abstract class BaseAction implements Action
         $this->priority = $priority;
 
         return $this;
+    }
+
+    public function recordSet(): RecordSet|null
+    {
+        return null;
     }
 }
