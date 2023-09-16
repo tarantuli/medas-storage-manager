@@ -8,9 +8,14 @@ use Medas\StorageManager\Interfaces\{RecordSet, Storage};
 
 abstract class BaseAction implements Action
 {
-    protected Storage $storage;
-    protected Priority $priority = Priority::Default;
     private \Closure|null $onComplete = null;
+
+    public function __construct(
+        public readonly Storage $storage,
+        protected Priority      $priority = Priority::Default,
+    )
+    {
+    }
 
     public function __serialize(): array
     {
