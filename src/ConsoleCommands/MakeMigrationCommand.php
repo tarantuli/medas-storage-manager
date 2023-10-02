@@ -20,7 +20,7 @@ readonly class MakeMigrationCommand extends BaseConsoleCommand
     public function __construct(
         private CommandGroup          $group,
         private ConsolePrinter        $consolePrinter,
-        private EntityDirectories $entityDirectories,
+        private EntityDirectories     $entityDirectories,
         private MigrationBuildManager $migrationBuildManager,
         private MigrationDirectory    $migrationDirectory,
         private OptionController      $optionController,
