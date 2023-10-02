@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\{EventListener, Service};
-use Medas\EntityManager\Entities\{IdValue, KeyMaker, SelectorRecordsFetcher};
+use Medas\EntityManager\Entities\{IdValue, KeyMaker, ValueFetchers\FetchResult, ValueFetchers\SelectorRecordsFetcher};
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
@@ -29,7 +29,7 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         $this->storeRecords = new RecordCollection();
     }
 
-    public function fetch(Selector $selector = null, array $arguments = []): array
+    public function fetch(Selector $selector = null, array $arguments = []): FetchResult
     {
         $entity = $selector->entity();
         $metaData = $this->metaDataManager->get($entity);
@@ -45,7 +45,7 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
             $record = $this->unserializeAndCache($metaData, $metaData->entity->store, $idValue, $record);
         }
 
-        return $records;
+        return new FetchResult(true, $records);
     }
 
     #[EventListener]

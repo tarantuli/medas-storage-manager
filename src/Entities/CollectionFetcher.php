@@ -6,7 +6,7 @@ namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{Collection, IsLazyLoaded, SettableCollection, TracksChanges};
-use Medas\EntityManager\Entities\FetchResult;
+use Medas\EntityManager\Entities\ValueFetchers\FetchResult;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\Types\{Collection as CollectionType, Relation};
 use Medas\StorageManager\StorageManager;

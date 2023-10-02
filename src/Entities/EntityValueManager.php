@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\{EventListener, Service};
-use Medas\EntityManager\Entities\{EntityValueFetcher, FetchResult, KeyMaker};
+use Medas\EntityManager\Entities\{KeyMaker, ValueFetchers\EntityValueFetcher, ValueFetchers\FetchResult};
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
