@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure;
 
+use Medas\Core\Attributes\ConfigValue;
 use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\CacheManager;
 use Medas\Core\Interfaces\Type;
@@ -11,6 +12,7 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Properties\Handler;
 use Medas\EntityManager\Types\{Binary, Boolean, Collection, Integer, Relation};
+use Medas\StorageManager\ConfigOptions\TypeDefaults\DefaultMaxIntegerValue;
 use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
 
 #[Service]
@@ -21,8 +23,11 @@ readonly class EntityStructureFinder
         private EnumHandler       $enumHandler,
         private MetaDataManager   $metaDataManager,
         private ParentStoreFinder $parentStoreFinder,
-        private RelationHandler $relationHandler,
+        private RelationHandler   $relationHandler,
         private TypeHandlerFinder $typeHandlerFinder,
+
+        #[ConfigValue(DefaultMaxIntegerValue::class)]
+        private int               $defaultMaxIntegerValue,
     )
     {
     }
@@ -132,7 +137,7 @@ readonly class EntityStructureFinder
 
         if ($type instanceof Integer) {
             $field->minValue = $type->minValue;
-            $field->maxValue = $type->maxValue;
+            $field->maxValue = $type->maxValue ?? $this->defaultMaxIntegerValue;
         }
 
         if ($type instanceof Binary) {
