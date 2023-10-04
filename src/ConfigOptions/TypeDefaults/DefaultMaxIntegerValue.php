@@ -38,7 +38,7 @@ readonly class DefaultMaxIntegerValue implements ConfigOption
         return true;
     }
 
-    public function default(): int
+    public function default(): float
     {
         return Integer::UNSIGNED_8_BYTE_MAX;
     }
