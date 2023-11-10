@@ -50,7 +50,8 @@ readonly class EntityValueManager implements EntityValueFetcher
 
     #[EventListener]
     public function clearCaches(
-        /** @noinspection PhpUnusedParameterInspection */ MustClearEntityValueCaches $event,
+        /** @noinspection PhpUnusedParameterInspection */
+        MustClearEntityValueCaches $event,
     ): void
     {
         $this->entityRecords->clear();

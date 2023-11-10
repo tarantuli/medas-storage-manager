@@ -49,7 +49,8 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
 
     #[EventListener]
     public function clearCaches(
-        /** @noinspection PhpUnusedParameterInspection */ MustClearEntityValueCaches $event,
+        /** @noinspection PhpUnusedParameterInspection */
+        MustClearEntityValueCaches $event,
     ): void
     {
         $this->storeRecords->clear();

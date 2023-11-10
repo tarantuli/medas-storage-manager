@@ -103,6 +103,7 @@ readonly class ChangeFinder
 
             if ($fieldValue === Blueprint\Type::Boolean && $currentValue === Blueprint\Type::Integer) {
                 unset($diff[$key]);
+
                 continue;
             }
 
@@ -110,6 +111,7 @@ readonly class ChangeFinder
                 // Compare by backed value
                 if ($fieldValue->value == $currentValue) {
                     unset($diff[$key]);
+
                     continue;
                 }
             }
