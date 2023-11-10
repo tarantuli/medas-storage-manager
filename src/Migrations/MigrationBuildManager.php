@@ -6,12 +6,14 @@ namespace Medas\StorageManager\Migrations;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Attributes\Entity;
-use Medas\FileBuilder\PhpClass\{MethodDefinition, ParameterDefinition, PhpClassDefinition};
-use Medas\FileBuilder\PhpClassBuilder;
+use Medas\FileBuilder\{
+    PhpClass\MethodDefinition,
+    PhpClass\ParameterDefinition,
+    PhpClass\PhpClassDefinition,
+    PhpClassBuilder
+};
 use Medas\FileSystem\DirectoryManager;
-use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\Structure\EntityStructureFinder;
-use Medas\StorageManager\UnitOfWork\UnitOfWork;
+use Medas\StorageManager\{StorageManager, Structure\EntityStructureFinder, UnitOfWork\UnitOfWork};
 
 #[Service]
 class MigrationBuildManager
@@ -19,7 +21,6 @@ class MigrationBuildManager
     private string $className;
     private string|null $classCode;
     private bool $migrationNeeded;
-
     private PhpClassDefinition $migrationClass;
     private MethodDefinition $migrateMethod;
     private MethodDefinition $undoMethod;
@@ -39,7 +40,9 @@ class MigrationBuildManager
 
         if ($this->migrationNeeded) {
             $this->directoryManager->create($migrationsDirectory);
+
             $filePath = $migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php';
+
             file_put_contents($filePath, $this->classCode);
 
             return $filePath;
@@ -70,8 +73,8 @@ class MigrationBuildManager
     {
         $now = \DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''))
             ->format('YmdHisu');
-        $this->className = 'Migration' . $now;
 
+        $this->className = 'Migration' . $now;
         $this->migrationClass = new PhpClassDefinition($this->className, 'Medas\\Migrations');
         $this->migrationClass->implements[] = Migration::class;
     }
@@ -126,6 +129,7 @@ class MigrationBuildManager
         foreach ($directories as $directory) {
             if (str_starts_with($class->getFileName(), $directory)) {
                 $foundDirectory = true;
+
                 break;
             }
         }
@@ -148,9 +152,13 @@ class MigrationBuildManager
     private function processEntity(string $className, Entity $entity): void
     {
         $expectedStructure = $this->entityStructureFinder->find($className);
-
         $needed = $this->storageManager->controller($entity->storage)->migrationBuilder()
-            ->build($this->storageManager->byName($entity->storage), $expectedStructure, $this->migrateMethod, $this->undoMethod);
+            ->build(
+                $this->storageManager->byName($entity->storage),
+                $expectedStructure,
+                $this->migrateMethod,
+                $this->undoMethod
+            );
 
         $this->migrationNeeded = $this->migrationNeeded || $needed;
     }

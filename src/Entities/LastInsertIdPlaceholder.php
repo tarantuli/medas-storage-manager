@@ -6,5 +6,4 @@ namespace Medas\StorageManager\Entities;
 
 class LastInsertIdPlaceholder
 {
-
 }

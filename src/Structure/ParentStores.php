@@ -24,6 +24,7 @@ class ParentStores
             if ($this->stores[$index] !== null) {
                 return $this->stores[$index];
             }
+
             --$index;
         }
 

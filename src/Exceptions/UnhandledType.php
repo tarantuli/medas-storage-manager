@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
-use Medas\Core\Interfaces\Type;
+use Medas\Core\{Exceptions\BaseException, Interfaces\Type};
 
 class UnhandledType extends BaseException
 {

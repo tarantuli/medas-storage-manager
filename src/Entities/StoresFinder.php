@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Cache\MemoryCache;
-use Medas\Core\Attributes\Service;
-use Medas\Core\Serializers\NoopSerializer;
+use Medas\Core\{Attributes\Service, Serializers\NoopSerializer};
 use Medas\EntityManager\MetaData;
-use Medas\StorageManager\Interfaces\Store;
-use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\Structure\EntityStructureFinder;
+use Medas\StorageManager\{Interfaces\Store, StorageManager, Structure\EntityStructureFinder};
 
 #[Service]
 readonly class StoresFinder
@@ -28,10 +25,7 @@ readonly class StoresFinder
     /** @return Store[] */
     public function find(MetaData $metaData): array
     {
-        return $this->cache->get(
-            $metaData->className,
-            fn() => $this->gather($metaData)
-        );
+        return $this->cache->get($metaData->className, fn() => $this->gather($metaData));
     }
 
     /** @return Store[] */

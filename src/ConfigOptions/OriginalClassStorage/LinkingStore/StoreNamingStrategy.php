@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions\OriginalClassStorage\LinkingStore;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{ConfigGroup, ConfigOption, Validator};
-use Medas\StorageManager\Inheritance\{LinkinStore\AppendFixedSuffix, LinkinStore\NamingStrategy};
+use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup, Interfaces\ConfigOption, Interfaces\Validator};
+use Medas\StorageManager\Inheritance\LinkinStore\{AppendFixedSuffix, NamingStrategy};
 
 #[Service]
 readonly class StoreNamingStrategy implements ConfigOption, Validator

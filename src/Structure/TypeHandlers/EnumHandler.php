@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure\TypeHandlers;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\Type;
+use Medas\Core\{Attributes\Service, Interfaces\Type};
 use Medas\EntityManager\Types\{Integer, Text};
 use Medas\StorageManager\Exceptions\EnumIsNotBacked;
 use Medas\StorageManager\Structure\Blueprint\Type as BlueprintType;

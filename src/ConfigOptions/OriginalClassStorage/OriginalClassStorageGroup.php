@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions\OriginalClassStorage;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\ConfigGroup;
+use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup};
 use Medas\StorageManager\ConfigOptions\RootGroup;
 
 #[Service]

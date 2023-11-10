@@ -6,8 +6,7 @@ namespace Medas\StorageManager\Migrations;
 
 use Medas\Core\Attributes\Service;
 use Medas\FileSystem\DirectoryManager;
-use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
+use Medas\StorageManager\{StorageManager, UnitOfWork\UnitOfWork, UnitOfWork\UnitOfWorkExecutor};
 
 #[Service]
 class MigrationManager
@@ -42,6 +41,7 @@ class MigrationManager
             }
 
             $migration->migrate($unitOfWork);
+
             $this->processedMigrations[] = $migration;
         }
 
@@ -56,6 +56,7 @@ class MigrationManager
     private function findMigrations(string $directory): array
     {
         $migrations = [];
+
         foreach (get_declared_classes() as $className) {
             if (null === $migration = $this->createMigration($className, $directory)) {
                 continue;
@@ -102,9 +103,11 @@ class MigrationManager
     private function registerExecution(Migration $migration): void
     {
         $storageController = $this->storageManager->controller();
-
         $actions = $storageController->actionBuilders()->insert()
-            ->build($this->migrationStoreManager->get(), ['migration' => $migration::class, 'migratedAt' => date('Y-m-d H:i:s')]);
+            ->build($this->migrationStoreManager->get(), [
+                'migration' => $migration::class,
+                'migratedAt' => date('Y-m-d H:i:s')
+            ]);
 
         $storageController->actionExecutor()->executeSet($actions);
     }

@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConsoleCommands;
 
 use Medas\ConfigOptions\OptionController;
-use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
-use Medas\Console\Formats\Color;
-use Medas\Console\Text;
+use Medas\Console\{Commands\BaseConsoleCommand, Commands\ConsoleCommandGroup, Formats\Color, Text};
 use Medas\ConsolePrinter\ConsolePrinter;
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\ConfigOptions\EntityDirectories;
-use Medas\StorageManager\ConfigOptions\MigrationDirectory;
-use Medas\StorageManager\Migrations\MigrationBuildManager;
+use Medas\StorageManager\{ConfigOptions\MigrationDirectory, Migrations\MigrationBuildManager};
 
 #[Service]
 readonly class MakeMigrationCommand extends BaseConsoleCommand

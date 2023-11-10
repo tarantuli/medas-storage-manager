@@ -5,21 +5,19 @@ declare(strict_types=1);
 namespace Medas\StorageManager;
 
 use Medas\Core\Attributes\Service;
-use Medas\StorageManager\Interfaces\{Storage, StorageController};
 
 #[Service]
 class StorageManager
 {
-    /** @var Storage[] */
+    /** @var Interfaces\Storage[] */
     private array $storages = [];
+    private Interfaces\Storage $default;
 
-    private Storage $default;
-
-    /** @var StorageController[] */
+    /** @var Interfaces\StorageController[] */
     private array $controllers = [];
     private array $controllerPerStorageName = [];
 
-    public function add(Storage $storage, bool $isDefault = false): void
+    public function add(Interfaces\Storage $storage, bool $isDefault = false): void
     {
         $this->storages[$storage->name()] = $storage;
 
@@ -31,12 +29,12 @@ class StorageManager
         $this->controller($storage);
     }
 
-    public function byName(string $name = null): Storage
+    public function byName(string $name = null): Interfaces\Storage
     {
         return $name === null ? $this->default : $this->storages[$name];
     }
 
-    public function controller(Storage|string $storage = null): StorageController
+    public function controller(Interfaces\Storage|string $storage = null): Interfaces\StorageController
     {
         if ($storage === null) {
             $storage = $this->default;
@@ -49,10 +47,12 @@ class StorageManager
 
         if (!array_key_exists($name, $this->controllerPerStorageName)) {
             $foundController = false;
+
             foreach ($this->controllers as $controller) {
                 if ($controller->handles($storage)) {
                     $this->controllerPerStorageName[$name] = $controller;
                     $foundController = true;
+
                     break;
                 }
             }
@@ -65,7 +65,7 @@ class StorageManager
         return $this->controllerPerStorageName[$name];
     }
 
-    public function registerController(StorageController $controller): void
+    public function registerController(Interfaces\StorageController $controller): void
     {
         $this->controllers[] = $controller;
     }

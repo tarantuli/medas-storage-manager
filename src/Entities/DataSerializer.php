@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\Serializer;
-use Medas\EntityManager\{Exceptions\PropertyDoesNotExist,
+use Medas\Core\{Attributes\Service, Interfaces\Serializer};
+use Medas\EntityManager\{
+    Exceptions\PropertyDoesNotExist,
     MetaData,
     MetaDataManager,
     Properties\Handler,
-    Types\Relation};
-use Medas\StorageManager\Interfaces\Record;
-use Medas\StorageManager\StorageManager;
+    Types\Relation
+};
+use Medas\StorageManager\{Interfaces\Record, StorageManager};
 
 #[Service]
 readonly class DataSerializer

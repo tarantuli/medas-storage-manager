@@ -7,8 +7,7 @@ namespace Medas\StorageManager\ConsoleCommands;
 use Medas\ConfigOptions\OptionController;
 use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
 use Medas\Core\Attributes\Service;
-use Medas\StorageManager\ConfigOptions\MigrationDirectory;
-use Medas\StorageManager\Migrations\MigrationManager;
+use Medas\StorageManager\{ConfigOptions\MigrationDirectory, Migrations\MigrationManager};
 
 #[Service]
 readonly class MigrateCommand extends BaseConsoleCommand
@@ -39,8 +38,6 @@ readonly class MigrateCommand extends BaseConsoleCommand
 
     public function process(array $arguments): void
     {
-        $this->migrationManager->migrate(
-            $this->optionController->getValue($this->migrationDirectory)
-        );
+        $this->migrationManager->migrate($this->optionController->getValue($this->migrationDirectory));
     }
 }

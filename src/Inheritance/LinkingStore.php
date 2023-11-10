@@ -6,7 +6,6 @@ namespace Medas\StorageManager\Inheritance;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\LinkingStore\StoreNamingStrategy;
-use Medas\StorageManager\Inheritance\LinkinStore\NamingStrategy;
 use Medas\StorageManager\Interfaces\{ActionExecutor, Storage, StorageController};
 use Medas\StorageManager\Structure\Blueprint;
 use Medas\StorageManager\UnitOfWork\ActionSet;
@@ -15,11 +14,11 @@ use Medas\StorageManager\UnitOfWork\ActionSet;
 readonly class LinkingStore implements OriginalClassStorageStrategy
 {
     public function __construct(
-        private ActionExecutor    $actionExecutor,
-        private StorageController $storageController,
+        private ActionExecutor             $actionExecutor,
+        private StorageController          $storageController,
 
         #[ConfigValue(StoreNamingStrategy::class)]
-        private NamingStrategy    $namingStrategy,
+        private LinkinStore\NamingStrategy $namingStrategy,
     )
     {
     }
@@ -27,7 +26,6 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
     public function buildStoreActions(Blueprint $blueprint, Storage $storage): ActionSet
     {
         $linkStoreBlueprint = new Blueprint();
-
         $idField = clone $blueprint->primaryIndex()->fields()[0];
         $idField->name = 'id';
         $idField->isGenerated = false;
@@ -45,11 +43,7 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
             isGenerated: false,
         );
 
-        $primaryIndex = new Blueprint\Index(
-            [$idField],
-            true
-        );
-
+        $primaryIndex = new Blueprint\Index([$idField], true);
         $linkStoreBlueprint->name = $this->namingStrategy->determine($blueprint->name);
 
         $linkStoreBlueprint

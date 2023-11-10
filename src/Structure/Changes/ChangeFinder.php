@@ -12,11 +12,7 @@ readonly class ChangeFinder
 {
     public function find(Blueprint $expected, Blueprint $existing): Changes|null
     {
-        $job = new Job(
-            $expected,
-            $existing,
-            new Changes($expected->name)
-        );
+        $job = new Job($expected, $existing, new Changes($expected->name));
 
         $this->checkFields($job);
         $this->checkIndexes($job);
@@ -118,10 +114,9 @@ readonly class ChangeFinder
                 }
             }
 
-            if ($current->hasDefault === false
-                && $field->hasDefault === true
-                && $field->default === null) {
+            if ($current->hasDefault === false && $field->hasDefault === true && $field->default === null) {
                 unset($diff[$key]);
+
                 /** @noinspection PhpUnnecessaryStopStatementInspection */
                 continue;
             }

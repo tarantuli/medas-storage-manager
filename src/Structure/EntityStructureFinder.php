@@ -4,48 +4,44 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure;
 
-use Medas\Core\Attributes\ConfigValue;
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\CacheManager;
-use Medas\Core\Interfaces\Type;
-use Medas\EntityManager\MetaData;
-use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Properties\Handler;
-use Medas\EntityManager\Types\{Binary, Boolean, Collection, Integer, Relation};
+use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\CacheManager, Interfaces\Type};
+use Medas\EntityManager\{
+    MetaData,
+    MetaDataManager,
+    Properties\Handler,
+    Types\Binary,
+    Types\Boolean,
+    Types\Collection,
+    Types\Integer,
+    Types\Relation
+};
 use Medas\StorageManager\ConfigOptions\TypeDefaults\DefaultMaxIntegerValue;
-use Medas\StorageManager\Structure\TypeHandlers\{EnumHandler, RelationHandler};
 
 #[Service]
 readonly class EntityStructureFinder
 {
     public function __construct(
-        private CacheManager      $cacheManager,
-        private EnumHandler       $enumHandler,
-        private MetaDataManager   $metaDataManager,
-        private ParentStoreFinder $parentStoreFinder,
-        private RelationHandler   $relationHandler,
-        private TypeHandlerFinder $typeHandlerFinder,
+        private CacheManager                 $cacheManager,
+        private TypeHandlers\EnumHandler     $enumHandler,
+        private MetaDataManager              $metaDataManager,
+        private ParentStoreFinder            $parentStoreFinder,
+        private TypeHandlers\RelationHandler $relationHandler,
+        private TypeHandlerFinder            $typeHandlerFinder,
 
         #[ConfigValue(DefaultMaxIntegerValue::class)]
-        private int               $defaultMaxIntegerValue,
+        private int                          $defaultMaxIntegerValue,
     )
     {
     }
 
     public function find(string $className): Blueprint
     {
-        return $this->cacheManager->get()->get(
-            [__CLASS__, $className],
-            fn() => $this->compile($className)
-        );
+        return $this->cacheManager->get()->get([__CLASS__, $className], fn() => $this->compile($className));
     }
 
     private function compile(string $className): Blueprint
     {
-        $job = new EntityStructureFinder\Job(
-            $this->metaDataManager->get($className),
-            new Blueprint()
-        );
+        $job = new EntityStructureFinder\Job($this->metaDataManager->get($className), new Blueprint());
 
         $this->findName($job);
         $this->findInheritance($job);
@@ -70,8 +66,8 @@ readonly class EntityStructureFinder
     private function findInheritance(EntityStructureFinder\Job $job): void
     {
         if ($job->blueprint->storeOriginalClass = $job->metaData->inheritance->storeOriginalClass) {
-            $job->blueprint->storeRequestingOriginalClassStorage =
-                $this->metaDataManager->get($job->metaData->inheritance->sharedParentClass)->entity->store;
+            $job->blueprint->storeRequestingOriginalClassStorage
+                = $this->metaDataManager->get($job->metaData->inheritance->sharedParentClass)->entity->store;
         }
     }
 
@@ -80,9 +76,7 @@ readonly class EntityStructureFinder
         $parents = $this->parentStoreFinder->find($job->metaData);
 
         foreach ($job->metaData->properties as $property) {
-            $job->blueprint->addField(
-                $this->fieldFromProperty($property, $parents)
-            );
+            $job->blueprint->addField($this->fieldFromProperty($property, $parents));
         }
     }
 
@@ -156,8 +150,8 @@ readonly class EntityStructureFinder
     private function findPrimaryKey(EntityStructureFinder\Job $job): void
     {
         $index = new Blueprint\Index([], true);
-        $index->addField($job->blueprint->fieldByName($job->metaData->idProperty->name));
 
+        $index->addField($job->blueprint->fieldByName($job->metaData->idProperty->name));
         $job->blueprint->addIndex($index);
     }
 
@@ -169,9 +163,11 @@ readonly class EntityStructureFinder
                 continue;
             }
 
-            $job->blueprint->addIndex(
-                new Blueprint\Index([$job->blueprint->fieldByName($property->name)], false, true)
-            );
+            $job->blueprint->addIndex(new Blueprint\Index(
+                [$job->blueprint->fieldByName($property->name)],
+                false,
+                true
+            ));
         }
     }
 
@@ -192,14 +188,12 @@ readonly class EntityStructureFinder
         $collectionType = $property->type;
         $collectionTypeHandler = $this->typeHandlerFinder->forString($collectionType->contentType);
 
-        if (!$collectionTypeHandler instanceof RelationHandler) {
+        if (!$collectionTypeHandler instanceof TypeHandlers\RelationHandler) {
             return;
         }
 
         $referencedMetaData = $this->metaDataManager->get($collectionType->contentType);
-
         $collectionProperty = $referencedMetaData->idProperty;
-
         $field->collectionField = $this->fieldFromProperty($collectionProperty);
         $field->collectionStore = $referencedMetaData->entity->store;
     }

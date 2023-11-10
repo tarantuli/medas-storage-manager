@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces\Builders;
 
-use Medas\StorageManager\Interfaces\Storage;
-use Medas\StorageManager\Structure\Blueprint;
-use Medas\StorageManager\UnitOfWork\ActionSet;
+use Medas\StorageManager\{Interfaces\Storage, Structure\Blueprint, UnitOfWork\ActionSet};
 
 interface CreateStoreBuilder
 {

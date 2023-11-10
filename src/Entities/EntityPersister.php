@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\Attributes\ConfigValue;
-use Medas\Core\Attributes\Service;
-use Medas\Core\Exceptions\GuidProviderIsNotAvailable;
-use Medas\Core\Interfaces\GuidProvider;
-use Medas\EntityManager\Hydration\ValueGetter;
-use Medas\EntityManager\MetaData;
-use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Types\{Collection, Guid};
+use Medas\Core\{
+    Attributes\ConfigValue,
+    Attributes\Service,
+    Exceptions\GuidProviderIsNotAvailable,
+    Interfaces\GuidProvider
+};
+use Medas\EntityManager\{Hydration\ValueGetter, MetaData, MetaDataManager, Types\Collection, Types\Guid};
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Interfaces\{Storage, Store};
@@ -50,7 +49,9 @@ readonly class EntityPersister
 
             if ($property->isCreationTimestamp || $property->isModificationTimestamp) {
                 $value = new \DateTime();
+
                 $property->reflection->setValue($entity, $value);
+
                 $foundValue = true;
             }
             elseif ($property->reflection->isInitialized($entity)) {
@@ -68,7 +69,9 @@ readonly class EntityPersister
                 }
 
                 $value = $this->guidProvider->create();
+
                 $property->reflection->setValue($entity, $value);
+
                 $foundValue = true;
             }
 
@@ -130,6 +133,7 @@ readonly class EntityPersister
         return function (Storage $storage, mixed $lastInsertId) use ($metaData, $entity) {
             if ($metaData->idProperty->isGeneratedValue) {
                 $value = $lastInsertId ?? $this->storageManager->controller($storage)->lastGeneratedValue();
+
                 $metaData->idProperty->reflection->setValue($entity, $value);
             }
 
@@ -145,12 +149,12 @@ readonly class EntityPersister
             if ($property->isModificationTimestamp) {
                 $value = new \DateTime();
                 $changedValues[$property->name] = $value;
+
                 $property->reflection->setValue($entity, $value);
             }
 
             if ($property->type instanceof Collection) {
                 $this->queueCollectionUpdate($unitOfWork, $metaData, $entity, $property);
-
                 unset($changedValues[$property->name]);
             }
         }
@@ -161,15 +165,10 @@ readonly class EntityPersister
         }
 
         $this->dataSerializer->serializeArray($metaData, $changedValues);
+
         $idValues = $this->getIdValues($entity, $metaData);
 
-        $this->unitOfWorkManager->queueUpdate(
-            $unitOfWork,
-            $this->getStore($metaData),
-            $changedValues,
-            $idValues
-        );
-
+        $this->unitOfWorkManager->queueUpdate($unitOfWork, $this->getStore($metaData), $changedValues, $idValues);
         $this->recordManager->updateRecord($metaData, $changedValues, $idValues);
     }
 
@@ -178,12 +177,7 @@ readonly class EntityPersister
         $metaData = $this->metaDataManager->get($entity::class);
         $idValues = $this->getIdValues($entity, $metaData);
 
-        $this->unitOfWorkManager->queueDelete(
-            $unitOfWork,
-            $this->getStore($metaData),
-            $idValues
-        );
-
+        $this->unitOfWorkManager->queueDelete($unitOfWork, $this->getStore($metaData), $idValues);
         $this->recordManager->removeRecord($metaData, $idValues);
     }
 
@@ -195,7 +189,12 @@ readonly class EntityPersister
         return [$metaData->idProperty->name => $serializeValue];
     }
 
-    private function queueCollectionUpdate(UnitOfWork $unitOfWork, MetaData $metaData, object $entity, MetaData\Property $property): void
+    private function queueCollectionUpdate(
+        UnitOfWork        $unitOfWork,
+        MetaData          $metaData,
+        object            $entity,
+        MetaData\Property $property
+    ): void
     {
         if (!$property->type instanceof Collection) {
             throw new \Exception('property type should be a Collection instance');

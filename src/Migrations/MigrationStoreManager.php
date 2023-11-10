@@ -28,7 +28,6 @@ readonly class MigrationStoreManager
     {
         if (!isset($this->store)) {
             $storageController = $this->storageManager->controller();
-
             $store = $storageController->store($this->migrationsStoreName);
 
             if (!$storageController->hasStore($store)) {
@@ -44,19 +43,15 @@ readonly class MigrationStoreManager
     private function build(Store $store): void
     {
         $blueprint = new Blueprint();
-
         $blueprint->name = $store->name();
-
         $migrationField = new Field('migration', Type::Text);
         $datetimeField = new Field('migratedAt', Type::DateTime);
 
         $blueprint->addField($migrationField);
         $blueprint->addField($datetimeField);
-
         $blueprint->addIndex(new Index([$migrationField]));
 
         $storageController = $this->storageManager->controller();
-
         $actions = $storageController->actionBuilders()->createStore()
             ->build($store->storage(), $blueprint);
 

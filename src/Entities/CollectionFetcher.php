@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{Collection, IsLazyLoaded, SettableCollection, TracksChanges};
+use Medas\Core\{
+    Attributes\Service,
+    Interfaces\Collection,
+    Interfaces\IsLazyLoaded,
+    Interfaces\SettableCollection,
+    Interfaces\TracksChanges
+};
 use Medas\EntityManager\Entities\ValueFetchers\FetchResult;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\Types\{Collection as CollectionType, Relation};
@@ -30,9 +35,7 @@ readonly class CollectionFetcher
         $collection = new $propertyType->collectionType();
 
         if ($collection instanceof IsLazyLoaded) {
-            $collection->setLoader(
-                fn() => $this->fetchCollectionItems($metaData, $entity, $property)
-            );
+            $collection->setLoader(fn() => $this->fetchCollectionItems($metaData, $entity, $property));
         }
         elseif ($collection instanceof SettableCollection) {
             $collection->setData($this->fetchCollectionItems($metaData, $entity, $property));
@@ -65,8 +68,11 @@ readonly class CollectionFetcher
 
         $serializer = $this->storageManager->controller($metaData->entity->storage)->serializer();
         $items = [];
+
         foreach ($this->storesFinder->find($metaData) as $store) {
-            $fetcher = $this->storageManager->controller($store->storage())->recordFetchers()->collectionRecordFetcher();
+            $fetcher
+                = $this->storageManager->controller($store->storage())->recordFetchers()->collectionRecordFetcher();
+
             $records = $fetcher->fetch($store, $entity, $property);
 
             foreach ($records as $record) {

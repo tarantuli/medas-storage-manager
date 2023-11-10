@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
-use Medas\StorageManager\{Interfaces\Store};
+use Medas\StorageManager\Interfaces\Store;
 
 class StoresDontHaveProperty extends BaseException
 {

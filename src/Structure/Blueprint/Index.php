@@ -27,8 +27,10 @@ class Index
 
     public function hash(): string
     {
-        return array_reduce($this->fields, fn(string $carry, Field $field) => $carry . $field->name . "\0", '')
-            . (int) $this->isPrimary
-            . (int) $this->isUnique;
+        return array_reduce(
+            $this->fields,
+            fn(string $carry, Field $field) => $carry . $field->name . "\0",
+            ''
+        ) . (int) $this->isPrimary . (int) $this->isUnique;
     }
 }

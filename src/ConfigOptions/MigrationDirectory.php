@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
+use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup, Interfaces\ConfigOption};
 
 #[Service]
 readonly class MigrationDirectory implements ConfigOption

@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\Type;
+use Medas\Core\{Attributes\Service, Interfaces\Type};
 use Medas\EntityManager\Types\{Binary, Boolean, Collection, DateTime, FloatingPoint, Integer, Relation, Text};
-use Medas\StorageManager\Exceptions\UnhandledType;
-use Medas\StorageManager\Exceptions\UnhandledTypeString;
-use Medas\StorageManager\Structure\TypeHandlers\TypeHandler;
+use Medas\StorageManager\Exceptions\{UnhandledType, UnhandledTypeString};
 
 #[Service]
 readonly class TypeHandlerFinder
@@ -27,7 +24,7 @@ readonly class TypeHandlerFinder
     {
     }
 
-    public function for(Type $type): TypeHandler
+    public function for(Type $type): TypeHandlers\TypeHandler
     {
         // Order matters, don't sort by name
         return match (true) {
@@ -43,7 +40,7 @@ readonly class TypeHandlerFinder
         };
     }
 
-    public function forString(string $type): TypeHandler
+    public function forString(string $type): TypeHandlers\TypeHandler
     {
         return match (true) {
             $type === 'bool' => $this->booleanHandler,

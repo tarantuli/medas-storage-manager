@@ -9,7 +9,7 @@ use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\Core\AsSingleton;
 use Medas\EntityManager\EntityManagerPackage;
 use Medas\FileBuilder\FileBuilderPackage;
-use Medas\ServiceManager\{BasePackage};
+use Medas\ServiceManager\BasePackage;
 
 class StorageManagerPackage extends BasePackage
 {

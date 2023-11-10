@@ -10,8 +10,7 @@ use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
-use Medas\StorageManager\Interfaces\{Record, Store};
-use Medas\StorageManager\StorageManager;
+use Medas\StorageManager\{Interfaces\Record, Interfaces\Store, StorageManager};
 
 #[Service]
 readonly class StoreRecordManager implements SelectorRecordsFetcher
@@ -65,7 +64,6 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         }
 
         $controller = $this->storageManager->controller($store->storage());
-
         $actionSet = $controller->actionBuilders()
             ->get()->build([$store], [$metaData->idProperty->name => $idValue]);
 
@@ -76,17 +74,22 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         return $this->unserializeAndCache($metaData, $store->name(), $idValue, $record);
     }
 
-    private function unserializeAndCache(MetaData $metaData, string $storeName, mixed $idValue, Record|null $record): Record|null
+    private function unserializeAndCache(
+        MetaData    $metaData,
+        string      $storeName,
+        mixed       $idValue,
+        Record|null $record
+    ): Record|null
     {
         $key = $this->keyMaker->get($storeName, $idValue);
 
         if ($record === null) {
             $this->storeRecords->offsetSet($key, null);
+
             return null;
         }
 
         $this->dataSerializer->unserializeArray($metaData, $record);
-
         $this->storeRecords->offsetSet($key, $record);
 
         return $record;

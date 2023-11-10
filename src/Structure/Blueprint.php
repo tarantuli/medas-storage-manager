@@ -7,13 +7,9 @@ namespace Medas\StorageManager\Structure;
 class Blueprint
 {
     public string $name;
-
     public string|null $parent;
-
     public bool $storeOriginalClass = false;
-
     public string $storeRequestingOriginalClassStorage;
-
     public string $originalEntityClassStorageStrategy;
 
     /** @var Blueprint\Field[] */
@@ -93,6 +89,9 @@ class Blueprint
 
     public function foreignKeysByHash(array $hashes): array
     {
-        return array_values(array_filter($this->foreignKeys, fn($foreignKey) => in_array($foreignKey->hash(), $hashes, true)));
+        return array_values(array_filter(
+            $this->foreignKeys,
+            fn($foreignKey) => in_array($foreignKey->hash(), $hashes, true)
+        ));
     }
 }

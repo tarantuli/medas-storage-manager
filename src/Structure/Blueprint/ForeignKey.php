@@ -17,8 +17,6 @@ class ForeignKey
 
     public function hash(): string
     {
-        return $this->field . "\0"
-            . $this->foreignEntity . "\0"
-            . $this->foreignField;
+        return $this->field . "\0" . $this->foreignEntity . "\0" . $this->foreignField;
     }
 }

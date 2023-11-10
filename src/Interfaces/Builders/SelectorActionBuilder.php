@@ -10,5 +10,4 @@ use Medas\StorageManager\UnitOfWork\ActionSet;
 interface SelectorActionBuilder
 {
     public function build(Selector $selector, array $arguments): ActionSet;
-
 }

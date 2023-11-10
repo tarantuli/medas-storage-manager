@@ -10,7 +10,6 @@ use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\Types\Collection as CollectionType;
-use Medas\StorageManager\Entities\Exceptions\StoresDontHaveProperty;
 use Medas\StorageManager\Interfaces\Record;
 
 #[Service]
@@ -46,7 +45,7 @@ readonly class EntityValueManager implements EntityValueFetcher
             return new FetchResult(true, $record[$property->name]);
         }
 
-        throw new StoresDontHaveProperty($this->storesFinder->find($metaData), $property->name);
+        throw new Exceptions\StoresDontHaveProperty($this->storesFinder->find($metaData), $property->name);
     }
 
     #[EventListener]

@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\UnitOfWork;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\ManagedCollection;
+use Medas\Core\{Attributes\Service, Interfaces\ManagedCollection};
 use Medas\EntityManager\Types\Collection;
-use Medas\StorageManager\Interfaces\Store;
-use Medas\StorageManager\StorageManager;
+use Medas\StorageManager\{Interfaces\Store, StorageManager};
 
 #[Service]
 readonly class UnitOfWorkManager
@@ -46,7 +44,6 @@ readonly class UnitOfWorkManager
             }
 
             $action->setOnComplete($onComplete);
-
             $unitOfWork->addAction($action);
         }
     }
@@ -61,7 +58,14 @@ readonly class UnitOfWorkManager
         }
     }
 
-    public function queueCollectionUpdate(UnitOfWork $unitOfWork, Store $store, object $entity, string $name, Collection $type, ManagedCollection $values): void
+    public function queueCollectionUpdate(
+        UnitOfWork        $unitOfWork,
+        Store             $store,
+        object            $entity,
+        string            $name,
+        Collection        $type,
+        ManagedCollection $values
+    ): void
     {
         $actions = $this->storageManager->controller($store->storage())->actionBuilders()->collectionUpdate()
             ->build($store, $entity, $name, $type, $values);

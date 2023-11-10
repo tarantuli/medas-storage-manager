@@ -22,6 +22,7 @@ class UnitOfWork
     public function addAction(Action $action): void
     {
         $this->storages->attach($action->storage());
+
         $this->actions[] = $action;
     }
 
