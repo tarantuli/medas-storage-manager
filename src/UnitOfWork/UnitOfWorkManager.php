@@ -44,6 +44,7 @@ readonly class UnitOfWorkManager
             }
 
             $action->setOnComplete($onComplete);
+
             $unitOfWork->addAction($action);
         }
     }

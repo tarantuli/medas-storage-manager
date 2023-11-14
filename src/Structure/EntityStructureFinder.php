@@ -152,6 +152,7 @@ readonly class EntityStructureFinder
         $index = new Blueprint\Index([], true);
 
         $index->addField($job->blueprint->fieldByName($job->metaData->idProperty->name));
+
         $job->blueprint->addIndex($index);
     }
 

@@ -155,6 +155,7 @@ readonly class EntityPersister
 
             if ($property->type instanceof Collection) {
                 $this->queueCollectionUpdate($unitOfWork, $metaData, $entity, $property);
+
                 unset($changedValues[$property->name]);
             }
         }

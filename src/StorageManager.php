@@ -26,6 +26,7 @@ class StorageManager
         }
 
         unset($this->controllerPerStorageName[$storage->name()]);
+
         $this->controller($storage);
     }
 
