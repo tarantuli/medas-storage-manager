@@ -11,10 +11,12 @@ class StorageManager
 {
     /** @var Interfaces\Storage[] */
     private array $storages = [];
+
     private Interfaces\Storage $default;
 
     /** @var Interfaces\StorageController[] */
     private array $controllers = [];
+
     private array $controllerPerStorageName = [];
 
     public function add(Interfaces\Storage $storage, bool $isDefault = false): void
