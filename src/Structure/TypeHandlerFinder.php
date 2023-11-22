@@ -5,7 +5,16 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Structure;
 
 use Medas\Core\{Attributes\Service, Interfaces\Type};
-use Medas\EntityManager\Types\{Binary, Boolean, Collection, DateTime, FloatingPoint, Integer, Relation, Text};
+use Medas\EntityManager\Types\{
+    Binary,
+    Boolean,
+    Collection,
+    DateTime,
+    FloatingPoint,
+    Integer,
+    Relation,
+    Text
+};
 use Medas\StorageManager\Exceptions\{UnhandledType, UnhandledTypeString};
 
 #[Service]

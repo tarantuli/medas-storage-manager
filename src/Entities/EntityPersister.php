@@ -10,7 +10,13 @@ use Medas\Core\{
     Exceptions\GuidProviderIsNotAvailable,
     Interfaces\GuidProvider
 };
-use Medas\EntityManager\{Hydration\ValueGetter, MetaData, MetaDataManager, Types\Collection, Types\Guid};
+use Medas\EntityManager\{
+    Hydration\ValueGetter,
+    MetaData,
+    MetaDataManager,
+    Types\Collection,
+    Types\Guid
+};
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Interfaces\{Storage, Store};
@@ -169,7 +175,13 @@ readonly class EntityPersister
 
         $idValues = $this->getIdValues($entity, $metaData);
 
-        $this->unitOfWorkManager->queueUpdate($unitOfWork, $this->getStore($metaData), $changedValues, $idValues);
+        $this->unitOfWorkManager->queueUpdate(
+            $unitOfWork,
+            $this->getStore($metaData),
+            $changedValues,
+            $idValues
+        );
+
         $this->recordManager->updateRecord($metaData, $changedValues, $idValues);
     }
 
@@ -185,7 +197,12 @@ readonly class EntityPersister
     private function getIdValues(object $entity, MetaData $metaData): array
     {
         $idValue = $this->valueGetter->getValue($entity, $metaData->idProperty);
-        $serializeValue = $this->dataSerializer->serializeValue($metaData, $metaData->idProperty, $idValue);
+
+        $serializeValue = $this->dataSerializer->serializeValue(
+            $metaData,
+            $metaData->idProperty,
+            $idValue
+        );
 
         return [$metaData->idProperty->name => $serializeValue];
     }

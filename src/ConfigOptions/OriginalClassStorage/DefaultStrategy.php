@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions\OriginalClassStorage;
 
-use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup, Interfaces\ConfigOption, Interfaces\Validator};
+use Medas\Core\{
+    Attributes\Service,
+    Interfaces\ConfigGroup,
+    Interfaces\ConfigOption,
+    Interfaces\Validator
+};
 use Medas\StorageManager\Inheritance\{LinkingStore, OriginalClassStorageStrategy};
 
 #[Service]

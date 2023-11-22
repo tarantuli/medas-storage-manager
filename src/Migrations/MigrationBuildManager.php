@@ -66,7 +66,9 @@ class MigrationBuildManager
 
         $this->processEntities($directories);
 
-        return $this->classCode = $this->migrationNeeded ? $this->phpClassBuilder->build($this->migrationClass) : null;
+        return $this->classCode = $this->migrationNeeded
+            ? $this->phpClassBuilder->build($this->migrationClass)
+            : null;
     }
 
     private function initializeClass(): void

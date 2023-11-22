@@ -27,7 +27,11 @@ readonly class ChangeFlusher implements Flusher
         }
 
         foreach ($changes->updatedEntities() as $entity) {
-            $this->entityPersister->prepareUpdate($entity, $changes->entityChanges($entity), $unitOfWork);
+            $this->entityPersister->prepareUpdate(
+                $entity,
+                $changes->entityChanges($entity),
+                $unitOfWork
+            );
         }
 
         foreach ($changes->deletedEntities() as $entity) {

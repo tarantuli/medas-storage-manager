@@ -52,7 +52,10 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
             ->addIndex($primaryIndex)
             ->addForeignKey($idForeignKey);
 
-        return $this->storageController->migrationBuilder()->buildActions($storage, $linkStoreBlueprint);
+        return $this->storageController->migrationBuilder()->buildActions(
+            $storage,
+            $linkStoreBlueprint
+        );
     }
 
     public function createValuesToStore(Blueprint $blueprint, object $entity): array

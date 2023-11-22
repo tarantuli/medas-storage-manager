@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\EntityManager\Entities\ValueFetchers\{FetchResult, OriginalClassFetcher as OriginalClassFetcherInterface};
+use Medas\EntityManager\Entities\ValueFetchers\{
+    FetchResult,
+    OriginalClassFetcher as OriginalClassFetcherInterface
+};
 use Medas\EntityManager\MetaData;
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
@@ -27,6 +30,9 @@ readonly class OriginalClassFetcher implements OriginalClassFetcherInterface
     {
         $blueprint = $this->entityStructureFinder->find($metaData->className);
 
-        return new FetchResult(true, $this->originalClassStorageStrategy->getOriginalClass($blueprint, $id));
+        return new FetchResult(
+            true,
+            $this->originalClassStorageStrategy->getOriginalClass($blueprint, $id)
+        );
     }
 }

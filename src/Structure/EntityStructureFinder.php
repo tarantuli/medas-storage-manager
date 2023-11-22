@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure;
 
-use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\CacheManager, Interfaces\Type};
+use Medas\Core\{
+    Attributes\ConfigValue,
+    Attributes\Service,
+    Interfaces\CacheManager,
+    Interfaces\Type
+};
 use Medas\EntityManager\{
     MetaData,
     MetaDataManager,
@@ -36,12 +41,18 @@ readonly class EntityStructureFinder
 
     public function find(string $className): Blueprint
     {
-        return $this->cacheManager->get()->get([__CLASS__, $className], fn() => $this->compile($className));
+        return $this->cacheManager->get()->get(
+            [__CLASS__, $className],
+            fn() => $this->compile($className)
+        );
     }
 
     private function compile(string $className): Blueprint
     {
-        $job = new EntityStructureFinder\Job($this->metaDataManager->get($className), new Blueprint());
+        $job = new EntityStructureFinder\Job(
+            $this->metaDataManager->get($className),
+            new Blueprint()
+        );
 
         $this->findName($job);
         $this->findInheritance($job);

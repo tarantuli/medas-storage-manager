@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\{EventListener, Service};
-use Medas\EntityManager\Entities\{KeyMaker, ValueFetchers\EntityValueFetcher, ValueFetchers\FetchResult};
+use Medas\EntityManager\Entities\{
+    KeyMaker,
+    ValueFetchers\EntityValueFetcher,
+    ValueFetchers\FetchResult
+};
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
@@ -45,7 +49,10 @@ readonly class EntityValueManager implements EntityValueFetcher
             return new FetchResult(true, $record[$property->name]);
         }
 
-        throw new Exceptions\StoresDontHaveProperty($this->storesFinder->find($metaData), $property->name);
+        throw new Exceptions\StoresDontHaveProperty(
+            $this->storesFinder->find($metaData),
+            $property->name
+        );
     }
 
     #[EventListener]
