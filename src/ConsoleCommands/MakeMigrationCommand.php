@@ -50,7 +50,10 @@ readonly class MakeMigrationCommand extends BaseConsoleCommand
         $this->consolePrinter->printEol();
 
         $filePath
-            ? $this->consolePrinter->print(new Text('created migration file '), new Text($filePath, Color::LightYellow))
+            ? $this->consolePrinter->print(
+                new Text('created migration file '),
+                new Text($filePath, Color::LightYellow)
+            )
             : $this->consolePrinter->print(new Text('no need to create a migration file', Color::LightGray));
     }
 }
