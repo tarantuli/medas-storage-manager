@@ -61,7 +61,7 @@ class StorageManager
             }
 
             if (!$foundController) {
-                throw new \Exception('no controller found for ' . $name);
+                throw new Exceptions\NoControllerFoundForStorage($storage);
             }
         }
 
