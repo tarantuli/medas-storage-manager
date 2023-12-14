@@ -52,12 +52,14 @@ class StorageManager
             $foundController = false;
 
             foreach ($this->controllers as $controller) {
-                if ($controller->handles($storage)) {
-                    $this->controllerPerStorageName[$name] = $controller;
-                    $foundController = true;
-
-                    break;
+                if (!$controller->handles($storage)) {
+                    continue;
                 }
+
+                $this->controllerPerStorageName[$name] = $controller;
+                $foundController = true;
+
+                break;
             }
 
             if (!$foundController) {
