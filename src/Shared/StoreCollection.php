@@ -29,4 +29,11 @@ abstract class StoreCollection
 
         return $this->stores[$databaseName][$storeName];
     }
+
+    public function delete(Storage $storage, Store $store): void
+    {
+        if (isset($this->stores[$storage->name()][$store->name()])) {
+            unset($this->stores[$storage->name()][$store->name()]);
+        }
+    }
 }
