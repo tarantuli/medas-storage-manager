@@ -23,6 +23,7 @@ class Blueprint
 
     public function addField(Blueprint\Field $field): self
     {
+        $field->store = $this->name;
         $this->fields[] = $field;
 
         return $this;
