@@ -25,42 +25,64 @@ readonly class StoreManager
         return $selector->lastRecordSet;
     }
 
-    public function insert(Interfaces\Store $store, array $values): Interfaces\RecordSet|null
+    public function insert(Interfaces\Store $store, array $values, bool $commit = true): Interfaces\RecordSet|null
     {
         $controller = $this->storageManager->controller($store->storage());
         $selector = $controller->actionBuilders()->insert()->build($store, $values);
 
         $controller->actionExecutor()->executeSet($selector);
 
+        if ($commit) {
+            $controller->transaction($store->storage())->commit();
+        }
+
         return $selector->lastRecordSet;
     }
 
-    public function update(Interfaces\Store $store, array $updates, array $conditions): Interfaces\RecordSet|null
+    public function update(
+        Interfaces\Store $store,
+        array            $updates,
+        array            $conditions,
+        bool             $commit = true
+    ): Interfaces\RecordSet|null
     {
         $controller = $this->storageManager->controller($store->storage());
         $selector = $controller->actionBuilders()->update()->build($store, $updates, $conditions);
 
         $controller->actionExecutor()->executeSet($selector);
 
+        if ($commit) {
+            $controller->transaction($store->storage())->commit();
+        }
+
         return $selector->lastRecordSet;
     }
 
-    public function upsert(Interfaces\Store $store, array $updates, array $conditions): Interfaces\RecordSet|null
+    public function upsert(
+        Interfaces\Store $store,
+        array            $updates,
+        array            $conditions,
+        bool             $commit = true
+    ): Interfaces\RecordSet|null
     {
         if ($this->fetch($store, $conditions)->hasRecords()) {
-            return $this->update($store, $updates, $conditions);
+            return $this->update($store, $updates, $conditions, $commit);
         }
         else {
-            return $this->insert($store, array_merge($conditions, $updates));
+            return $this->insert($store, array_merge($conditions, $updates), $commit);
         }
     }
 
-    public function delete(Interfaces\Store $store, array $conditions): Interfaces\RecordSet|null
+    public function delete(Interfaces\Store $store, array $conditions, bool $commit = true): Interfaces\RecordSet|null
     {
         $controller = $this->storageManager->controller($store->storage());
         $selector = $controller->actionBuilders()->delete()->build($store, $conditions);
 
         $controller->actionExecutor()->executeSet($selector);
+
+        if ($commit) {
+            $controller->transaction($store->storage())->commit();
+        }
 
         return $selector->lastRecordSet;
     }
