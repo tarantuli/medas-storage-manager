@@ -125,11 +125,6 @@ readonly class EntityPersister
         }
     }
 
-    private function getStore(MetaData $metaData): Store
-    {
-        return $this->storageManager->controller($metaData->entity->storage)->store($metaData->entity->store);
-    }
-
     private function generatedValueSetter(MetaData $metaData, object $entity): \Closure|null
     {
         if (!$metaData->idProperty) {
@@ -185,6 +180,27 @@ readonly class EntityPersister
         $this->recordManager->updateRecord($metaData, $changedValues, $idValues);
     }
 
+    private function queueCollectionUpdate(
+        UnitOfWork        $unitOfWork,
+        MetaData          $metaData,
+        object            $entity,
+        MetaData\Property $property
+    ): void
+    {
+        if (!$property->type instanceof Collection) {
+            throw new \Exception('property type should be a Collection instance');
+        }
+
+        $this->unitOfWorkManager->queueCollectionUpdate(
+            $unitOfWork,
+            $this->getStore($metaData),
+            $entity,
+            $property->name,
+            $property->type,
+            $property->reflection->getValue($entity)
+        );
+    }
+
     public function prepareDelete(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
@@ -207,24 +223,8 @@ readonly class EntityPersister
         return [$metaData->idProperty->name => $serializeValue];
     }
 
-    private function queueCollectionUpdate(
-        UnitOfWork        $unitOfWork,
-        MetaData          $metaData,
-        object            $entity,
-        MetaData\Property $property
-    ): void
+    private function getStore(MetaData $metaData): Store
     {
-        if (!$property->type instanceof Collection) {
-            throw new \Exception('property type should be a Collection instance');
-        }
-
-        $this->unitOfWorkManager->queueCollectionUpdate(
-            $unitOfWork,
-            $this->getStore($metaData),
-            $entity,
-            $property->name,
-            $property->type,
-            $property->reflection->getValue($entity)
-        );
+        return $this->storageManager->controller($metaData->entity->storage)->store($metaData->entity->store);
     }
 }

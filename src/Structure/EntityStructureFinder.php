@@ -91,6 +91,42 @@ readonly class EntityStructureFinder
         }
     }
 
+    private function findPrimaryKey(EntityStructureFinder\Job $job): void
+    {
+        $index = new Blueprint\Index([], true);
+
+        $index->addField($job->blueprint->fieldByName($job->metaData->idProperty->name));
+
+        $job->blueprint->addIndex($index);
+    }
+
+    private function findKeys(EntityStructureFinder\Job $job): void
+    {
+        // Unique values
+        foreach ($job->metaData->properties as $property) {
+            if (!$property->isUnique) {
+                continue;
+            }
+
+            $job->blueprint->addIndex(new Blueprint\Index(
+                [$job->blueprint->fieldByName($property->name)],
+                false,
+                true
+            ));
+        }
+    }
+
+    private function findForeignKeys(EntityStructureFinder\Job $job): void
+    {
+        foreach ($job->metaData->properties as $property) {
+            $handler = $this->typeHandlerFinder->for($property->type);
+
+            if ($foreignKey = $handler->foreignKey($property)) {
+                $job->blueprint->addForeignKey($foreignKey);
+            }
+        }
+    }
+
     public function fieldFromProperty(MetaData\Property $property, ParentStores $parentStores = null): Blueprint\Field
     {
         $field = new Blueprint\Field($property->name, Blueprint\Type::Text);
@@ -156,42 +192,6 @@ readonly class EntityStructureFinder
         }
 
         return $field;
-    }
-
-    private function findPrimaryKey(EntityStructureFinder\Job $job): void
-    {
-        $index = new Blueprint\Index([], true);
-
-        $index->addField($job->blueprint->fieldByName($job->metaData->idProperty->name));
-
-        $job->blueprint->addIndex($index);
-    }
-
-    private function findKeys(EntityStructureFinder\Job $job): void
-    {
-        // Unique values
-        foreach ($job->metaData->properties as $property) {
-            if (!$property->isUnique) {
-                continue;
-            }
-
-            $job->blueprint->addIndex(new Blueprint\Index(
-                [$job->blueprint->fieldByName($property->name)],
-                false,
-                true
-            ));
-        }
-    }
-
-    private function findForeignKeys(EntityStructureFinder\Job $job): void
-    {
-        foreach ($job->metaData->properties as $property) {
-            $handler = $this->typeHandlerFinder->for($property->type);
-
-            if ($foreignKey = $handler->foreignKey($property)) {
-                $job->blueprint->addForeignKey($foreignKey);
-            }
-        }
     }
 
     private function handleCollectionField(MetaData\Property $property, Blueprint\Field $field): void

@@ -43,35 +43,6 @@ readonly class ChangeFinder
         }
     }
 
-    private function checkIndexes(Job $job): void
-    {
-        foreach ($job->expected->indexes as $index) {
-            if (!$job->existing->indexByHash($index->hash())) {
-                $job->changes->indexes[] = $index;
-            }
-
-            $job->foundChanges = true;
-        }
-    }
-
-    private function checkForeignKeys(Job $job): void
-    {
-        foreach ($job->expected->foreignKeys as $foreignKey) {
-            if ($current = $job->existing->foreignKeyByHash($foreignKey->hash())) {
-                if ($this->areForeignKeysComparable($foreignKey, $current)) {
-                    continue;
-                }
-
-                $job->changes->changeForeignKey[] = $foreignKey;
-            }
-            else {
-                $job->changes->addForeignKey[] = $foreignKey;
-            }
-
-            $job->foundChanges = true;
-        }
-    }
-
     private function areFieldsComparable(Blueprint\Field $field, Blueprint\Field $current): bool
     {
         $diff = array_udiff_assoc((array) $field, (array) $current, fn($a, $b) => $a <=> $b);
@@ -125,6 +96,35 @@ readonly class ChangeFinder
         }
 
         return $diff === [];
+    }
+
+    private function checkIndexes(Job $job): void
+    {
+        foreach ($job->expected->indexes as $index) {
+            if (!$job->existing->indexByHash($index->hash())) {
+                $job->changes->indexes[] = $index;
+            }
+
+            $job->foundChanges = true;
+        }
+    }
+
+    private function checkForeignKeys(Job $job): void
+    {
+        foreach ($job->expected->foreignKeys as $foreignKey) {
+            if ($current = $job->existing->foreignKeyByHash($foreignKey->hash())) {
+                if ($this->areForeignKeysComparable($foreignKey, $current)) {
+                    continue;
+                }
+
+                $job->changes->changeForeignKey[] = $foreignKey;
+            }
+            else {
+                $job->changes->addForeignKey[] = $foreignKey;
+            }
+
+            $job->foundChanges = true;
+        }
     }
 
     private function areForeignKeysComparable(Blueprint\ForeignKey $foreignKey, Blueprint\ForeignKey $current): bool

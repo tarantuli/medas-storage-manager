@@ -57,11 +57,6 @@ readonly class DataSerializer
         return $value;
     }
 
-    private function getStorageSerializer(MetaData $metaData): Serializer
-    {
-        return $this->storageManager->controller($metaData->entity->storage)->serializer();
-    }
-
     public function serializeArray(MetaData $metaData, iterable &$data): void
     {
         foreach ($data as $key => $value) {
@@ -79,5 +74,10 @@ readonly class DataSerializer
         }
 
         return $this->getStorageSerializer($metaData)->serialize($value);
+    }
+
+    private function getStorageSerializer(MetaData $metaData): Serializer
+    {
+        return $this->storageManager->controller($metaData->entity->storage)->serializer();
     }
 }

@@ -24,20 +24,6 @@ readonly class EnumHandler
         };
     }
 
-    public function getBlueprintType(string $enum): BlueprintType
-    {
-        $enumReflection = new \ReflectionEnum($enum);
-
-        if (!$enumReflection->isBacked()) {
-            throw new EnumIsNotBacked($enum);
-        }
-
-        return match ($enumReflection->getBackingType()->getName()) {
-            'int' => BlueprintType::Integer,
-            'string' => BlueprintType::Text,
-        };
-    }
-
     private function getIntegerType(string $enum): Type
     {
         $minValue = null;
@@ -76,5 +62,19 @@ readonly class EnumHandler
         }
 
         return new Text($minLength, $maxLength);
+    }
+
+    public function getBlueprintType(string $enum): BlueprintType
+    {
+        $enumReflection = new \ReflectionEnum($enum);
+
+        if (!$enumReflection->isBacked()) {
+            throw new EnumIsNotBacked($enum);
+        }
+
+        return match ($enumReflection->getBackingType()->getName()) {
+            'int' => BlueprintType::Integer,
+            'string' => BlueprintType::Text,
+        };
     }
 }

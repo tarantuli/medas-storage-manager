@@ -55,15 +55,6 @@ readonly class EntityValueManager implements EntityValueFetcher
         );
     }
 
-    #[EventListener]
-    public function clearCaches(
-        /** @noinspection PhpUnusedParameterInspection */
-        MustClearEntityValueCaches $event,
-    ): void
-    {
-        $this->entityRecords->clear();
-    }
-
     private function getEntityRecord(MetaData $metaData, object $entity): Record|null
     {
         $idValue = $this->dataSerializer->serializeValue(
@@ -94,5 +85,14 @@ readonly class EntityValueManager implements EntityValueFetcher
         }
 
         return $this->entityRecords[$key];
+    }
+
+    #[EventListener]
+    public function clearCaches(
+        /** @noinspection PhpUnusedParameterInspection */
+        MustClearEntityValueCaches $event,
+    ): void
+    {
+        $this->entityRecords->clear();
     }
 }
