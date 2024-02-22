@@ -8,12 +8,12 @@ use Medas\Core\{
     Attributes\ConfigValue,
     Attributes\Service,
     Interfaces\CacheManager,
+    Interfaces\PropertyHandler,
     Interfaces\Type
 };
 use Medas\EntityManager\{
     MetaData,
     MetaDataManager,
-    Properties\Handler,
     Types\Binary,
     Types\Boolean,
     Types\Collection,
@@ -164,7 +164,7 @@ readonly class EntityStructureFinder
 
             if ($class = $property->handler) {
                 // This property has been assigned a handler, let it serialize the value
-                /** @var Handler $propertyHandler */
+                /** @var PropertyHandler $propertyHandler */
                 $propertyHandler = service($class);
                 $field->default = $propertyHandler->serialize($field->default);
             }

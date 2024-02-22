@@ -12,7 +12,7 @@ use Medas\FileBuilder\{
     PhpClass\PhpClassDefinition,
     PhpClassBuilder
 };
-use Medas\FileSystem\DirectoryManager;
+use Medas\FileSystem\{DirectoryCreator, FileLoader};
 use Medas\StorageManager\{StorageManager, Structure\EntityStructureFinder, UnitOfWork\UnitOfWork};
 
 #[Service]
@@ -26,8 +26,9 @@ class MigrationBuildManager
     private MethodDefinition $undoMethod;
 
     public function __construct(
-        private readonly DirectoryManager      $directoryManager,
+        private readonly DirectoryCreator      $directoryCreator,
         private readonly EntityStructureFinder $entityStructureFinder,
+        private readonly FileLoader            $fileLoader,
         private readonly PhpClassBuilder       $phpClassBuilder,
         private readonly StorageManager        $storageManager,
     )
@@ -39,7 +40,7 @@ class MigrationBuildManager
         $this->createMigrationClass($sourceDirectories);
 
         if ($this->migrationNeeded) {
-            $this->directoryManager->create($migrationsDirectory);
+            $this->directoryCreator->create($migrationsDirectory);
 
             $filePath = $migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php';
 
@@ -61,7 +62,7 @@ class MigrationBuildManager
         $this->initializeMethods();
 
         foreach ($directories as $directory) {
-            $this->directoryManager->loadPhpFiles($directory);
+            $this->fileLoader->load($directory);
         }
 
         $this->processEntities($directories);

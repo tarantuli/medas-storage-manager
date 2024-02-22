@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Migrations;
 
 use Medas\Core\Attributes\Service;
-use Medas\FileSystem\DirectoryManager;
+use Medas\FileSystem\FileLoader;
 use Medas\StorageManager\{StorageManager, UnitOfWork\UnitOfWork, UnitOfWork\UnitOfWorkExecutor};
 
 #[Service]
@@ -14,7 +14,7 @@ class MigrationManager
     private array $processedMigrations = [];
 
     public function __construct(
-        private readonly DirectoryManager      $directoryManager,
+        private readonly FileLoader            $fileLoader,
         private readonly MigrationStoreManager $migrationStoreManager,
         private readonly StorageManager        $storageManager,
         private readonly UnitOfWorkExecutor    $unitOfWorkExecutor,
@@ -26,7 +26,7 @@ class MigrationManager
     {
         $directory = realpath($directory);
 
-        $this->directoryManager->loadPhpFiles($directory);
+        $this->fileLoader->load($directory);
         $this->processEntities($directory);
     }
 
