@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Migrations;
 
-use Medas\Core\Attributes\Service;
-use Medas\FileSystem\FileLoader;
+use Medas\Core\{Attributes\Service, Interfaces\FileLoader};
 use Medas\StorageManager\{StorageManager, UnitOfWork\UnitOfWork, UnitOfWork\UnitOfWorkExecutor};
 
 #[Service]

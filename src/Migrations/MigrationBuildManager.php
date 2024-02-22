@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Migrations;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\DirectoryCreator, Interfaces\FileLoader};
 use Medas\EntityManager\Attributes\Entity;
 use Medas\FileBuilder\{
     PhpClass\MethodDefinition,
@@ -12,7 +12,6 @@ use Medas\FileBuilder\{
     PhpClass\PhpClassDefinition,
     PhpClassBuilder
 };
-use Medas\FileSystem\{DirectoryCreator, FileLoader};
 use Medas\StorageManager\{StorageManager, Structure\EntityStructureFinder, UnitOfWork\UnitOfWork};
 
 #[Service]
