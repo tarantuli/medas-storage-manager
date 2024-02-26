@@ -8,7 +8,7 @@ use Medas\StorageManager\Interfaces\Storage;
 
 class UnitOfWork
 {
-    /** @var Storage[]|\SplObjectStorage */
+    /** @var Storage[] */
     private array|\SplObjectStorage $storages;
 
     /** @var Action[] */
@@ -26,7 +26,10 @@ class UnitOfWork
         $this->actions[] = $action;
     }
 
-    /** @return Storage[]|\SplObjectStorage */
+    /**
+     * @return Storage[]
+     * @noinspection PhpDocSignatureInspection
+     */
     public function storages(): array|\SplObjectStorage
     {
         return $this->storages;
