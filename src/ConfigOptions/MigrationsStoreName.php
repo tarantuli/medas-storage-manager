@@ -15,7 +15,7 @@ use Medas\Core\{
 readonly class MigrationsStoreName implements ConfigOption, Validator
 {
     public function __construct(
-        private RootGroup $group,
+        private StorageManagerConfigGroup $group,
     )
     {
     }

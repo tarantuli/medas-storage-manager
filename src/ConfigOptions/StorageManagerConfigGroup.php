@@ -7,7 +7,7 @@ namespace Medas\StorageManager\ConfigOptions;
 use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup};
 
 #[Service]
-readonly class RootGroup implements ConfigGroup
+readonly class StorageManagerConfigGroup implements ConfigGroup
 {
     public function parent(): ConfigGroup|null
     {
