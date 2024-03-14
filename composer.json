@@ -1,6 +1,9 @@
 {
     "name": "morphp/medas-storage-manager",
     "description": "Medas storage manager",
+    "keywords": [
+        "storage"
+    ],
     "authors": [
         {
             "name": "Patrick Morpey",
