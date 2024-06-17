@@ -58,6 +58,19 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         return new FetchResult(true, $records);
     }
 
+    public function fetchCount(Selector $selector, array $arguments = []): FetchResult
+    {
+        // Todo: make a proper COUNT(*) implementation
+        $entity = $selector->entity();
+        $metaData = $this->metaDataManager->get($entity);
+        $actionSet = $this->storageManager->controller($metaData->entity->storage)->actionBuilders()
+            ->selectorAction()->build($selector, $arguments);
+
+        $this->storageManager->controller($metaData->entity->storage)->actionExecutor()->executeSet($actionSet);
+
+        return new FetchResult(true, count($actionSet->lastRecordSet->fetchRecords()));
+    }
+
     #[EventListener]
     public function clearCaches(
         /** @noinspection PhpUnusedParameterInspection */
