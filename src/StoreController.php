@@ -7,7 +7,7 @@ namespace Medas\StorageManager;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-readonly class StoreManager
+readonly class StoreController
 {
     public function __construct(
         private StorageManager $storageManager,
