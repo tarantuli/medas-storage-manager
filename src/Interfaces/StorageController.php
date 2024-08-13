@@ -11,15 +11,20 @@ interface StorageController
 {
     public function handles(Storage $storage): bool;
 
-    public function store(string $name, Storage $storage = null): Store;
-
-    public function deleteStore(Store $store): void;
+    public function serializer(Storage $storage = null): Serializer;
 
     public function transaction(Storage $storage = null): Transaction;
 
     public function lastGeneratedValue(Storage $storage = null): int|null;
 
-    public function serializer(Storage $storage = null): Serializer;
+    public function store(string $name, Storage $storage = null): Store;
+
+    public function deleteStore(Store $store): void;
+
+    /** @return Store[] */
+    public function getStores(Storage $storage = null, string $nameFilter = null): array;
+
+    public function hasStore(Store $store, Storage $storage = null): bool;
 
     public function actionBuilders(): ActionBuilders;
 
@@ -28,6 +33,4 @@ interface StorageController
     public function recordFetchers(): RecordFetchers;
 
     public function migrationBuilder(): MigrationBuilder;
-
-    public function hasStore(Store $store, Storage $storage = null): bool;
 }
