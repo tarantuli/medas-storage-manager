@@ -37,6 +37,15 @@ class StorageManager
         return $name === null ? $this->default : $this->storages[$name];
     }
 
+    public function getElseSet(string $name, \Closure $storageBuilder): Interfaces\Storage
+    {
+        if (array_key_exists($name, $this->storages)) {
+            return $this->storages[$name];
+        }
+
+        return $this->storages[$name] = $storageBuilder();
+    }
+
     public function controller(Interfaces\Storage|string $storage = null): Interfaces\StorageController
     {
         if ($storage === null) {
