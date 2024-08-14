@@ -11,4 +11,6 @@ interface RecordSet
     public function fetchRecord(): Record|null;
 
     public function hasRecords(): bool;
+
+    public function fetchMetaData(): RecordMetaData;
 }
