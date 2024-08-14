@@ -8,6 +8,8 @@ use Medas\Core\Interfaces\Type;
 
 interface FieldMetaData
 {
+    public function name(): string;
+
     public function type(): Type;
 
     public function length(): int|null;
