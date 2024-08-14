@@ -6,6 +6,6 @@ namespace Medas\StorageManager\Interfaces;
 
 interface RecordMetaData
 {
-    /** @return ColumnMetaData[] */
-    public function columns(): array;
+    /** @return FieldMetaData[] */
+    public function fields(): array;
 }

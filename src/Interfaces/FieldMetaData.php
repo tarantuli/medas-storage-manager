@@ -6,7 +6,7 @@ namespace Medas\StorageManager\Interfaces;
 
 use Medas\Core\Interfaces\Type;
 
-interface ColumnMetaData
+interface FieldMetaData
 {
     public function type(): Type;
 
