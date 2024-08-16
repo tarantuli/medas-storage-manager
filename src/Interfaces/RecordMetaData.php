@@ -8,4 +8,6 @@ interface RecordMetaData
 {
     /** @return FieldMetaData[] */
     public function fields(): array;
+
+    public function rowCount(): int;
 }
