@@ -16,3 +16,4 @@ interface FieldMetaData
 
     public function precision(): int|null;
 }
+
