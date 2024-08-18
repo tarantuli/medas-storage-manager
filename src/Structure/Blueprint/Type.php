@@ -9,6 +9,7 @@ enum Type: string
     case Binary = 'binary';
     case Boolean = 'boolean';
     case DateTime = 'dateTime';
+    case Date = 'date';
     case Float = 'float';
     case Integer = 'integer';
     case Text = 'text';
