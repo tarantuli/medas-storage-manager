@@ -10,6 +10,9 @@ interface RecordMetaData
     public function fields(): array;
 
     /** @return string[] */
+    public function fieldNames(): array;
+
+    /** @return string[] */
     public function primaryKeyFieldNames(): array;
 
     public function rowCount(): int;
