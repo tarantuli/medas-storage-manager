@@ -12,6 +12,8 @@ interface FieldMetaData
 
     public function type(): Type;
 
+    public function isNullable(): bool;
+
     public function length(): int|null;
 
     public function precision(): int|null;
