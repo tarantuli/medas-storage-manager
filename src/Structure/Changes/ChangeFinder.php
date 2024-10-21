@@ -105,6 +105,10 @@ readonly class ChangeFinder
     private function checkIndexes(Job $job): void
     {
         foreach ($job->expected->indexes as $index) {
+            if ($index->isPrimary) {
+                continue;
+            }
+
             if (!$job->existing->indexByHash($index->hash())) {
                 $job->changes->addIndexes[] = $index;
             }
