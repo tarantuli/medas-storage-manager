@@ -102,17 +102,14 @@ readonly class EntityStructureFinder
 
     private function findKeys(EntityStructureFinder\Job $job): void
     {
-        // Unique values
         foreach ($job->metaData->properties as $property) {
-            if (!$property->isUnique) {
-                continue;
+            if ($property->isUnique || $property->isIndex) {
+                $job->blueprint->addIndex(new Blueprint\Index(
+                    [$job->blueprint->fieldByName($property->name)],
+                    false,
+                    $property->isUnique
+                ));
             }
-
-            $job->blueprint->addIndex(new Blueprint\Index(
-                [$job->blueprint->fieldByName($property->name)],
-                false,
-                true
-            ));
         }
     }
 

@@ -12,5 +12,5 @@ interface RecordSet
 
     public function hasRecords(): bool;
 
-    public function fetchMetaData(): RecordMetaData;
+    public function fetchMetaData(): RecordSetMetaData;
 }
