@@ -143,6 +143,14 @@ readonly class EntityStructureFinder
             $field->isNullable = true;
         }
 
+        if ($property->isUnique) {
+            $field->isUnique = true;
+        }
+
+        if ($property->isIndex) {
+            $field->isIndex = true;
+        }
+
         if ($property->isGeneratedValue) {
             $field->isGenerated = true;
         }

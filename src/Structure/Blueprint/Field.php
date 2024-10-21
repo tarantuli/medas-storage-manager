@@ -15,6 +15,8 @@ class Field
         public string|null $collectionStore = null,
         public Field|null  $collectionField = null,
         public bool        $isNullable = false,
+        public bool        $isUnique = false,
+        public bool        $isIndex = false,
         public bool        $isGenerated = false,
         public bool        $isCreationTimestamp = false,
         public bool        $isModificationTimestamp = false,
