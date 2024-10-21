@@ -51,6 +51,10 @@ readonly class ChangeFinder
             unset($diff['store']);
         }
 
+        if (isset($diff['isIndex'])) {
+            unset($diff['isIndex']);
+        }
+
         // If the diff contains length or value parameters, compare ranges
         if (isset($diff['minLength']) and $current->minLength <= $field->minLength) {
             unset($diff['minLength']);
@@ -102,7 +106,7 @@ readonly class ChangeFinder
     {
         foreach ($job->expected->indexes as $index) {
             if (!$job->existing->indexByHash($index->hash())) {
-                $job->changes->indexes[] = $index;
+                $job->changes->addIndexes[] = $index;
             }
 
             $job->foundChanges = true;

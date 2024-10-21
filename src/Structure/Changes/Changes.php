@@ -15,7 +15,7 @@ class Changes
     public array $changeFields = [];
 
     /** @var Blueprint\Index[] */
-    public array $indexes = [];
+    public array $addIndexes = [];
 
     /** @var Blueprint\ForeignKey[] */
     public array $changeForeignKey = [];
