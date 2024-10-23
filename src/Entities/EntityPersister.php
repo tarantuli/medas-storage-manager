@@ -8,7 +8,8 @@ use Medas\Core\{
     Attributes\ConfigValue,
     Attributes\Service,
     Exceptions\GuidProviderIsNotAvailable,
-    Interfaces\GuidProvider
+    Interfaces\GuidProvider,
+    Interfaces\TracksChanges
 };
 use Medas\EntityManager\{
     Hydration\ValueGetter,
@@ -191,14 +192,20 @@ readonly class EntityPersister
             throw new \Exception('property type should be a Collection instance');
         }
 
+        $value = $property->reflection->getValue($entity);
+
         $this->unitOfWorkManager->queueCollectionUpdate(
             $unitOfWork,
             $this->getStore($metaData),
             $entity,
             $property->name,
             $property->type,
-            $property->reflection->getValue($entity)
+            $value
         );
+
+        if ($value instanceof TracksChanges) {
+            $value->resetChangeTracking();
+        }
     }
 
     public function prepareDelete(object $entity, UnitOfWork $unitOfWork): void
