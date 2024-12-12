@@ -10,6 +10,7 @@ class Record implements RecordInterface
 {
     private int $keyIndex;
     private array $keys;
+    private int $keyCount;
 
     public function __construct(private array $data)
     {
@@ -62,12 +63,13 @@ class Record implements RecordInterface
 
     public function valid(): bool
     {
-        return array_key_exists($this->keyIndex, $this->keys);
+        return $this->keyIndex < $this->keyCount;
     }
 
     public function rewind(): void
     {
         $this->keys = array_keys($this->data);
+        $this->keyCount = count($this->keys);
         $this->keyIndex = 0;
     }
 }

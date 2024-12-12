@@ -25,9 +25,16 @@ readonly class DataSerializer
 
     public function unserializeArray(MetaData $metaData, Record &$data): void
     {
+        $serializer = $this->getStorageSerializer($metaData);
+
         foreach ($data as $key => $value) {
             try {
-                $data[$key] = $this->unserializeValue($metaData, $metaData->property($key), $value);
+                $data[$key] = $this->unserializeValue(
+                    $metaData,
+                    $metaData->property($key),
+                    $value,
+                    $serializer
+                );
             }
             catch (PropertyDoesNotExist) {
                 continue;
@@ -35,16 +42,22 @@ readonly class DataSerializer
         }
     }
 
-    public function unserializeValue(MetaData $metaData, MetaData\Property $property, mixed $value): mixed
+    public function unserializeValue(
+        MetaData          $metaData,
+        MetaData\Property $property,
+        mixed             $value,
+        Serializer|null   $serializer = null
+    ): mixed
     {
         $type = $property->type;
+        $serializer ??= $this->getStorageSerializer($metaData);
 
         if ($type instanceof Relation && !enum_exists($type->entity)) {
             // Unserialize using the type of the referenced ID property of the related class
             $type = $this->metaDataManager->get($type->entity)->idProperty->type;
         }
 
-        $value = $this->getStorageSerializer($metaData)->unserialize($value, $type);
+        $value = $serializer->unserialize($value, $type);
 
         if ($class = $property->handler) {
             // This property has been assigned a handler, let it unserialize afterward

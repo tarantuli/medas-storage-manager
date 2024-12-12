@@ -57,12 +57,7 @@ readonly class EntityValueManager implements EntityValueFetcher
 
     private function getEntityRecord(MetaData $metaData, object $entity): Record|null
     {
-        $idValue = $this->dataSerializer->serializeValue(
-            $metaData,
-            $metaData->idProperty,
-            $this->entityValueGetter->getValue($entity, $metaData->idProperty),
-        );
-
+        $idValue = $this->entityValueGetter->getValue($entity, $metaData->idProperty);
         $key = $this->keyMaker->get($entity::class, $idValue);
 
         if (!$this->entityRecords->offsetExists($key)) {
@@ -90,7 +85,7 @@ readonly class EntityValueManager implements EntityValueFetcher
     #[EventListener]
     public function clearCaches(
         /** @noinspection PhpUnusedParameterInspection */
-        MustClearEntityValueCaches $event,
+        MustClearEntityValueCaches $event
     ): void
     {
         $this->entityRecords->clear();
