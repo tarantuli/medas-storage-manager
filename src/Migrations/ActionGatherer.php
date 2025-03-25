@@ -24,7 +24,9 @@ readonly class ActionGatherer
     {
         $actions = new ActionSet();
 
-        foreach ($directories as $directory) {
+        foreach ($directories as &$directory) {
+            $directory = realpath($directory);
+
             $this->fileLoader->load($directory);
         }
 

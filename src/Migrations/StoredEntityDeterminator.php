@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Migrations;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Attributes\Entity;
+use Medas\EntityManager\{Attributes\Entity, MetaData\EntityCompiler};
 
 #[Service]
 readonly class StoredEntityDeterminator
 {
+    public function __construct(
+        private EntityCompiler $entityCompiler,
+    )
+    {
+    }
+
     public function determine(string $className, array $directories): Entity|null
     {
         $class = new \ReflectionClass($className);
@@ -32,7 +38,7 @@ readonly class StoredEntityDeterminator
             return null;
         }
 
-        if (!$entity = attribute(Entity::class, $class)) {
+        if (!$entity = $this->entityCompiler->compile($class)) {
             return null;
         }
 
