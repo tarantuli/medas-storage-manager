@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Migrations;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\FileLoader};
 use Medas\EntityManager\Attributes\Entity;
 use Medas\StorageManager\{StorageManager, Structure\EntityStructureFinder, UnitOfWork\ActionSet};
 
@@ -13,6 +13,7 @@ readonly class ActionGatherer
 {
     public function __construct(
         private EntityStructureFinder    $entityStructureFinder,
+        private FileLoader               $fileLoader,
         private StorageManager           $storageManager,
         private StoredEntityDeterminator $storedEntityDeterminator,
     )
@@ -22,6 +23,10 @@ readonly class ActionGatherer
     public function gather(array $directories): ActionSet
     {
         $actions = new ActionSet();
+
+        foreach ($directories as $directory) {
+            $this->fileLoader->load($directory);
+        }
 
         foreach (get_declared_classes() as $className) {
             if (null === $entity = $this->storedEntityDeterminator->determine($className, $directories)) {

@@ -55,11 +55,6 @@ readonly class MigrationBuildManager
 
         $this->initializeClass($job);
         $this->initializeMethods($job);
-
-        foreach ($job->sourceDirectories as $directory) {
-            $this->fileLoader->load($directory);
-        }
-
         $this->processEntities($job);
 
         $job->classCode = $job->migrationNeeded
@@ -106,6 +101,10 @@ readonly class MigrationBuildManager
     private function processEntities(Job $job): void
     {
         $job->migrationNeeded = false;
+
+        foreach ($job->sourceDirectories as $directory) {
+            $this->fileLoader->load($directory);
+        }
 
         foreach (get_declared_classes() as $className) {
             if (null === $entity = $this->storedEntityDeterminator->determine($className, $job->sourceDirectories)) {
