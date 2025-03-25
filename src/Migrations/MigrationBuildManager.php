@@ -15,35 +15,29 @@ use Medas\FileBuilder\{
 use Medas\StorageManager\{StorageManager, Structure\EntityStructureFinder, UnitOfWork\UnitOfWork};
 
 #[Service]
-class MigrationBuildManager
+readonly class MigrationBuildManager
 {
-    private string $className;
-    private string|null $classCode;
-    private bool $migrationNeeded;
-    private PhpClassDefinition $migrationClass;
-    private MethodDefinition $migrateMethod;
-    private MethodDefinition $undoMethod;
-
     public function __construct(
-        private readonly DirectoryCreator      $directoryCreator,
-        private readonly EntityStructureFinder $entityStructureFinder,
-        private readonly FileLoader            $fileLoader,
-        private readonly PhpClassBuilder       $phpClassBuilder,
-        private readonly StorageManager        $storageManager,
+        private DirectoryCreator         $directoryCreator,
+        private EntityStructureFinder    $entityStructureFinder,
+        private FileLoader               $fileLoader,
+        private PhpClassBuilder          $phpClassBuilder,
+        private StorageManager           $storageManager,
+        private StoredEntityDeterminator $storedEntityDeterminator,
     )
     {
     }
 
     public function createMigration(array $sourceDirectories, string $migrationsDirectory): string|null
     {
-        $this->createMigrationClass($sourceDirectories);
+        $job = $this->createMigrationClassCode($sourceDirectories);
 
-        if ($this->migrationNeeded) {
+        if ($job->migrationNeeded) {
             $this->directoryCreator->create($migrationsDirectory);
 
-            $filePath = $migrationsDirectory . DIRECTORY_SEPARATOR . $this->className . '.php';
+            $filePath = $migrationsDirectory . DIRECTORY_SEPARATOR . $job->className . '.php';
 
-            file_put_contents($filePath, $this->classCode);
+            file_put_contents($filePath, $job->classCode);
 
             return $filePath;
         }
@@ -51,117 +45,88 @@ class MigrationBuildManager
         return null;
     }
 
-    public function createMigrationClass(array $directories): string|null
+    public function createMigrationClassCode(array $sourceDirectories): Job
     {
-        foreach ($directories as $i => $directory) {
-            $directories[$i] = realpath($directory);
+        $job = new Job($sourceDirectories);
+
+        foreach ($job->sourceDirectories as $i => $directory) {
+            $job->sourceDirectories[$i] = realpath($directory);
         }
 
-        $this->initializeClass();
-        $this->initializeMethods();
+        $this->initializeClass($job);
+        $this->initializeMethods($job);
 
-        foreach ($directories as $directory) {
+        foreach ($job->sourceDirectories as $directory) {
             $this->fileLoader->load($directory);
         }
 
-        $this->processEntities($directories);
+        $this->processEntities($job);
 
-        return $this->classCode = $this->migrationNeeded
-            ? $this->phpClassBuilder->build($this->migrationClass)
+        $job->classCode = $job->migrationNeeded
+            ? $this->phpClassBuilder->build($job->migrationClass)
             : null;
+
+        return $job;
     }
 
-    private function initializeClass(): void
+    private function initializeClass(Job $job): void
     {
         $now = \DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''))
             ->format('YmdHisu');
 
-        $this->className = 'Migration' . $now;
-        $this->migrationClass = new PhpClassDefinition($this->className, 'Medas\\Migrations');
-        $this->migrationClass->implements[] = Migration::class;
+        $job->className = 'Migration' . $now;
+        $job->migrationClass = new PhpClassDefinition($job->className, 'Medas\\Migrations');
+        $job->migrationClass->implements[] = Migration::class;
     }
 
-    private function initializeMethods(): void
+    private function initializeMethods(Job $job): void
     {
-        $this->initializeMigrateMethod();
-        $this->initializeUndoMethod();
+        $this->initializeMigrateMethod($job);
+        $this->initializeUndoMethod($job);
 
-        $this->migrationClass->methods = [$this->migrateMethod, $this->undoMethod];
+        $job->migrationClass->methods = [$job->migrateMethod, $job->undoMethod];
     }
 
-    private function initializeMigrateMethod(): void
+    private function initializeMigrateMethod(Job $job): void
     {
-        $this->migrateMethod = new MethodDefinition('migrate');
-        $this->migrateMethod->parameters = [new ParameterDefinition(UnitOfWork::class, 'unitOfWork')];
-        $this->migrateMethod->returnTypes = ['void'];
-        $this->migrateMethod->body = '';
+        $job->migrateMethod = new MethodDefinition('migrate');
+        $job->migrateMethod->parameters = [new ParameterDefinition(UnitOfWork::class, 'unitOfWork')];
+        $job->migrateMethod->returnTypes = ['void'];
+        $job->migrateMethod->body = '';
     }
 
-    private function initializeUndoMethod(): void
+    private function initializeUndoMethod(Job $job): void
     {
-        $this->undoMethod = new MethodDefinition('undo');
-        $this->undoMethod->parameters = [new ParameterDefinition(UnitOfWork::class, 'unitOfWork')];
-        $this->undoMethod->returnTypes = ['void'];
-        $this->undoMethod->body = '';
+        $job->undoMethod = new MethodDefinition('undo');
+        $job->undoMethod->parameters = [new ParameterDefinition(UnitOfWork::class, 'unitOfWork')];
+        $job->undoMethod->returnTypes = ['void'];
+        $job->undoMethod->body = '';
     }
 
-    private function processEntities(array $directories): void
+    private function processEntities(Job $job): void
     {
-        $this->migrationNeeded = false;
+        $job->migrationNeeded = false;
 
         foreach (get_declared_classes() as $className) {
-            if (null === $entity = $this->determineStoredEntity($className, $directories)) {
+            if (null === $entity = $this->storedEntityDeterminator->determine($className, $job->sourceDirectories)) {
                 continue;
             }
 
-            $this->processEntity($className, $entity);
+            $this->processEntity($job, $className, $entity);
         }
     }
 
-    private function determineStoredEntity(string $className, array $directories): Entity|null
-    {
-        $class = new \ReflectionClass($className);
-
-        if (!$class->getFileName()) {
-            return null;
-        }
-
-        $foundDirectory = false;
-
-        foreach ($directories as $directory) {
-            if (str_starts_with($class->getFileName(), $directory)) {
-                $foundDirectory = true;
-
-                break;
-            }
-        }
-
-        if (!$foundDirectory) {
-            return null;
-        }
-
-        if (!$entity = attribute(Entity::class, $class)) {
-            return null;
-        }
-
-        if ($entity->storage === null && $entity->store === null) {
-            return null;
-        }
-
-        return $entity;
-    }
-
-    private function processEntity(string $className, Entity $entity): void
+    private function processEntity(Job $job, string $className, Entity $entity): void
     {
         $expectedStructure = $this->entityStructureFinder->find($className);
         $needed = $this->storageManager->controller($entity->storage)->migrationBuilder()
             ->build(
                 $this->storageManager->byName($entity->storage),
                 $expectedStructure,
-                $this->migrateMethod,
-                $this->undoMethod
+                $job->migrateMethod,
+                $job->undoMethod
             );
 
-        $this->migrationNeeded = $this->migrationNeeded || $needed;
+        $job->migrationNeeded = $job->migrationNeeded || $needed;
     }
 }
