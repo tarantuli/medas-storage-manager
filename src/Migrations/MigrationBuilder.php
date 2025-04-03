@@ -14,6 +14,7 @@ interface MigrationBuilder
         Blueprint        $expectedStructure,
         MethodDefinition $migrateMethod,
         MethodDefinition $undoMethod,
+        bool             $ignoreExistingStructure = false,
     ): bool;
 
     public function buildActions(Storage $storage, Blueprint $blueprint): ActionSet;

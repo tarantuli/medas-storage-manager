@@ -16,7 +16,7 @@ class Job
     public MethodDefinition $undoMethod;
 
     public function __construct(
-        public array $sourceDirectories,
+        public Settings $settings,
     )
     {
     }

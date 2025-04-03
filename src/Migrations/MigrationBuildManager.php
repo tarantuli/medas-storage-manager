@@ -28,14 +28,17 @@ readonly class MigrationBuildManager
     {
     }
 
-    public function createMigration(array $sourceDirectories, string $migrationsDirectory): string|null
+    public function createMigration(Settings $settings): string|null
     {
-        $job = $this->createMigrationClassCode($sourceDirectories);
+        $job = $this->createMigrationClassCode($settings);
 
         if ($job->migrationNeeded) {
-            $this->directoryCreator->create($migrationsDirectory);
+            $this->directoryCreator->create($settings->migrationsDirectory);
 
-            $filePath = $migrationsDirectory . DIRECTORY_SEPARATOR . $job->className . '.php';
+            $filePath = $settings->migrationsDirectory
+                . DIRECTORY_SEPARATOR
+                . $job->className
+                . '.php';
 
             file_put_contents($filePath, $job->classCode);
 
@@ -45,12 +48,12 @@ readonly class MigrationBuildManager
         return null;
     }
 
-    public function createMigrationClassCode(array $sourceDirectories): Job
+    public function createMigrationClassCode(Settings $settings): Job
     {
-        $job = new Job($sourceDirectories);
+        $job = new Job($settings);
 
-        foreach ($job->sourceDirectories as $i => $directory) {
-            $job->sourceDirectories[$i] = realpath($directory);
+        foreach ($job->settings->sourceDirectories as $i => $directory) {
+            $job->settings->sourceDirectories[$i] = realpath($directory);
         }
 
         $this->initializeClass($job);
@@ -102,12 +105,15 @@ readonly class MigrationBuildManager
     {
         $job->migrationNeeded = false;
 
-        foreach ($job->sourceDirectories as $directory) {
+        foreach ($job->settings->sourceDirectories as $directory) {
             $this->fileLoader->load($directory);
         }
 
         foreach (get_declared_classes() as $className) {
-            if (null === $entity = $this->storedEntityDeterminator->determine($className, $job->sourceDirectories)) {
+            if (null === $entity = $this->storedEntityDeterminator->determine(
+                $className,
+                $job->settings->sourceDirectories
+            )) {
                 continue;
             }
 
@@ -123,7 +129,8 @@ readonly class MigrationBuildManager
                 $this->storageManager->byName($entity->storage),
                 $expectedStructure,
                 $job->migrateMethod,
-                $job->undoMethod
+                $job->undoMethod,
+                $job->settings->ignoreExistingStorage,
             );
 
         $job->migrationNeeded = $job->migrationNeeded || $needed;

@@ -9,7 +9,11 @@ use Medas\Console\{Commands\BaseConsoleCommand, Commands\ConsoleCommandGroup, Fo
 use Medas\ConsolePrinter\ConsolePrinter;
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\ConfigOptions\EntityDirectories;
-use Medas\StorageManager\{ConfigOptions\MigrationDirectory, Migrations\MigrationBuildManager};
+use Medas\StorageManager\{
+    ConfigOptions\MigrationDirectory,
+    Migrations\MigrationBuildManager,
+    Migrations\Settings
+};
 
 #[Service]
 readonly class MakeMigrationCommand extends BaseConsoleCommand
@@ -42,10 +46,16 @@ readonly class MakeMigrationCommand extends BaseConsoleCommand
 
     public function process(array $arguments): void
     {
-        $filePath = $this->migrationBuildManager->createMigration(
+        $settings = new Settings(
             $this->optionController->getValue($this->entityDirectories),
             $this->optionController->getValue($this->migrationDirectory)
         );
+
+        if (in_array('--clean', $arguments)) {
+            $settings->ignoreExistingStorage = true;
+        }
+
+        $filePath = $this->migrationBuildManager->createMigration($settings);
 
         $this->consolePrinter->printEol();
 
