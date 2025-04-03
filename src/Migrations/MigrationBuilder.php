@@ -17,5 +17,9 @@ interface MigrationBuilder
         bool             $ignoreExistingStructure = false,
     ): bool;
 
-    public function buildActions(Storage $storage, Blueprint $blueprint): ActionSet;
+    public function buildActions(
+        Storage   $storage,
+        Blueprint $blueprint,
+        bool      $ignoreExistingStructure = false,
+    ): ActionSet;
 }
