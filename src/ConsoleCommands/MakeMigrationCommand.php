@@ -7,10 +7,11 @@ namespace Medas\StorageManager\ConsoleCommands;
 use Medas\ConfigOptions\OptionController;
 use Medas\Console\{Commands\BaseConsoleCommand, Commands\ConsoleCommandGroup, Formats\Color, Text};
 use Medas\ConsolePrinter\ConsolePrinter;
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\ImplementorFinder};
 use Medas\EntityManager\ConfigOptions\EntityDirectories;
 use Medas\StorageManager\{
     ConfigOptions\MigrationDirectory,
+    Interfaces\PackageEntities,
     Migrations\MigrationBuildManager,
     Migrations\Settings
 };
@@ -53,6 +54,13 @@ readonly class MakeMigrationCommand extends BaseConsoleCommand
 
         if (in_array('--clean', $arguments)) {
             $settings->ignoreExistingStorage = true;
+        }
+
+        foreach (service(ImplementorFinder::class)->find(PackageEntities::class) as $packageEntities) {
+            $settings->sourceDirectories = array_merge(
+                $settings->sourceDirectories,
+                $packageEntities->directories()
+            );
         }
 
         $filePath = $this->migrationBuildManager->createMigration($settings);
