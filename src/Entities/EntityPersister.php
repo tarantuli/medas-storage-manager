@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\{
-    Attributes\ConfigValue,
-    Attributes\Service,
-    Exceptions\GuidProviderIsNotAvailable,
-    Interfaces\GuidProvider,
-    Interfaces\TracksChanges
-};
+use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\TracksChanges};
 use Medas\EntityManager\{
     Hydration\ValueGetter,
     MetaData,
     MetaDataManager,
     Snapshots\PropertyChange,
-    Types\Collection,
-    Types\Guid
+    Types\Collection
 };
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
@@ -32,7 +25,6 @@ readonly class EntityPersister
     public function __construct(
         private DataSerializer               $dataSerializer,
         private EntityStructureFinder        $entityStructureFinder,
-        private GuidProvider|null            $guidProvider,
         private MetaDataManager              $metaDataManager,
         private StoreRecordManager           $recordManager,
         private StorageManager               $storageManager,
@@ -70,17 +62,6 @@ readonly class EntityPersister
                     $value = $property->reflection->getValue($entity);
                     $foundValue = true;
                 }
-            }
-            elseif ($property->type instanceof Guid) {
-                if ($this->guidProvider === null) {
-                    throw new GuidProviderIsNotAvailable();
-                }
-
-                $value = $this->guidProvider->create();
-
-                $property->reflection->setValue($entity, $value);
-
-                $foundValue = true;
             }
 
             if ($foundValue) {
