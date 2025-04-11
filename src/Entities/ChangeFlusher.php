@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{Changes, Flusher};
+use Medas\EntityManager\{Entities\Flusher, Snapshots\Changes};
 use Medas\StorageManager\UnitOfWork\{UnitOfWork, UnitOfWorkExecutor};
 
 #[Service]

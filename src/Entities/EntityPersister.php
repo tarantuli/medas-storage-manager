@@ -15,6 +15,7 @@ use Medas\EntityManager\{
     Hydration\ValueGetter,
     MetaData,
     MetaDataManager,
+    Snapshots\PropertyChange,
     Types\Collection,
     Types\Guid
 };
@@ -143,9 +144,15 @@ readonly class EntityPersister
         };
     }
 
+    /** @param PropertyChange[] $changedValues */
     public function prepareUpdate(object $entity, array $changedValues, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
+
+        // Replace the PropertyChange objects by the new values
+        foreach ($changedValues as &$changedValue) {
+            $changedValue = $changedValue->current;
+        }
 
         foreach ($metaData->properties as $property) {
             if ($property->isModificationTimestamp) {
