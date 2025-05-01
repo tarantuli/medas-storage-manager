@@ -6,8 +6,8 @@ namespace Medas\StorageManager\Structure;
 
 class Blueprint
 {
-    public string $name;
-    public string|null $parent;
+    public string|null $name = null;
+    public string|null $parent = null;
     public bool $storeOriginalClass = false;
     public string $storeRequestingOriginalClassStorage;
     public string $originalEntityClassStorageStrategy;
