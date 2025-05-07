@@ -6,13 +6,13 @@ namespace Medas\StorageManager\Shared;
 
 use Medas\Core\{
     Attributes\Service,
-    Interfaces\Guid,
-    Interfaces\GuidProvider,
     Interfaces\HasId,
     Interfaces\Serializer,
-    Interfaces\Type
+    Interfaces\Type,
+    Interfaces\Uuid,
+    Interfaces\UuidProvider
 };
-use Medas\EntityManager\Types\{Boolean, Guid as GuidType, Relation};
+use Medas\EntityManager\Types\{Boolean, Relation, Uuid as UuidType};
 
 #[Service]
 class ValueSerializer implements Serializer
@@ -24,7 +24,7 @@ class ValueSerializer implements Serializer
             $value = $value->id();
         }
 
-        if ($value instanceof Guid) {
+        if ($value instanceof Uuid) {
             return $value->toBytes();
         }
 
@@ -51,8 +51,8 @@ class ValueSerializer implements Serializer
             return null;
         }
 
-        if ($type instanceof GuidType) {
-            return service(GuidProvider::class)->fromBytes($value);
+        if ($type instanceof UuidType) {
+            return service(UuidProvider::class)->fromBytes($value);
         }
 
         if ($type instanceof Boolean) {
