@@ -31,6 +31,11 @@ readonly class MigrateCommand extends BaseConsoleCommand
         return 'migrate';
     }
 
+    public function aliases(): array
+    {
+        return ['migrate'];
+    }
+
     public function description(): string
     {
         return 'Migrates the storages';

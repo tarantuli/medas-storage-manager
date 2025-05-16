@@ -40,6 +40,11 @@ readonly class MakeMigrationCommand extends BaseConsoleCommand
         return 'make-migration';
     }
 
+    public function aliases(): array
+    {
+        return ['c.migration'];
+    }
+
     public function description(): string
     {
         return 'Makes a new migration class file';
