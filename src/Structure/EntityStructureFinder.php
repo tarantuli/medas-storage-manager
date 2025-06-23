@@ -111,6 +111,16 @@ readonly class EntityStructureFinder
                 ));
             }
         }
+
+        foreach ($job->metaData->uniquePropertySets as $propertyNames) {
+            $index = new Blueprint\Index([], false, true);
+
+            foreach ($propertyNames as $propertyName) {
+                $index->addField($job->blueprint->fieldByName($propertyName));
+            }
+
+            $job->blueprint->addIndex($index);
+        }
     }
 
     private function findForeignKeys(EntityStructureFinder\Job $job): void
