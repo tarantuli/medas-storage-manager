@@ -7,7 +7,6 @@ namespace Medas\StorageManager\Structure;
 use Medas\Core\{
     Attributes\ConfigValue,
     Attributes\Service,
-    Interfaces\CacheManager,
     Interfaces\PropertyHandler,
     Interfaces\Type
 };
@@ -26,7 +25,6 @@ use Medas\StorageManager\ConfigOptions\TypeDefaults\DefaultMaxIntegerValue;
 readonly class EntityStructureFinder
 {
     public function __construct(
-        private CacheManager                 $cacheManager,
         private TypeHandlers\EnumHandler     $enumHandler,
         private MetaDataManager              $metaDataManager,
         private ParentStoreFinder            $parentStoreFinder,
@@ -41,10 +39,7 @@ readonly class EntityStructureFinder
 
     public function find(string $className): Blueprint
     {
-        return $this->cacheManager->get()->get(
-            [__CLASS__, $className],
-            fn() => $this->compile($className)
-        );
+        return cache([__CLASS__, $className], fn() => $this->compile($className));
     }
 
     private function compile(string $className): Blueprint
