@@ -98,24 +98,35 @@ readonly class EntityStructureFinder
     private function findKeys(EntityStructureFinder\Job $job): void
     {
         foreach ($job->metaData->properties as $property) {
-            if ($property->isUnique || $property->isIndex) {
-                $job->blueprint->addIndex(new Blueprint\Index(
-                    [$job->blueprint->fieldByName($property->name)],
-                    false,
-                    $property->isUnique
-                ));
+            if (!$property->isUnique || $property->isIndex) {
+                continue;
             }
+
+            $this->addIndex(
+                $job,
+                [$job->blueprint->fieldByName($property->name)],
+                $property->isUnique
+            );
         }
 
         foreach ($job->metaData->uniquePropertySets as $propertyNames) {
-            $index = new Blueprint\Index([], false, true);
-
-            foreach ($propertyNames as $propertyName) {
-                $index->addField($job->blueprint->fieldByName($propertyName));
-            }
-
-            $job->blueprint->addIndex($index);
+            $this->addIndex($job, $propertyNames, true);
         }
+
+        foreach ($job->metaData->compoundIndexes as $propertyNames) {
+            $this->addIndex($job, $propertyNames, false);
+        }
+    }
+
+    private function addIndex(EntityStructureFinder\Job $job, mixed $propertyNames, bool $isUnique): void
+    {
+        $index = new Blueprint\Index([], false, $isUnique);
+
+        foreach ($propertyNames as $propertyName) {
+            $index->addField($job->blueprint->fieldByName($propertyName));
+        }
+
+        $job->blueprint->addIndex($index);
     }
 
     private function findForeignKeys(EntityStructureFinder\Job $job): void
