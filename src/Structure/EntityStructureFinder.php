@@ -102,11 +102,7 @@ readonly class EntityStructureFinder
                 continue;
             }
 
-            $this->addIndex(
-                $job,
-                [$job->blueprint->fieldByName($property->name)],
-                $property->isUnique
-            );
+            $this->addIndex($job, [$property->name], $property->isUnique);
         }
 
         foreach ($job->metaData->uniquePropertySets as $propertyNames) {
