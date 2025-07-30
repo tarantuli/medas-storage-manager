@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\UnitOfWork;
 
-use Medas\Core\{Attributes\Service, Interfaces\ManagedCollection};
-use Medas\EntityManager\Types\Collection;
+use Medas\Core\{Attributes\Service, Interfaces\ManagedCollection, Types\Collection};
 use Medas\StorageManager\{Interfaces\Store, StorageManager};
 
 #[Service]

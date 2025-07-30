@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure;
 
-use Medas\Core\{Attributes\Service, Interfaces\Type};
-use Medas\EntityManager\Types\{
-    Binary,
-    Boolean,
-    Collection,
-    DateTime,
-    FloatingPoint,
-    Integer,
-    Relation,
-    Text
+use Medas\Core\{
+    Attributes\Service,
+    Interfaces\Type,
+    Types\Binary,
+    Types\Boolean,
+    Types\Collection,
+    Types\DateTime,
+    Types\FloatingPoint,
+    Types\Integer,
+    Types\Relation,
+    Types\Text
 };
 use Medas\StorageManager\Exceptions\{UnhandledType, UnhandledTypeString};
 
@@ -35,7 +36,7 @@ readonly class TypeHandlerFinder
 
     public function for(Type $type): TypeHandlers\TypeHandler
     {
-        // Order matters, don't sort by name
+        // The order matters, don't sort by name
         return match (true) {
             $type instanceof Text => $this->textHandler,
             $type instanceof Binary => $this->binaryHandler,

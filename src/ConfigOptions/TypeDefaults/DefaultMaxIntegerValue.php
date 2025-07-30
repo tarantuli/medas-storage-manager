@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConfigOptions\TypeDefaults;
 
-use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup, Interfaces\ConfigOption};
-use Medas\EntityManager\Types\Integer;
+use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup, Interfaces\ConfigOption, Types\Integer};
 
 #[Service]
 readonly class DefaultMaxIntegerValue implements ConfigOption

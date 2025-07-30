@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\Attributes\{EventListener, Service};
+use Medas\Core\{Attributes\EventListener, Attributes\Service, Types\Collection as CollectionType};
 use Medas\EntityManager\Entities\{
     KeyMaker,
     ValueFetchers\EntityValueFetcher,
@@ -13,7 +13,6 @@ use Medas\EntityManager\Entities\{
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
-use Medas\EntityManager\Types\Collection as CollectionType;
 use Medas\StorageManager\Interfaces\Record;
 
 #[Service]

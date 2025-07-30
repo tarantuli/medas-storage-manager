@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces\Builders;
 
-use Medas\Core\Interfaces\ManagedCollection;
-use Medas\EntityManager\Types\Collection;
+use Medas\Core\{Interfaces\ManagedCollection, Types\Collection};
 use Medas\StorageManager\{Interfaces\Store, UnitOfWork\ActionSet};
 
 interface CollectionUpdateBuilder

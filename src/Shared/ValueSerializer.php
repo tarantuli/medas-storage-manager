@@ -10,9 +10,11 @@ use Medas\Core\{
     Interfaces\Serializer,
     Interfaces\Type,
     Interfaces\Uuid,
-    Interfaces\UuidProvider
+    Interfaces\UuidProvider,
+    Types\Boolean,
+    Types\Relation,
+    Types\Uuid as UuidType
 };
-use Medas\EntityManager\Types\{Boolean, Relation, Uuid as UuidType};
 
 #[Service]
 class ValueSerializer implements Serializer

@@ -9,11 +9,12 @@ use Medas\Core\{
     Interfaces\Collection,
     Interfaces\IsLazyLoaded,
     Interfaces\SettableCollection,
-    Interfaces\TracksChanges
+    Interfaces\TracksChanges,
+    Types\Collection as CollectionType,
+    Types\Relation
 };
 use Medas\EntityManager\Entities\ValueFetchers\FetchResult;
 use Medas\EntityManager\MetaData;
-use Medas\EntityManager\Types\{Collection as CollectionType, Relation};
 use Medas\StorageManager\StorageManager;
 
 #[Service]
