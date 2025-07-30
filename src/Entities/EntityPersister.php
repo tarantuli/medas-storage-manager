@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Entities;
 
-use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\TracksChanges};
+use Medas\Core\{
+    Attributes\ConfigValue,
+    Attributes\Service,
+    Interfaces\TracksChanges,
+    Types\Collection
+};
 use Medas\EntityManager\{
     Hydration\ValueGetter,
     MetaData,
     MetaDataManager,
-    Snapshots\PropertyChange,
-    Types\Collection
+    Snapshots\PropertyChange
 };
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
@@ -150,7 +154,7 @@ readonly class EntityPersister
             }
         }
 
-        // Stop if there's no values left to update
+        // Stop if there are no values left to update
         if ($changedValues === []) {
             return;
         }

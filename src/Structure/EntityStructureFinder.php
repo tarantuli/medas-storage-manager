@@ -8,17 +8,14 @@ use Medas\Core\{
     Attributes\ConfigValue,
     Attributes\Service,
     Interfaces\PropertyHandler,
-    Interfaces\Type
-};
-use Medas\EntityManager\{
-    MetaData,
-    MetaDataManager,
+    Interfaces\Type,
     Types\Binary,
     Types\Boolean,
     Types\Collection,
     Types\Integer,
     Types\Relation
 };
+use Medas\EntityManager\{MetaData, MetaDataManager};
 use Medas\StorageManager\ConfigOptions\TypeDefaults\DefaultMaxIntegerValue;
 
 #[Service]
