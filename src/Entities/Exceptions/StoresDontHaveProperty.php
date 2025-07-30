@@ -23,16 +23,11 @@ class StoresDontHaveProperty extends BaseException
             $storeNames[] = $store->name();
         }
 
-        parent::__construct(
-            count($storeNames) === 1 ? '' : 's',
-            implode(', ', $storeNames),
-            $storage->name(),
-            $property
-        );
+        parent::__construct(implode(', ', $storeNames), $storage->name(), $property);
     }
 
     public function pattern(): string
     {
-        return 'store%s %s in storage %s do not have a property named %s';
+        return 'store/stores %s in storage %s do not have a property named %s';
     }
 }
