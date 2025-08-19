@@ -15,7 +15,7 @@ use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
-use Medas\StorageManager\{Interfaces\Record, Interfaces\Store, StorageManager};
+use Medas\StorageManager\{Interfaces\Record, Interfaces\Store, SelectorFetcher, StorageManager};
 
 #[Service]
 readonly class StoreRecordManager implements SelectorRecordsFetcher
@@ -27,6 +27,7 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         private IdValue         $idValue,
         private KeyMaker        $keyMaker,
         private MetaDataManager $metaDataManager,
+        private SelectorFetcher $selectorfetcher,
         private StorageManager  $storageManager,
     )
     {
@@ -35,14 +36,8 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
 
     public function fetch(Selector $selector = null, array $arguments = []): FetchResult
     {
-        $entity = $selector->entity();
-        $metaData = $this->metaDataManager->get($entity);
-        $actionSet = $this->storageManager->controller($metaData->entity->storage)->actionBuilders()
-            ->selectorAction()->build($selector, $arguments);
-
-        $this->storageManager->controller($metaData->entity->storage)->actionExecutor()->executeSet($actionSet);
-
-        $records = $actionSet->lastRecordSet->fetchRecords();
+        $metaData = $this->metaDataManager->get($selector->entity());
+        $records = $this->selectorfetcher->fetch($selector, $arguments);
 
         foreach ($records as &$record) {
             $idValue = $this->idValue->get($record, $metaData);
