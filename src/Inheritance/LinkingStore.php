@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Inheritance;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\EntityManager\Attributes\Relations\Action;
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\LinkingStore\StoreNamingStrategy;
 use Medas\StorageManager\Interfaces\{ActionExecutor, Storage, StorageController};
 use Medas\StorageManager\Structure\Blueprint;
@@ -35,7 +36,8 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
             'id',
             $blueprint->name,
             $blueprint->primaryIndex()->fields()[0]->name,
-            true
+            Action::Cascade,
+            Action::Cascade
         );
 
         $valueField = new Blueprint\Field(

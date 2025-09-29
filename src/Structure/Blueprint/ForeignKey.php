@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure\Blueprint;
 
+use Medas\EntityManager\Attributes\Relations\Action;
+
 class ForeignKey
 {
     public function __construct(
         public string $field,
         public string $foreignEntity,
         public string $foreignField,
-        public bool   $doCascade = false,
+        public Action $onDelete,
+        public Action $onUpdate,
     )
     {
     }

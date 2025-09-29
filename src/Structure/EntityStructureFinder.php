@@ -22,11 +22,11 @@ use Medas\StorageManager\ConfigOptions\TypeDefaults\DefaultMaxIntegerValue;
 readonly class EntityStructureFinder
 {
     public function __construct(
-        private TypeHandlers\EnumHandler     $enumHandler,
         private MetaDataManager              $metaDataManager,
         private ParentStoreFinder            $parentStoreFinder,
-        private TypeHandlers\RelationHandler $relationHandler,
         private TypeHandlerFinder            $typeHandlerFinder,
+        private TypeHandlers\EnumHandler     $enumHandler,
+        private TypeHandlers\RelationHandler $relationHandler,
 
         #[ConfigValue(DefaultMaxIntegerValue::class)]
         private int                          $defaultMaxIntegerValue,

@@ -57,7 +57,8 @@ readonly class RelationHandler extends BaseHandler
             $property->name,
             $this->metaDataManager->get($type->entity)->entity->store,
             $this->getIdProperty($type->entity)->name,
-            $property->onDeleteCascade,
+            $property->onDelete,
+            $property->onUpdate,
         );
     }
 }

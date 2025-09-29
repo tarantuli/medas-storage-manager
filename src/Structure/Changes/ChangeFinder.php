@@ -137,6 +137,7 @@ readonly class ChangeFinder
 
     private function areForeignKeysComparable(Blueprint\ForeignKey $foreignKey, Blueprint\ForeignKey $current): bool
     {
-        return $foreignKey->doCascade === $current->doCascade;
+        return $foreignKey->onDelete === $current->onDelete
+            && $foreignKey->onUpdate === $current->onUpdate;
     }
 }
