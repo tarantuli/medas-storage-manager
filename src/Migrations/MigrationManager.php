@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Migrations;
 
 use Medas\Core\{Attributes\Service, Interfaces\FileLoader};
-use Medas\StorageManager\{StorageManager, UnitOfWork\UnitOfWork, UnitOfWork\UnitOfWorkExecutor};
+use Medas\StorageManager\{
+    Exceptions\MigrationException,
+    StorageManager,
+    UnitOfWork\UnitOfWork,
+    UnitOfWork\UnitOfWorkExecutor
+};
 
 #[Service]
 class MigrationManager
@@ -34,12 +39,17 @@ class MigrationManager
         $unitOfWork = new UnitOfWork();
         $migrations = $this->findMigrations($directory);
 
-        foreach ($migrations as $migration) {
+        foreach ($migrations as $fileName => $migration) {
             if ($this->isExecuted($migration)) {
                 continue;
             }
 
-            $migration->migrate($unitOfWork);
+            try {
+                $migration->migrate($unitOfWork);
+            }
+            catch (\Throwable $e) {
+                throw new MigrationException($fileName, $e->getMessage());
+            }
 
             $this->processedMigrations[] = $migration;
         }
