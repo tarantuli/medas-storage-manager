@@ -27,16 +27,13 @@ use Medas\StorageManager\UnitOfWork\{Priority, UnitOfWork, UnitOfWorkManager};
 readonly class EntityPersister
 {
     public function __construct(
-        private DataSerializer               $dataSerializer,
-        private EntityStructureFinder        $entityStructureFinder,
-        private MetaDataManager              $metaDataManager,
-        private StoreRecordManager           $recordManager,
-        private StorageManager               $storageManager,
-        private UnitOfWorkManager            $unitOfWorkManager,
-        private ValueGetter                  $valueGetter,
-
-        #[ConfigValue(DefaultStrategy::class)]
-        private OriginalClassStorageStrategy $originalClassStorageStrategy,
+        private DataSerializer     $dataSerializer, private EntityStructureFinder $entityStructureFinder, private MetaDataManager $metaDataManager, #[ConfigValue(
+            DefaultStrategy::class
+        )]private OriginalClassStorageStrategy $originalClassStorageStrategy,
+        private StorageManager     $storageManager,
+        private StoreRecordManager $recordManager,
+        private UnitOfWorkManager  $unitOfWorkManager,
+        private ValueGetter        $valueGetter,
     )
     {
     }

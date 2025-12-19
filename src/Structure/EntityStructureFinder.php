@@ -133,7 +133,10 @@ readonly class EntityStructureFinder
         }
     }
 
-    public function fieldFromProperty(MetaData\Property $property, ParentStores $parentStores = null): Blueprint\Field
+    public function fieldFromProperty(
+        MetaData\Property $property,
+        ParentStores|null $parentStores = null
+    ): Blueprint\Field
     {
         $field = new Blueprint\Field($property->name, Blueprint\Type::Text);
 

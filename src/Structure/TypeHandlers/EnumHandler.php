@@ -28,7 +28,7 @@ readonly class EnumHandler
         $minValue = null;
         $maxValue = null;
 
-        foreach ((new \ReflectionEnum($enum))->getCases() as $case) {
+        foreach (new \ReflectionEnum($enum)->getCases() as $case) {
             $value = $case->getBackingValue();
 
             if ($minValue === null || $value < $minValue) {
@@ -48,7 +48,7 @@ readonly class EnumHandler
         $minLength = null;
         $maxLength = null;
 
-        foreach ((new \ReflectionEnum($enum))->getCases() as $case) {
+        foreach (new \ReflectionEnum($enum)->getCases() as $case) {
             $length = strlen($case->getBackingValue());
 
             if ($minLength === null || $length < $minLength) {

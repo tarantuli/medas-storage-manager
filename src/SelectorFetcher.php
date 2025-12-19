@@ -17,7 +17,7 @@ readonly class SelectorFetcher
     {
     }
 
-    public function fetch(Selector $selector = null, array $arguments = []): array
+    public function fetch(Selector|null $selector = null, array $arguments = []): array
     {
         $entity = $selector->entity();
         $metaData = $this->metaDataManager->get($entity);

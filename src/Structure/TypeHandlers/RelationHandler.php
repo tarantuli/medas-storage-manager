@@ -12,8 +12,8 @@ use Medas\StorageManager\Structure\{Blueprint\ForeignKey, Blueprint\Type, TypeHa
 readonly class RelationHandler extends BaseHandler
 {
     public function __construct(
-        private MetaDataManager $metaDataManager,
         private EnumHandler     $enumHandler,
+        private MetaDataManager $metaDataManager,
     )
     {
     }

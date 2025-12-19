@@ -32,7 +32,7 @@ class StorageManager
         $this->controller($storage);
     }
 
-    public function byName(string $name = null): Interfaces\Storage
+    public function byName(string|null $name = null): Interfaces\Storage
     {
         return $name === null ? $this->default : $this->storages[$name];
     }
@@ -46,7 +46,7 @@ class StorageManager
         return $this->storages[$name] = $storageBuilder();
     }
 
-    public function controller(Interfaces\Storage|string $storage = null): Interfaces\StorageController
+    public function controller(Interfaces\Storage|string|null $storage = null): Interfaces\StorageController
     {
         if ($storage === null) {
             $storage = $this->default;

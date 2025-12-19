@@ -8,7 +8,7 @@ use Medas\StorageManager\UnitOfWork\{Action, ActionSet};
 
 interface ActionExecutor
 {
-    public function execute(Action $action, ActionSet $actionSet = null): void;
+    public function execute(Action $action, ActionSet|null $actionSet = null): void;
 
     public function executeSet(ActionSet $actionSet): void;
 }

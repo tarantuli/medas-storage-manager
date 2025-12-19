@@ -27,11 +27,11 @@ readonly class UnitOfWorkManager
     }
 
     public function queueCreate(
-        UnitOfWork $unitOfWork,
-        Store      $store,
-        array      $values,
-        \Closure   $onComplete = null,
-        Priority   $priority = null,
+        UnitOfWork    $unitOfWork,
+        Store         $store,
+        array         $values,
+        ?\Closure     $onComplete = null,
+        Priority|null $priority = null,
     ): void
     {
         $actions = $this->storageManager->controller($store->storage())->actionBuilders()->insert()

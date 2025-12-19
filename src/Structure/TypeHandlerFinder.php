@@ -26,8 +26,8 @@ readonly class TypeHandlerFinder
         private TypeHandlers\BooleanHandler    $booleanHandler,
         private TypeHandlers\CollectionHandler $collectionHandler,
         private TypeHandlers\DateTimeHandler   $dateTimeHandler,
-        private TypeHandlers\IntegerHandler    $integerHandler,
         private TypeHandlers\FloatHandler      $floatHandler,
+        private TypeHandlers\IntegerHandler    $integerHandler,
         private TypeHandlers\RelationHandler   $relationHandler,
         private TypeHandlers\TextHandler       $textHandler,
     )

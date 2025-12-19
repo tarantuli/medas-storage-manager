@@ -55,13 +55,7 @@ class Blueprint
 
     public function primaryIndex(): Blueprint\Index|null
     {
-        foreach ($this->indexes as $index) {
-            if ($index->isPrimary) {
-                return $index;
-            }
-        }
-
-        return null;
+        return array_find($this->indexes, fn($index) => $index->isPrimary);
     }
 
     public function idField(): Blueprint\Field|null
