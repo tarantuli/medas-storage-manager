@@ -15,10 +15,11 @@ use Medas\StorageManager\UnitOfWork\ActionSet;
 readonly class LinkingStore implements OriginalClassStorageStrategy
 {
     public function __construct(
-        private ActionExecutor    $actionExecutor, #[ConfigValue(
-            StoreNamingStrategy::class
-        )]private LinkinStore\NamingStrategy $namingStrategy,
-        private StorageController $storageController,
+        private ActionExecutor             $actionExecutor,
+
+        #[ConfigValue(StoreNamingStrategy::class)]
+        private LinkinStore\NamingStrategy $namingStrategy,
+        private StorageController          $storageController,
     )
     {
     }
