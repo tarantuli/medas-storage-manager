@@ -15,7 +15,6 @@ class RecordCollection extends GenericCollection
     public function clear(): void
     {
         $this->data = [];
-        $this->hasChanged = true;
         $this->index = 0;
     }
 }
