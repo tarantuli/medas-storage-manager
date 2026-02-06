@@ -1,7 +1,7 @@
 {
   "name": "morphp/medas-storage-manager",
   "description": "Medas storage manager",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "keywords": [
     "storage"
   ],
@@ -13,24 +13,19 @@
   ],
   "type": "library",
   "require": {
-    "morphp/medas-cache": "^2",
-    "morphp/medas-config-options": "^2",
-    "morphp/medas-console": "^2",
-    "morphp/medas-console-printer": "^2",
-    "morphp/medas-core": "^2",
-    "morphp/medas-entity-manager": "^2",
-    "morphp/medas-file-builder": "^2",
-    "php": "^8.4"
+    "morphp/medas-cache": "^1",
+    "morphp/medas-config-options": "^1",
+    "morphp/medas-console": "^1",
+    "morphp/medas-console-printer": "^1",
+    "morphp/medas-core": "^1",
+    "morphp/medas-entity-manager": "^1",
+    "morphp/medas-file-builder": "^1",
+    "php": "^8.2"
   },
   "require-dev": {
-    "morphp/medas-config-manager": "^2",
-    "morphp/medas-service-manager": "^2",
+    "morphp/medas-config-manager": "^1",
+    "morphp/medas-service-manager": "^1",
     "phpunit/phpunit": "^9.5"
-  },
-  "extra": {
-    "branch-alias": {
-      "^2": "0.x-dev"
-    }
   },
   "autoload": {
     "psr-4": {
