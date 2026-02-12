@@ -13,15 +13,13 @@ use Medas\StorageManager\{
 };
 
 #[Service]
-class MigrationManager
+readonly class MigrationManager
 {
-    private array $processedMigrations = [];
-
     public function __construct(
-        private readonly FileLoader            $fileLoader,
-        private readonly MigrationStoreManager $migrationStoreManager,
-        private readonly StorageManager        $storageManager,
-        private readonly UnitOfWorkExecutor    $unitOfWorkExecutor,
+        private FileLoader            $fileLoader,
+        private MigrationStoreManager $migrationStoreManager,
+        private StorageManager        $storageManager,
+        private UnitOfWorkExecutor    $unitOfWorkExecutor,
     )
     {
     }
@@ -31,12 +29,11 @@ class MigrationManager
         $directory = realpath($directory);
 
         $this->fileLoader->load($directory);
-        $this->processEntities($directory);
+        $this->processDirectory($directory);
     }
 
-    private function processEntities(string $directory): void
+    private function processDirectory(string $directory): void
     {
-        $unitOfWork = new UnitOfWork();
         $migrations = $this->findMigrations($directory);
 
         foreach ($migrations as $fileName => $migration) {
@@ -45,18 +42,16 @@ class MigrationManager
             }
 
             try {
+                $unitOfWork = new UnitOfWork();
+
                 $migration->migrate($unitOfWork);
+
+                $this->unitOfWorkExecutor->execute($unitOfWork);
             }
             catch (\Throwable $e) {
                 throw new MigrationException($fileName, $e->getMessage());
             }
 
-            $this->processedMigrations[] = $migration;
-        }
-
-        $this->unitOfWorkExecutor->execute($unitOfWork);
-
-        foreach ($this->processedMigrations as $migration) {
             $this->registerExecution($migration);
         }
     }
@@ -119,10 +114,5 @@ class MigrationManager
             );
 
         $storageController->actionExecutor()->executeSet($actions);
-    }
-
-    public function processedMigrations(): array
-    {
-        return $this->processedMigrations;
     }
 }
