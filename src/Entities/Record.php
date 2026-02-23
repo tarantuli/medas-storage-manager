@@ -8,9 +8,9 @@ use Medas\StorageManager\Interfaces\Record as RecordInterface;
 
 class Record implements RecordInterface
 {
-    private int $keyIndex;
-    private array $keys;
-    private int $keyCount;
+    private int $keyIndex = 0;
+    private array $keys = [];
+    private int $keyCount = 0;
 
     public function __construct(private array $data)
     {

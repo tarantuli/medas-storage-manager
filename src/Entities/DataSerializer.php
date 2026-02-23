@@ -8,6 +8,7 @@ use Medas\Core\{
     Attributes\Service,
     Interfaces\PropertyHandler,
     Interfaces\Serializer,
+    Interfaces\ServiceManager,
     Types\Relation
 };
 use Medas\EntityManager\{Exceptions\PropertyDoesNotExist, MetaData, MetaDataManager};
@@ -18,6 +19,7 @@ readonly class DataSerializer
 {
     public function __construct(
         private MetaDataManager $metaDataManager,
+        private ServiceManager  $serviceManager,
         private StorageManager  $storageManager,
     )
     {
@@ -62,14 +64,14 @@ readonly class DataSerializer
         if ($class = $property->handler) {
             // This property has been assigned a handler, let it unserialize afterward
             /** @var PropertyHandler $handler */
-            $handler = service($class);
+            $handler = $this->serviceManager->resolve($class);
             $value = $handler->unserialize($value);
         }
 
         return $value;
     }
 
-    public function serializeArray(MetaData $metaData, iterable &$data): void
+    public function serializeArray(MetaData $metaData, array &$data): void
     {
         foreach ($data as $key => $value) {
             $data[$key] = $this->serializeValue($metaData, $metaData->property($key), $value);
@@ -81,7 +83,7 @@ readonly class DataSerializer
         if ($class = $property->handler) {
             // This property has been assigned a handler, let it serialize first
             /** @var PropertyHandler $propertyHandler */
-            $propertyHandler = service($class);
+            $propertyHandler = $this->serviceManager->resolve($class);
             $value = $propertyHandler->serialize($value);
         }
 

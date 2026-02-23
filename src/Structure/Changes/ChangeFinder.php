@@ -56,19 +56,19 @@ readonly class ChangeFinder
         }
 
         // If the diff contains length or value parameters, compare ranges
-        if (isset($diff['minLength']) and $current->minLength <= $field->minLength) {
+        if (isset($diff['minLength']) && $current->minLength <= $field->minLength) {
             unset($diff['minLength']);
         }
 
-        if (isset($diff['maxLength']) and $current->maxLength >= $field->maxLength) {
+        if (isset($diff['maxLength']) && $current->maxLength >= $field->maxLength) {
             unset($diff['maxLength']);
         }
 
-        if (isset($diff['minValue']) and $current->minValue <= $field->minValue) {
+        if (isset($diff['minValue']) && $current->minValue <= $field->minValue) {
             unset($diff['minValue']);
         }
 
-        if (isset($diff['maxValue']) and $current->maxValue >= $field->maxValue) {
+        if (isset($diff['maxValue']) && $current->maxValue >= $field->maxValue) {
             unset($diff['maxValue']);
         }
 
@@ -111,9 +111,8 @@ readonly class ChangeFinder
 
             if (!$job->existing->indexByHash($index->hash())) {
                 $job->changes->addIndexes[] = $index;
+                $job->foundChanges = true;
             }
-
-            $job->foundChanges = true;
         }
     }
 
@@ -126,12 +125,12 @@ readonly class ChangeFinder
                 }
 
                 $job->changes->changeForeignKey[] = $foreignKey;
+                $job->foundChanges = true;
             }
             else {
                 $job->changes->addForeignKey[] = $foreignKey;
+                $job->foundChanges = true;
             }
-
-            $job->foundChanges = true;
         }
     }
 

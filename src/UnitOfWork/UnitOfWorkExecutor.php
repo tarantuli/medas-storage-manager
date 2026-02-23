@@ -27,10 +27,12 @@ readonly class UnitOfWorkExecutor
         }
 
         try {
-            $this->storageManager->controller($unitOfWork->actions()[0]->storage())->actionExecutor()
-                ->executeSet(new ActionSet($unitOfWork->actions()));
+            foreach ($unitOfWork->actions() as $action) {
+                $this->storageManager->controller($action->storage())->actionExecutor()
+                    ->execute($action);
+            }
         }
-        catch (\Exception $exception) {
+        catch (\Throwable $exception) {
             foreach ($unitOfWork->storages() as $storage) {
                 $this->storageManager->controller($storage)->transaction($storage)->rollback();
             }

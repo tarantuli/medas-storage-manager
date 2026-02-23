@@ -8,15 +8,17 @@ use Medas\Core\{
     Attributes\Service,
     Interfaces\ConfigGroup,
     Interfaces\ConfigOption,
+    Interfaces\ServiceManager,
     Interfaces\Validator
 };
-use Medas\StorageManager\Inheritance\LinkinStore\{AppendFixedSuffix, NamingStrategy};
+use Medas\StorageManager\Inheritance\LinkingStore\{AppendFixedSuffix, NamingStrategy};
 
 #[Service]
 readonly class StoreNamingStrategy implements ConfigOption, Validator
 {
     public function __construct(
         private LinkingStoreGroup $group,
+        private ServiceManager    $serviceManager,
     )
     {
     }
@@ -48,6 +50,6 @@ readonly class StoreNamingStrategy implements ConfigOption, Validator
 
     public function default(): NamingStrategy
     {
-        return service(AppendFixedSuffix::class);
+        return $this->serviceManager->resolve(AppendFixedSuffix::class);
     }
 }

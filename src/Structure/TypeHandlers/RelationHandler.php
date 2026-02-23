@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Structure\TypeHandlers;
 
-use Medas\Core\{Attributes\Service, Types\Relation};
+use Medas\Core\{Attributes\Service, Interfaces\ServiceManager, Types\Relation};
 use Medas\EntityManager\{MetaData\Property, MetaDataManager};
 use Medas\StorageManager\Structure\{Blueprint\ForeignKey, Blueprint\Type, TypeHandlerFinder};
 
@@ -14,6 +14,7 @@ readonly class RelationHandler extends BaseHandler
     public function __construct(
         private EnumHandler     $enumHandler,
         private MetaDataManager $metaDataManager,
+        private ServiceManager  $serviceManager,
     )
     {
     }
@@ -34,7 +35,7 @@ readonly class RelationHandler extends BaseHandler
         $idProperty = $this->getIdProperty($entity);
 
         // We can't inject it in the constructor due to circular dependencies
-        $typeHandlerFinder = service(TypeHandlerFinder::class);
+        $typeHandlerFinder = $this->serviceManager->resolve(TypeHandlerFinder::class);
 
         return $typeHandlerFinder->for($idProperty->type)->fieldType($idProperty);
     }

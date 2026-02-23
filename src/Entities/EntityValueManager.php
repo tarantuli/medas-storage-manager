@@ -13,7 +13,7 @@ use Medas\EntityManager\Entities\{
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
-use Medas\StorageManager\Interfaces\Record;
+use Medas\StorageManager\{Exceptions\StoresDontHaveProperty, Interfaces\Record};
 
 #[Service]
 readonly class EntityValueManager implements EntityValueFetcher
@@ -48,10 +48,7 @@ readonly class EntityValueManager implements EntityValueFetcher
             return new FetchResult(true, $record[$property->name]);
         }
 
-        throw new Exceptions\StoresDontHaveProperty(
-            $this->storesFinder->find($metaData),
-            $property->name
-        );
+        throw new StoresDontHaveProperty($this->storesFinder->find($metaData), $property->name);
     }
 
     private function getEntityRecord(MetaData $metaData, object $entity): Record|null

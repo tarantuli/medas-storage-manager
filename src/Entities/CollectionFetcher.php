@@ -15,7 +15,7 @@ use Medas\Core\{
 };
 use Medas\EntityManager\Entities\ValueFetchers\FetchResult;
 use Medas\EntityManager\MetaData;
-use Medas\StorageManager\StorageManager;
+use Medas\StorageManager\{Exceptions\UnhandledRawItemType, StorageManager};
 
 #[Service]
 readonly class CollectionFetcher
@@ -64,7 +64,7 @@ readonly class CollectionFetcher
             $itemType = new Relation($rawItemType);
         }
         else {
-            throw new \Exception('unhandled raw item type ' . $rawItemType);
+            throw new UnhandledRawItemType($rawItemType);
         }
 
         $serializer = $this->storageManager->controller($metaData->entity->storage)->serializer();

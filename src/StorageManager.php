@@ -19,6 +19,11 @@ class StorageManager
 
     private array $controllerPerStorageName = [];
 
+    /**
+     * @throws Exceptions\NoControllerFoundForStorage
+     * @throws Exceptions\NoDefaultStorageFound
+     * @throws Exceptions\NoStorageWithNameFound
+     */
     public function add(Interfaces\Storage $storage, bool $isDefault = false): void
     {
         $this->storages[$storage->name()] = $storage;
@@ -34,24 +39,53 @@ class StorageManager
 
     public function byName(string|null $name = null): Interfaces\Storage
     {
-        return $name === null ? $this->default : $this->storages[$name];
+        if ($name === null) {
+            if (!isset($this->default)) {
+                throw new Exceptions\NoDefaultStorageFound();
+            }
+
+            return $this->default;
+        }
+
+        if (!array_key_exists($name, $this->storages)) {
+            throw new Exceptions\NoStorageWithNameFound($name);
+        }
+
+        return $this->storages[$name];
     }
 
+    /**
+     * @throws Exceptions\NoControllerFoundForStorage
+     * @throws Exceptions\NoDefaultStorageFound
+     * @throws Exceptions\NoStorageWithNameFound
+     */
     public function getElseSet(string $name, \Closure $storageBuilder): Interfaces\Storage
     {
         if (array_key_exists($name, $this->storages)) {
             return $this->storages[$name];
         }
 
-        return $this->storages[$name] = $storageBuilder();
+        $storage = $this->storages[$name] = $storageBuilder();
+
+        $this->controller($storage);
+
+        return $storage;
     }
 
     public function controller(Interfaces\Storage|string|null $storage = null): Interfaces\StorageController
     {
         if ($storage === null) {
+            if (!isset($this->default)) {
+                throw new Exceptions\NoDefaultStorageFound();
+            }
+
             $storage = $this->default;
         }
         elseif (is_string($storage)) {
+            if (!array_key_exists($storage, $this->storages)) {
+                throw new Exceptions\NoStorageWithNameFound($storage);
+            }
+
             $storage = $this->storages[$storage];
         }
 

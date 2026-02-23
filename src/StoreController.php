@@ -65,7 +65,9 @@ readonly class StoreController
         bool             $commit = true
     ): Interfaces\RecordSet|null
     {
-        if ($this->fetch($store, $conditions)->hasRecords()) {
+        $recordSet = $this->fetch($store, $conditions);
+
+        if ($recordSet && $recordSet->hasRecords()) {
             return $this->update($store, $updates, $conditions, $commit);
         }
         else {

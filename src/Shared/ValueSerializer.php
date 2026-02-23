@@ -8,6 +8,7 @@ use Medas\Core\{
     Attributes\Service,
     Interfaces\HasId,
     Interfaces\Serializer,
+    Interfaces\ServiceManager,
     Interfaces\Type,
     Interfaces\Uuid,
     Interfaces\UuidProvider,
@@ -15,10 +16,21 @@ use Medas\Core\{
     Types\Relation,
     Types\Uuid as UuidType
 };
+use Medas\EntityManager\EntityManager;
 
 #[Service]
-class ValueSerializer implements Serializer
+readonly class ValueSerializer implements Serializer
 {
+    private \DateTimeZone $dateTimeZone;
+
+    public function __construct(
+        private EntityManager  $entityManager,
+        private ServiceManager $serviceManager,
+    )
+    {
+        $this->dateTimeZone = new \DateTimeZone(date_default_timezone_get());
+    }
+
     public function serialize(mixed $value): mixed
     {
         // Get the ID first, so other serializers can process its value
@@ -31,9 +43,11 @@ class ValueSerializer implements Serializer
         }
 
         if ($value instanceof \DateTime) {
-            $value->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+            $clone = clone $value;
 
-            return $value->format('Y-m-d H:i:s');
+            $clone->setTimezone($this->dateTimeZone);
+
+            return $clone->format('Y-m-d H:i:s');
         }
 
         if ($value instanceof \BackedEnum) {
@@ -54,7 +68,7 @@ class ValueSerializer implements Serializer
         }
 
         if ($type instanceof UuidType) {
-            return service(UuidProvider::class)->fromBytes($value);
+            return $this->serviceManager->resolve(UuidProvider::class)->fromBytes($value);
         }
 
         if ($type instanceof Boolean) {
@@ -66,7 +80,7 @@ class ValueSerializer implements Serializer
                 return $value;
             }
 
-            return em()->get($type->entity, $value);
+            return $this->entityManager->get($type->entity, $value);
         }
 
         return $value;

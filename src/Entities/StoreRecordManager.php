@@ -34,7 +34,7 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         $this->storeRecords = new RecordCollection();
     }
 
-    public function fetch(Selector|null $selector = null, array $arguments = []): FetchResult
+    public function fetch(Selector $selector, array $arguments = []): FetchResult
     {
         $metaData = $this->metaDataManager->get($selector->entity());
         $records = $this->selectorfetcher->fetch($selector, $arguments);
@@ -119,8 +119,8 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
     {
         $key = $this->getKeyFromRecord($metaData, $idValues);
 
-        if (isset($this->storeRecords->records[$key])) {
-            $this->storeRecords->records[$key]->patch($values);
+        if ($this->storeRecords->hasKey($key)) {
+            $this->storeRecords[$key]->patch($values);
         }
     }
 

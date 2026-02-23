@@ -13,7 +13,7 @@ use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index,
 #[Service]
 readonly class MigrationStoreManager
 {
-    private Store $store;
+    public Store $store;
 
     public function __construct(
         private StorageManager $storageManager,
@@ -22,22 +22,14 @@ readonly class MigrationStoreManager
         private string         $migrationsStoreName,
     )
     {
-    }
+        $storageController = $this->storageManager->controller();
+        $store = $storageController->store($this->migrationsStoreName);
 
-    public function get(): Store
-    {
-        if (!isset($this->store)) {
-            $storageController = $this->storageManager->controller();
-            $store = $storageController->store($this->migrationsStoreName);
-
-            if (!$storageController->hasStore($store)) {
-                $this->build($store);
-            }
-
-            $this->store = $store;
+        if (!$storageController->hasStore($store)) {
+            $this->build($store);
         }
 
-        return $this->store;
+        $this->store = $store;
     }
 
     private function build(Store $store): void

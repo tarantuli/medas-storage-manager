@@ -8,6 +8,7 @@ use Medas\Core\{
     Attributes\Service,
     Interfaces\ConfigGroup,
     Interfaces\ConfigOption,
+    Interfaces\ServiceManager,
     Interfaces\Validator
 };
 use Medas\StorageManager\Inheritance\{LinkingStore, OriginalClassStorageStrategy};
@@ -17,6 +18,7 @@ readonly class DefaultStrategy implements ConfigOption, Validator
 {
     public function __construct(
         private OriginalClassStorageGroup $group,
+        private ServiceManager            $serviceManager,
     )
     {
     }
@@ -48,6 +50,6 @@ readonly class DefaultStrategy implements ConfigOption, Validator
 
     public function default(): OriginalClassStorageStrategy
     {
-        return service(LinkingStore::class);
+        return $this->serviceManager->resolve(LinkingStore::class);
     }
 }

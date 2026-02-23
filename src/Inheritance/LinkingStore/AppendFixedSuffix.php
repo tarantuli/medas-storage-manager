@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\StorageManager\Inheritance\LinkinStore;
+namespace Medas\StorageManager\Inheritance\LinkingStore;
 
 use Medas\Core\Attributes\Service;
 

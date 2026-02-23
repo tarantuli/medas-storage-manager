@@ -17,4 +17,9 @@ class RecordCollection extends GenericCollection
         $this->data = [];
         $this->index = 0;
     }
+
+    public function hasKey(mixed $key): bool
+    {
+        return array_key_exists($key, $this->data);
+    }
 }

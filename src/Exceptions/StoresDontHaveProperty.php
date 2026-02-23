@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\StorageManager\Entities\Exceptions;
+namespace Medas\StorageManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 use Medas\StorageManager\Interfaces\Store;

@@ -7,7 +7,9 @@ namespace Medas\StorageManager\Structure;
 use Medas\Core\{
     Attributes\ConfigValue,
     Attributes\Service,
+    Interfaces\CacheManager,
     Interfaces\PropertyHandler,
+    Interfaces\ServiceManager,
     Interfaces\Type,
     Types\Binary,
     Types\Boolean,
@@ -22,8 +24,10 @@ use Medas\StorageManager\ConfigOptions\TypeDefaults\DefaultMaxIntegerValue;
 readonly class EntityStructureFinder
 {
     public function __construct(
+        private CacheManager                 $cacheManager,
         private MetaDataManager              $metaDataManager,
         private ParentStoreFinder            $parentStoreFinder,
+        private ServiceManager               $serviceManager,
         private TypeHandlerFinder            $typeHandlerFinder,
         private TypeHandlers\EnumHandler     $enumHandler,
         private TypeHandlers\RelationHandler $relationHandler,
@@ -36,7 +40,10 @@ readonly class EntityStructureFinder
 
     public function find(string $className): Blueprint
     {
-        return cache([__CLASS__, $className], fn() => $this->compile($className));
+        return $this->cacheManager->get()->get(
+            [__CLASS__, $className],
+            fn() => $this->compile($className)
+        );
     }
 
     private function compile(string $className): Blueprint
@@ -182,7 +189,7 @@ readonly class EntityStructureFinder
             if ($class = $property->handler) {
                 // This property has been assigned a handler, let it serialize the value
                 /** @var PropertyHandler $propertyHandler */
-                $propertyHandler = service($class);
+                $propertyHandler = $this->serviceManager->resolve($class);
                 $field->default = $propertyHandler->serialize($field->default);
             }
         }

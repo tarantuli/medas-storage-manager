@@ -69,9 +69,7 @@ readonly class MigrationBuildManager
 
     private function initializeClass(Job $job): void
     {
-        $now = \DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''))
-            ->format('YmdHisu');
-
+        $now = new \DateTime()->format('YmdHisu');
         $job->className = 'Migration' . $now;
         $job->migrationClass = new PhpClassDefinition($job->className, 'Medas\\Migrations');
         $job->migrationClass->implements[] = Migration::class;

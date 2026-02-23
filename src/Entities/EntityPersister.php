@@ -11,12 +11,14 @@ use Medas\Core\{
     Types\Collection
 };
 use Medas\EntityManager\{
+    EntityManager,
     Hydration\ValueGetter,
     MetaData,
     MetaDataManager,
     Snapshots\PropertyChange
 };
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
+use Medas\StorageManager\Exceptions\PropertyTypeShouldBeACollectionInstance;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Interfaces\{Storage, Store};
 use Medas\StorageManager\StorageManager;
@@ -28,6 +30,7 @@ readonly class EntityPersister
 {
     public function __construct(
         private DataSerializer               $dataSerializer,
+        private EntityManager                $entityManager,
         private EntityStructureFinder        $entityStructureFinder,
         private MetaDataManager              $metaDataManager,
 
@@ -125,7 +128,7 @@ readonly class EntityPersister
                 $metaData->idProperty->reflection->setValue($entity, $value);
             }
 
-            em()->resetKey($entity);
+            $this->entityManager->resetKey($entity);
         };
     }
 
@@ -181,7 +184,7 @@ readonly class EntityPersister
     ): void
     {
         if (!$property->type instanceof Collection) {
-            throw new \Exception('property type should be a Collection instance');
+            throw new PropertyTypeShouldBeACollectionInstance($property);
         }
 
         $value = $property->reflection->getValue($entity);

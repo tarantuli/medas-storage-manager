@@ -8,9 +8,9 @@ use Medas\Core\Exceptions\BaseException;
 
 class EnumIsNotBacked extends BaseException
 {
-    public function __construct(string $enum)
+    public function __construct(string $enumClassName)
     {
-        parent::__construct($enum);
+        parent::__construct($enumClassName);
     }
 
     public function pattern(): string

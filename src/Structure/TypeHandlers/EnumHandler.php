@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Structure\TypeHandlers;
 
 use Medas\Core\{Attributes\Service, Interfaces\Type, Types\Integer, Types\Text};
-use Medas\StorageManager\Exceptions\EnumIsNotBacked;
+use Medas\StorageManager\Exceptions\{
+    EnumIsNotBacked,
+    UnhandledEnumBackingType,
+    UnhandledEnumBlueprintType
+};
 use Medas\StorageManager\Structure\Blueprint\Type as BlueprintType;
 
 #[Service]
@@ -19,7 +23,7 @@ readonly class EnumHandler
         return match ($this->getBlueprintType($enum)) {
             BlueprintType::Integer => $this->getIntegerType($enum),
             BlueprintType::Text => $this->getStringType($enum),
-            default => throw new \Exception('this cannot trigger; an enum is either backed by integers or strings'),
+            default => throw new UnhandledEnumBlueprintType($enum, $this->getBlueprintType($enum))
         };
     }
 
@@ -74,6 +78,7 @@ readonly class EnumHandler
         return match ($enumReflection->getBackingType()->getName()) {
             'int' => BlueprintType::Integer,
             'string' => BlueprintType::Text,
+            default => throw new UnhandledEnumBackingType($enum, $enumReflection->getBackingType())
         };
     }
 }

@@ -8,11 +8,13 @@ use Medas\StorageManager\Interfaces\Storage;
 
 class UnitOfWork
 {
-    /** @var Storage[] */
-    private array|\SplObjectStorage $storages;
+    /** @var \SplObjectStorage<Storage> */
+    private \SplObjectStorage $storages;
 
     /** @var Action[] */
     private array $actions = [];
+
+    private bool $isSorted = false;
 
     public function __construct()
     {
@@ -24,13 +26,13 @@ class UnitOfWork
         $this->storages->attach($action->storage());
 
         $this->actions[] = $action;
+        $this->isSorted = false;
     }
 
     /**
-     * @return Storage[]
-     * @noinspection PhpDocSignatureInspection
+     * @return \SplObjectStorage<Storage>
      */
-    public function storages(): array|\SplObjectStorage
+    public function storages(): \SplObjectStorage
     {
         return $this->storages;
     }
@@ -38,7 +40,9 @@ class UnitOfWork
     /** @return Action[] */
     public function actions(): array
     {
-        $this->sortByPriority();
+        if (!$this->isSorted) {
+            $this->sortByPriority();
+        }
 
         return $this->actions;
     }
@@ -49,5 +53,7 @@ class UnitOfWork
             $this->actions,
             fn(Action $a, Action $b) => $a->priority()->value <=> $b->priority()->value
         );
+
+        $this->isSorted = true;
     }
 }
