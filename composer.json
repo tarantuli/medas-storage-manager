@@ -26,14 +26,13 @@
     "morphp/medas-service-manager": "^3",
     "phpunit/phpunit": "^10"
   },
-  "extra": {
-    "branch-alias": {
-      "^3": "0.x-dev"
-    }
-  },
   "autoload": {
     "psr-4": {
-      "Medas\\StorageManager\\": "src/",
+      "Medas\\StorageManager\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "Medas\\StorageManagerTest\\": "tests/"
     }
   }

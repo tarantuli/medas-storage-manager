@@ -6,10 +6,9 @@ namespace Medas\StorageManager;
 
 use Medas\Cache\CachePackage;
 use Medas\ConfigOptions\ConfigOptionsPackage;
-use Medas\Core\AsSingleton;
+use Medas\Core\{AsSingleton, BasePackage};
 use Medas\EntityManager\EntityManagerPackage;
 use Medas\FileBuilder\FileBuilderPackage;
-use Medas\ServiceManager\BasePackage;
 
 class StorageManagerPackage extends BasePackage
 {

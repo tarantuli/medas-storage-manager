@@ -15,7 +15,8 @@ class RecordCollection extends GenericCollection
     public function clear(): void
     {
         $this->data = [];
-        $this->index = 0;
+
+        $this->rewind();
     }
 
     public function hasKey(mixed $key): bool

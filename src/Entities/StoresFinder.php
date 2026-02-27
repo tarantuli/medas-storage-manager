@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Entities;
 
 use Medas\Cache\MemoryCache;
-use Medas\Core\{Attributes\Service, Serializers\NoopSerializer};
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData;
 use Medas\StorageManager\{Interfaces\Store, StorageManager, Structure\EntityStructureFinder};
 
@@ -19,7 +19,7 @@ readonly class StoresFinder
         private StorageManager        $storageManager,
     )
     {
-        $this->cache = new MemoryCache(new NoopSerializer());
+        $this->cache = new MemoryCache();
     }
 
     /** @return Store[] */

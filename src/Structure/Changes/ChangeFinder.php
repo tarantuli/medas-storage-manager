@@ -125,12 +125,12 @@ readonly class ChangeFinder
                 }
 
                 $job->changes->changeForeignKey[] = $foreignKey;
-                $job->foundChanges = true;
             }
             else {
                 $job->changes->addForeignKey[] = $foreignKey;
-                $job->foundChanges = true;
             }
+
+            $job->foundChanges = true;
         }
     }
 
