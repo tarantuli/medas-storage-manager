@@ -11,7 +11,7 @@ use Medas\Core\{
     Types\Collection
 };
 use Medas\EntityManager\{
-    EntityManager,
+    Events\ResetEntityKey,
     Hydration\ValueGetter,
     MetaData,
     MetaDataManager,
@@ -30,7 +30,6 @@ readonly class EntityPersister
 {
     public function __construct(
         private DataSerializer               $dataSerializer,
-        private EntityManager                $entityManager,
         private EntityStructureFinder        $entityStructureFinder,
         private MetaDataManager              $metaDataManager,
 
@@ -128,7 +127,7 @@ readonly class EntityPersister
                 $metaData->idProperty->reflection->setValue($entity, $value);
             }
 
-            $this->entityManager->resetKey($entity);
+            dispatch(new ResetEntityKey($entity));
         };
     }
 
