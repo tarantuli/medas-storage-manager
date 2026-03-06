@@ -133,9 +133,10 @@ readonly class MigrationManager
 
     private function isExecuted(Migration $migration): bool
     {
-        return $this->storageManager->controller()->recordFetchers()->filteredFetcher()
-            ->fetch($this->migrationStoreManager->store, ['migration' => $migration::class])
-            ->hasRecords();
+        $recordSet = $this->storageManager->controller()->recordFetchers()->filteredFetcher()
+            ->fetch($this->migrationStoreManager->store, ['migration' => $migration::class]);
+
+        return $recordSet->fetchRecord() !== null;
     }
 
     private function registerExecution(Migration $migration): void
