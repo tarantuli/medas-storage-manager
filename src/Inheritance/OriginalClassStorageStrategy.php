@@ -12,5 +12,5 @@ interface OriginalClassStorageStrategy
 
     public function createValuesToStore(Blueprint $blueprint, object $entity): array;
 
-    public function getOriginalClass(Blueprint $blueprint, mixed $id): string;
+    public function getOriginalClass(Blueprint $blueprint, Storage $storage, mixed $id): string;
 }

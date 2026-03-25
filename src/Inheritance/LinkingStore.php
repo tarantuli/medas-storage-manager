@@ -7,7 +7,8 @@ namespace Medas\StorageManager\Inheritance;
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\EntityManager\Attributes\Relations\Action;
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\LinkingStore\StoreNamingStrategy;
-use Medas\StorageManager\Interfaces\{Storage, StorageController};
+use Medas\StorageManager\Interfaces\Storage;
+use Medas\StorageManager\StorageManager;
 use Medas\StorageManager\Structure\Blueprint;
 use Medas\StorageManager\UnitOfWork\ActionSet;
 
@@ -17,7 +18,7 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
     public function __construct(
         #[ConfigValue(StoreNamingStrategy::class)]
         private LinkingStore\NamingStrategy $namingStrategy,
-        private StorageController           $storageController,
+        private StorageManager              $storageManager,
     )
     {
     }
@@ -53,7 +54,7 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
             ->addIndex($primaryIndex)
             ->addForeignKey($idForeignKey);
 
-        return $this->storageController->migrationBuilder()->buildActions(
+        return $this->storageManager->controller($storage)->migrationBuilder()->buildActions(
             $storage,
             $linkStoreBlueprint
         );
@@ -66,14 +67,16 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
         return [$storeName => ['entityClass' => $entity::class]];
     }
 
-    public function getOriginalClass(Blueprint $blueprint, mixed $id): string
+    public function getOriginalClass(Blueprint $blueprint, Storage $storage, mixed $id): string
     {
-        $actions = $this->storageController->actionBuilders()->get()->build(
-            [$this->storageController->store($this->namingStrategy->determine($blueprint->storeRequestingOriginalClassStorage))],
+        $storageController = $this->storageManager->controller($storage);
+
+        $actions = $storageController->actionBuilders()->get()->build(
+            [$storageController->store($this->namingStrategy->determine($blueprint->storeRequestingOriginalClassStorage))],
             [$blueprint->idField()->name => $id]
         );
 
-        $this->storageController->actionExecutor()->executeSet($actions);
+        $storageController->actionExecutor()->executeSet($actions);
 
         return $actions->lastRecordSet->fetchRecord()['entityClass'];
     }
