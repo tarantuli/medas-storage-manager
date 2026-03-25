@@ -7,7 +7,7 @@ namespace Medas\StorageManager\Inheritance;
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\EntityManager\Attributes\Relations\Action;
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\LinkingStore\StoreNamingStrategy;
-use Medas\StorageManager\Interfaces\{ActionExecutor, Storage, StorageController};
+use Medas\StorageManager\Interfaces\{Storage, StorageController};
 use Medas\StorageManager\Structure\Blueprint;
 use Medas\StorageManager\UnitOfWork\ActionSet;
 
@@ -15,8 +15,6 @@ use Medas\StorageManager\UnitOfWork\ActionSet;
 readonly class LinkingStore implements OriginalClassStorageStrategy
 {
     public function __construct(
-        private ActionExecutor              $actionExecutor,
-
         #[ConfigValue(StoreNamingStrategy::class)]
         private LinkingStore\NamingStrategy $namingStrategy,
         private StorageController           $storageController,
@@ -75,7 +73,7 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
             [$blueprint->idField()->name => $id]
         );
 
-        $this->actionExecutor->executeSet($actions);
+        $this->storageController->actionExecutor()->executeSet($actions);
 
         return $actions->lastRecordSet->fetchRecord()['entityClass'];
     }
