@@ -8,6 +8,7 @@ use Composer\Autoload\ClassLoader;
 use Medas\Core\{Attributes\Service, Interfaces\FileLoader};
 use Medas\StorageManager\{
     Exceptions\MigrationException,
+    Interfaces\Store,
     StorageManager,
     UnitOfWork\UnitOfWork,
     UnitOfWork\UnitOfWorkExecutor
@@ -30,15 +31,15 @@ readonly class MigrationManager
         $directory = realpath($directory);
 
         $this->fileLoader->load($directory);
-        $this->processDirectory($directory);
+        $this->processDirectory($directory, $this->migrationStoreManager->store());
     }
 
-    private function processDirectory(string $directory): void
+    private function processDirectory(string $directory, Store $store): void
     {
         $migrations = $this->findMigrations($directory);
 
         foreach ($migrations as $fileName => $migration) {
-            if ($this->isExecuted($migration)) {
+            if ($this->isExecuted($migration, $store)) {
                 continue;
             }
 
@@ -53,7 +54,7 @@ readonly class MigrationManager
                 throw new MigrationException($fileName, $e->getMessage());
             }
 
-            $this->registerExecution($migration);
+            $this->registerExecution($migration, $store);
         }
     }
 
@@ -131,22 +132,19 @@ readonly class MigrationManager
         return null;
     }
 
-    private function isExecuted(Migration $migration): bool
+    private function isExecuted(Migration $migration, Store $store): bool
     {
         $recordSet = $this->storageManager->controller()->recordFetchers()->filteredFetcher()
-            ->fetch($this->migrationStoreManager->store, ['migration' => $migration::class]);
+            ->fetch($store, ['migration' => $migration::class]);
 
         return $recordSet->fetchRecord() !== null;
     }
 
-    private function registerExecution(Migration $migration): void
+    private function registerExecution(Migration $migration, Store $store): void
     {
         $storageController = $this->storageManager->controller();
         $actions = $storageController->actionBuilders()->insert()
-            ->build(
-                $this->migrationStoreManager->store,
-                ['migration' => $migration::class, 'migratedAt' => new \DateTime()]
-            );
+            ->build($store, ['migration' => $migration::class, 'migratedAt' => new \DateTime()]);
 
         $storageController->actionExecutor()->executeSet($actions);
     }
