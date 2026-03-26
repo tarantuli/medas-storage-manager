@@ -5,7 +5,14 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConsoleCommands;
 
 use Medas\ConfigOptions\OptionController;
-use Medas\Console\{Commands\BaseConsoleCommand, Commands\ConsoleCommandGroup, Formats\Color, Text};
+use Medas\Console\{
+    Commands\BaseConsoleCommand,
+    Commands\CommandInput,
+    Commands\ConsoleCommandGroup,
+    Commands\Option,
+    Formats\Color,
+    Text
+};
 use Medas\ConsolePrinter\ConsolePrinter;
 use Medas\Core\{Attributes\Service, Interfaces\ImplementorFinder, Interfaces\ServiceManager};
 use Medas\EntityManager\ConfigOptions\EntityDirectories;
@@ -51,14 +58,19 @@ readonly class MakeMigrationCommand extends BaseConsoleCommand
         return 'Makes a new migration class file';
     }
 
-    public function process(array $arguments): void
+    public function options(): array
+    {
+        return [new Option('clean')];
+    }
+
+    public function process(CommandInput $input): void
     {
         $settings = new Settings(
             $this->optionController->getValue($this->entityDirectories),
             $this->optionController->getValue($this->migrationDirectory)
         );
 
-        if (in_array('--clean', $arguments)) {
+        if ($input->hasOption('clean')) {
             $settings->ignoreExistingStorage = true;
         }
 
