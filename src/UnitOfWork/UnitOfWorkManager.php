@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Medas\StorageManager\UnitOfWork;
 
 use Medas\Core\{
+    Attributes\ConfigValue,
     Attributes\Service,
+    ConfigOptions\DispatchDebugInformation,
     Events\DebugInformation,
     Interfaces\ManagedCollection,
     Types\Collection
@@ -17,6 +19,9 @@ readonly class UnitOfWorkManager
 {
     public function __construct(
         private StorageManager $storageManager,
+
+        #[ConfigValue(DispatchDebugInformation::class)]
+        private bool           $dispatchDebugInformation = false,
     )
     {
     }
@@ -27,7 +32,9 @@ readonly class UnitOfWorkManager
             ->build($store, $updates, $conditions);
 
         foreach ($actions as $action) {
-            dispatch(new DebugInformation('[unit of work manager] update action: %s', $action));
+            if ($this->dispatchDebugInformation) {
+                dispatch(new DebugInformation('[unit of work manager] update action: %s', $action));
+            }
 
             $unitOfWork->addAction($action);
         }
@@ -51,7 +58,9 @@ readonly class UnitOfWorkManager
 
             $action->setOnComplete($onComplete);
 
-            dispatch(new DebugInformation('[unit of work manager] create action: %s', $action));
+            if ($this->dispatchDebugInformation) {
+                dispatch(new DebugInformation('[unit of work manager] create action: %s', $action));
+            }
 
             $unitOfWork->addAction($action);
         }
@@ -63,7 +72,9 @@ readonly class UnitOfWorkManager
             ->build($store, $conditions);
 
         foreach ($actions as $action) {
-            dispatch(new DebugInformation('[unit of work manager] delete action: %s', $action));
+            if ($this->dispatchDebugInformation) {
+                dispatch(new DebugInformation('[unit of work manager] delete action: %s', $action));
+            }
 
             $unitOfWork->addAction($action);
         }
@@ -82,7 +93,9 @@ readonly class UnitOfWorkManager
             ->build($store, $entity, $name, $type, $values);
 
         foreach ($actions as $action) {
-            dispatch(new DebugInformation('[unit of work manager] collection update action: %s', $action));
+            if ($this->dispatchDebugInformation) {
+                dispatch(new DebugInformation('[unit of work manager] collection update action: %s', $action));
+            }
 
             $unitOfWork->addAction($action);
         }
