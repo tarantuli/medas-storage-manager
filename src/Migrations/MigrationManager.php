@@ -26,6 +26,22 @@ readonly class MigrationManager
     {
     }
 
+    /** @return string[] */
+    public function processedMigrations(): array
+    {
+        $store = $this->migrationStoreManager->store();
+        $recordSet = $this->storageManager->controller()->recordFetchers()->filteredFetcher()
+            ->fetch($store);
+
+        $processed = [];
+
+        while ($record = $recordSet->fetchRecord()) {
+            $processed[] = $record->data()['migration'];
+        }
+
+        return $processed;
+    }
+
     public function migrate(string $directory): void
     {
         $directory = realpath($directory);
