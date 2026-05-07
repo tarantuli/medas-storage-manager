@@ -7,7 +7,7 @@ namespace Medas\StorageManager\Entities;
 use Medas\Cache\MemoryCache;
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData;
-use Medas\StorageManager\{Interfaces\Store, StorageManager, Structure\EntityStructureFinder};
+use Medas\StorageManager\{Interfaces\Store, PropertyStoreMapper, StorageManager};
 
 #[Service]
 readonly class StoresFinder
@@ -15,8 +15,8 @@ readonly class StoresFinder
     private MemoryCache $cache;
 
     public function __construct(
-        private EntityStructureFinder $entityStructureFinder,
-        private StorageManager        $storageManager,
+        private PropertyStoreMapper $propertyStoreMapper,
+        private StorageManager      $storageManager,
     )
     {
         $this->cache = new MemoryCache();
@@ -31,17 +31,10 @@ readonly class StoresFinder
     /** @return Store[] */
     private function gather(MetaData $metaData): array
     {
-        $blueprint = $this->entityStructureFinder->find($metaData->className);
-        $storeNames = [];
-
-        foreach ($blueprint->fields as $field) {
-            $storeNames[] = $field->store;
-        }
-
         $stores = [];
 
-        foreach (array_unique($storeNames) as $name) {
-            $stores[] = $this->storageManager->controller($metaData->entity->storage)->store($name);
+        foreach ($this->propertyStoreMapper->get($metaData)->stores() as $storeName) {
+            $stores[] = $this->storageManager->controller($metaData->entity->storage)->store($storeName);
         }
 
         return $stores;

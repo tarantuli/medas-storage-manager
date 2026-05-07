@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Inheritance;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\EntityManager\Attributes\Relations\Action;
+use Medas\EntityManager\{MetaData, MetaDataManager};
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\LinkingStore\StoreNamingStrategy;
 use Medas\StorageManager\Interfaces\Storage;
 use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\Structure\Blueprint;
-use Medas\StorageManager\UnitOfWork\ActionSet;
 
 #[Service]
 readonly class LinkingStore implements OriginalClassStorageStrategy
@@ -18,62 +16,28 @@ readonly class LinkingStore implements OriginalClassStorageStrategy
     public function __construct(
         #[ConfigValue(StoreNamingStrategy::class)]
         private LinkingStore\NamingStrategy $namingStrategy,
+        private MetaDataManager             $metaDataManager,
         private StorageManager              $storageManager,
     )
     {
     }
 
-    public function buildStoreActions(Blueprint $blueprint, Storage $storage): ActionSet
+    public function createValuesToStore(MetaData $metaData, object $entity): array
     {
-        $linkStoreBlueprint = new Blueprint();
-        $idField = clone $blueprint->primaryIndex()->fields()[0];
-
-        $idField->name = 'id';
-        $idField->isGenerated = false;
-
-        $idForeignKey = new Blueprint\ForeignKey(
-            'id',
-            $blueprint->name,
-            $blueprint->primaryIndex()->fields()[0]->name,
-            Action::Cascade,
-            Action::Cascade
-        );
-
-        $valueField = new Blueprint\Field(
-            name: 'entityClass',
-            type: Blueprint\Type::Text,
-            isGenerated: false,
-        );
-
-        $primaryIndex = new Blueprint\Index([$idField], true);
-        $linkStoreBlueprint->name = $this->namingStrategy->determine($blueprint->name);
-
-        $linkStoreBlueprint
-            ->addField($idField)
-            ->addField($valueField)
-            ->addIndex($primaryIndex)
-            ->addForeignKey($idForeignKey);
-
-        return $this->storageManager->controller($storage)->migrationBuilder()->buildActions(
-            $storage,
-            $linkStoreBlueprint
-        );
-    }
-
-    public function createValuesToStore(Blueprint $blueprint, object $entity): array
-    {
-        $storeName = $this->namingStrategy->determine($blueprint->storeRequestingOriginalClassStorage);
+        $sharedParentStore = $this->metaDataManager->get($metaData->inheritance->sharedParentClass)->entity->store;
+        $storeName = $this->namingStrategy->determine($sharedParentStore);
 
         return [$storeName => ['entityClass' => $entity::class]];
     }
 
-    public function getOriginalClass(Blueprint $blueprint, Storage $storage, mixed $id): string
+    public function getOriginalClass(MetaData $metaData, Storage $storage, mixed $id): string
     {
+        $sharedParentStore = $this->metaDataManager->get($metaData->inheritance->sharedParentClass)->entity->store;
         $storageController = $this->storageManager->controller($storage);
 
         $actions = $storageController->actionBuilders()->get()->build(
-            [$storageController->store($this->namingStrategy->determine($blueprint->storeRequestingOriginalClassStorage))],
-            [$blueprint->idField()->name => $id]
+            [$storageController->store($this->namingStrategy->determine($sharedParentStore))],
+            [$metaData->idProperty->name => $id]
         );
 
         $storageController->actionExecutor()->executeSet($actions);

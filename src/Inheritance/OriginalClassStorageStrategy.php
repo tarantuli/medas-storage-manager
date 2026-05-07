@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Inheritance;
 
-use Medas\StorageManager\{Interfaces\Storage, Structure\Blueprint, UnitOfWork\ActionSet};
+use Medas\EntityManager\MetaData;
+use Medas\StorageManager\Interfaces\Storage;
 
 interface OriginalClassStorageStrategy
 {
-    public function buildStoreActions(Blueprint $blueprint, Storage $storage): ActionSet;
+    public function createValuesToStore(MetaData $metaData, object $entity): array;
 
-    public function createValuesToStore(Blueprint $blueprint, object $entity): array;
-
-    public function getOriginalClass(Blueprint $blueprint, Storage $storage, mixed $id): string;
+    public function getOriginalClass(MetaData $metaData, Storage $storage, mixed $id): string;
 }

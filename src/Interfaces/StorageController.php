@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Interfaces;
 
 use Medas\Core\Interfaces\Serializer;
-use Medas\StorageManager\Migrations\MigrationBuilder;
 
 interface StorageController
 {
@@ -31,6 +30,4 @@ interface StorageController
     public function actionExecutor(): ActionExecutor;
 
     public function recordFetchers(): RecordFetchers;
-
-    public function migrationBuilder(): MigrationBuilder;
 }

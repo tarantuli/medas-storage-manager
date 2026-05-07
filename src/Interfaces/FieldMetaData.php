@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Interfaces;
 
-use Medas\StorageManager\Structure\Blueprint\Type;
+use Medas\StorageManager\Type;
 
 interface FieldMetaData
 {

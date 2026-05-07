@@ -6,18 +6,19 @@ namespace Medas\StorageManager\Migrations;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\StorageManager\ConfigOptions\MigrationsStoreName;
-use Medas\StorageManager\Interfaces\Store;
+use Medas\StorageManager\Exceptions\MigrationStoreDoesNotExist;
+use Medas\StorageManager\Interfaces\{Builders\MigrationStoreBuilder, Store};
 use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\Structure\{Blueprint, Blueprint\Field, Blueprint\Index, Blueprint\Type};
 
 #[Service]
 readonly class MigrationStoreManager
 {
     public function __construct(
-        private StorageManager $storageManager,
+        private StorageManager             $storageManager,
 
         #[ConfigValue(MigrationsStoreName::class)]
-        private string         $migrationsStoreName,
+        private string                     $migrationsStoreName,
+        private MigrationStoreBuilder|null $builder,
     )
     {
     }
@@ -28,28 +29,13 @@ readonly class MigrationStoreManager
         $store = $storageController->store($this->migrationsStoreName);
 
         if (!$storageController->hasStore($store)) {
-            $this->build($store);
+            if ($this->builder === null) {
+                throw new MigrationStoreDoesNotExist();
+            }
+
+            $this->builder->build($store);
         }
 
         return $store;
-    }
-
-    private function build(Store $store): void
-    {
-        $blueprint = new Blueprint();
-
-        $blueprint->name = $store->name();
-        $migrationField = new Field('migration', Type::Text);
-        $datetimeField = new Field('migratedAt', Type::DateTime);
-
-        $blueprint->addField($migrationField);
-        $blueprint->addField($datetimeField);
-        $blueprint->addIndex(new Index([$migrationField]));
-
-        $storageController = $this->storageManager->controller();
-        $actions = $storageController->actionBuilders()->createStore()
-            ->build($store->storage(), $blueprint);
-
-        $storageController->actionExecutor()->executeSet($actions);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\StorageManager\Structure\Blueprint;
+namespace Medas\StorageManager;
 
 enum Type: string
 {

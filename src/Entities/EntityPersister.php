@@ -21,8 +21,8 @@ use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Exceptions\PropertyTypeShouldBeACollectionInstance;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\Interfaces\{Storage, Store};
+use Medas\StorageManager\PropertyStoreMapper;
 use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\Structure\EntityStructureFinder;
 use Medas\StorageManager\UnitOfWork\{Priority, UnitOfWork, UnitOfWorkManager};
 
 #[Service]
@@ -30,11 +30,11 @@ readonly class EntityPersister
 {
     public function __construct(
         private DataSerializer               $dataSerializer,
-        private EntityStructureFinder        $entityStructureFinder,
         private MetaDataManager              $metaDataManager,
 
         #[ConfigValue(DefaultStrategy::class)]
         private OriginalClassStorageStrategy $originalClassStorageStrategy,
+        private PropertyStoreMapper          $propertyStoreMapper,
         private StorageManager               $storageManager,
         private StoreRecordManager           $recordManager,
         private UnitOfWorkManager            $unitOfWorkManager,
@@ -46,7 +46,7 @@ readonly class EntityPersister
     public function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
-        $blueprint = $this->entityStructureFinder->find($entity::class);
+        $storeMap = $this->propertyStoreMapper->get($metaData);
         $valuesPerStore = [];
 
         foreach ($metaData->properties as $property) {
@@ -71,7 +71,7 @@ readonly class EntityPersister
             }
 
             if ($foundValue) {
-                $store = $blueprint->fieldByName($property->name)->store;
+                $store = $storeMap->storeForProperty($property->name);
 
                 if (!array_key_exists($store, $valuesPerStore)) {
                     $valuesPerStore[$store] = [];
@@ -81,7 +81,7 @@ readonly class EntityPersister
             }
         }
 
-        $idFieldStore = $blueprint->idField()->store;
+        $idFieldStore = $storeMap->storeForProperty($metaData->idProperty->name);
 
         if (!array_key_exists($idFieldStore, $valuesPerStore)) {
             $valuesPerStore[$idFieldStore] = [];
@@ -91,8 +91,8 @@ readonly class EntityPersister
             $this->dataSerializer->serializeArray($metaData, $subValues);
         }
 
-        if ($blueprint->storeOriginalClass) {
-            $values = $this->originalClassStorageStrategy->createValuesToStore($blueprint, $entity);
+        if ($metaData->inheritance->storeOriginalClass) {
+            $values = $this->originalClassStorageStrategy->createValuesToStore($metaData, $entity);
             $valuesPerStore = array_merge_recursive($valuesPerStore, $values);
         }
 
@@ -100,7 +100,7 @@ readonly class EntityPersister
             $priority = null;
 
             if ($store !== $idFieldStore) {
-                $values[$blueprint->idField()->name] = new LastInsertIdPlaceholder();
+                $values[$metaData->idProperty->name] = new LastInsertIdPlaceholder();
                 $priority = Priority::CreateDependentRecord;
             }
 

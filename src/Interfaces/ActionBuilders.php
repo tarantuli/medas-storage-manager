@@ -9,10 +9,6 @@ namespace Medas\StorageManager\Interfaces;
  */
 interface ActionBuilders
 {
-    public function createStore(): Builders\CreateStoreBuilder;
-
-    public function deleteStore(): Builders\DeleteStoreBuilder;
-
     public function selectorAction(): Builders\SelectorActionBuilder;
 
     public function insert(): Builders\InsertBuilder;

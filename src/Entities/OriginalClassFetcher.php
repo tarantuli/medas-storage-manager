@@ -13,14 +13,11 @@ use Medas\EntityManager\MetaData;
 use Medas\StorageManager\ConfigOptions\OriginalClassStorage\DefaultStrategy;
 use Medas\StorageManager\Inheritance\OriginalClassStorageStrategy;
 use Medas\StorageManager\StorageManager;
-use Medas\StorageManager\Structure\EntityStructureFinder;
 
 #[Service]
 readonly class OriginalClassFetcher implements OriginalClassFetcherInterface
 {
     public function __construct(
-        private EntityStructureFinder        $entityStructureFinder,
-
         #[ConfigValue(DefaultStrategy::class)]
         private OriginalClassStorageStrategy $originalClassStorageStrategy,
         private StorageManager               $storageManager,
@@ -30,12 +27,11 @@ readonly class OriginalClassFetcher implements OriginalClassFetcherInterface
 
     public function fetch(MetaData $metaData, mixed $id): FetchResult
     {
-        $blueprint = $this->entityStructureFinder->find($metaData->className);
         $storage = $this->storageManager->byName($metaData->entity->storage);
 
         return new FetchResult(
             true,
-            $this->originalClassStorageStrategy->getOriginalClass($blueprint, $storage, $id)
+            $this->originalClassStorageStrategy->getOriginalClass($metaData, $storage, $id)
         );
     }
 }
