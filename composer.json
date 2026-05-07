@@ -18,7 +18,6 @@
     "morphp/medas-console-printer": "^3",
     "morphp/medas-core": "^3",
     "morphp/medas-entity-manager": "^3",
-    "morphp/medas-file-builder": "^3",
     "php": "^8.4"
   },
   "require-dev": {

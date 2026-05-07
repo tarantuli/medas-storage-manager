@@ -8,7 +8,6 @@ use Medas\Cache\CachePackage;
 use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\Core\{AsSingleton, BasePackage};
 use Medas\EntityManager\EntityManagerPackage;
-use Medas\FileBuilder\FileBuilderPackage;
 
 class StorageManagerPackage extends BasePackage
 {
@@ -20,7 +19,6 @@ class StorageManagerPackage extends BasePackage
             CachePackage::instance(),
             ConfigOptionsPackage::instance(),
             EntityManagerPackage::instance(),
-            FileBuilderPackage::instance(),
         ];
     }
 
