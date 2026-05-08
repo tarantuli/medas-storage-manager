@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Shared;
 
 use Medas\Core\{
+    Attributes\EventListener,
     Attributes\Service,
     Interfaces\HasId,
     Interfaces\Serializer,
@@ -60,6 +61,12 @@ readonly class ValueSerializer implements Serializer
         return $value;
     }
 
+    #[EventListener]
+    public function handleSerializeRequest(SerializeValueRequest $request): void
+    {
+        $request->serializedValue = $this->serialize($request->value);
+    }
+
     public function unserialize(mixed $value, Type|null $type = null): mixed
     {
         if ($value === null) {
@@ -79,11 +86,17 @@ readonly class ValueSerializer implements Serializer
                 return $value;
             }
 
-            dispatch($event = new FindEntity($type->entity, $value));
+            $event = dispatch(new FindEntity($type->entity, $value));
 
             return $event->entity;
         }
 
         return $value;
+    }
+
+    #[EventListener]
+    public function handleUnserializeRequest(UnserializeValueRequest $request): void
+    {
+        $request->unserializedValue = $this->unserialize($request->value);
     }
 }
