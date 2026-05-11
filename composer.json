@@ -11,6 +11,14 @@
     }
   ],
   "type": "library",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../storage-manager-tests"
+    }
+  ],
   "require": {
     "morphp/medas-cache": "^3",
     "morphp/medas-config-options": "^3",
@@ -22,17 +30,14 @@
   },
   "require-dev": {
     "morphp/medas-config-manager": "^3",
+    "morphp/medas-object-instantiator": "^3",
     "morphp/medas-service-manager": "^3",
+    "morphp/medas-storage-manager-tests": "*",
     "phpunit/phpunit": "^10"
   },
   "autoload": {
     "psr-4": {
       "Medas\\StorageManager\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Medas\\StorageManagerTest\\": "tests/"
     }
   }
 }

@@ -84,14 +84,25 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         }
 
         $controller = $this->storageManager->controller($store->storage());
+        $arguments = [$metaData->idProperty->name => $idValue];
+        $arguments = $this->applyOwnershipFilters($metaData, $arguments);
         $actionSet = $controller->actionBuilders()
-            ->get()->build([$store], [$metaData->idProperty->name => $idValue]);
+            ->get()->build([$store], $arguments);
 
         $controller->actionExecutor()->executeSet($actionSet);
 
         $record = $actionSet->lastRecordSet->fetchRecord();
 
         return $this->unserializeAndCache($metaData, $store->name(), $idValue, $record);
+    }
+
+    private function applyOwnershipFilters(MetaData $metaData, array $filters): array
+    {
+        foreach ($metaData->ownershipFilters as $className) {
+            $filters = service($className)->addFilters($filters);
+        }
+
+        return $filters;
     }
 
     private function unserializeAndCache(
