@@ -12,6 +12,7 @@ use Medas\EntityManager\Entities\{
     ValueFetchers\SelectorRecordsFetcher
 };
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
+use Medas\EntityManager\Filters\OwnershipFilterApplier;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selector;
@@ -23,12 +24,13 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
     private RecordCollection $storeRecords;
 
     public function __construct(
-        private DataSerializer  $dataSerializer,
-        private IdValue         $idValue,
-        private KeyMaker        $keyMaker,
-        private MetaDataManager $metaDataManager,
-        private SelectorFetcher $selectorfetcher,
-        private StorageManager  $storageManager,
+        private DataSerializer         $dataSerializer,
+        private IdValue                $idValue,
+        private KeyMaker               $keyMaker,
+        private MetaDataManager        $metaDataManager,
+        private OwnershipFilterApplier $ownershipFilterApplier,
+        private SelectorFetcher        $selectorfetcher,
+        private StorageManager         $storageManager,
     )
     {
         $this->storeRecords = new RecordCollection();
@@ -85,7 +87,7 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
 
         $controller = $this->storageManager->controller($store->storage());
         $arguments = [$metaData->idProperty->name => $idValue];
-        $arguments = $this->applyOwnershipFilters($metaData, $arguments);
+        $arguments = $this->ownershipFilterApplier->apply($metaData, $arguments);
         $actionSet = $controller->actionBuilders()
             ->get()->build([$store], $arguments);
 
@@ -94,15 +96,6 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         $record = $actionSet->lastRecordSet->fetchRecord();
 
         return $this->unserializeAndCache($metaData, $store->name(), $idValue, $record);
-    }
-
-    private function applyOwnershipFilters(MetaData $metaData, array $filters): array
-    {
-        foreach ($metaData->ownershipFilters as $className) {
-            $filters = service($className)->addFilters($filters);
-        }
-
-        return $filters;
     }
 
     private function unserializeAndCache(
