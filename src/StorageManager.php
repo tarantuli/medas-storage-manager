@@ -34,7 +34,9 @@ class StorageManager
 
         unset($this->controllerPerStorageName[$storage->name()]);
 
-        $this->controller($storage);
+        $controller = $this->controller($storage);
+
+        $controller->initialize();
     }
 
     public function byName(string|null $name = null): Interfaces\Storage
