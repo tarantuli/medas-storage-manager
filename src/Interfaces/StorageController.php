@@ -8,7 +8,7 @@ use Medas\Core\Interfaces\Serializer;
 
 interface StorageController
 {
-    public function initialize(): void;
+    public function initialize(Storage $storage): void;
 
     public function handles(Storage $storage): bool;
 
