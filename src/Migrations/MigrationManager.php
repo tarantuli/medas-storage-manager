@@ -7,7 +7,10 @@ namespace Medas\StorageManager\Migrations;
 use Composer\Autoload\ClassLoader;
 use Medas\Core\{Attributes\Service, Interfaces\FileLoader};
 use Medas\StorageManager\{
+    Exceptions\MigrationAlreadyExecuted,
     Exceptions\MigrationException,
+    Exceptions\MigrationFileNotFound,
+    Exceptions\NotAMigrationFile,
     Interfaces\Store,
     StorageManager,
     UnitOfWork\UnitOfWork,
@@ -40,6 +43,33 @@ readonly class MigrationManager
         }
 
         return $processed;
+    }
+
+    public function markMigrated(string $filePath): void
+    {
+        // Resolve relative paths against the current working directory
+        $resolved = realpath($filePath);
+
+        if ($resolved === false) {
+            throw new MigrationFileNotFound($filePath);
+        }
+
+        // Load the file so the class becomes available if it is not PSR-4 autoloaded
+        require_once $resolved;
+
+        $migration = $this->migrationFromFile($resolved);
+
+        if ($migration === null) {
+            throw new NotAMigrationFile($resolved);
+        }
+
+        $store = $this->migrationStoreManager->store();
+
+        if ($this->isExecuted($migration, $store)) {
+            throw new MigrationAlreadyExecuted($migration::class);
+        }
+
+        $this->registerExecution($migration, $store);
     }
 
     public function migrate(string $directory): void
