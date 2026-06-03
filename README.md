@@ -187,10 +187,10 @@ service(\Medas\StorageManager\StorageManager::class)->registerController(
 
 ```bash
 # Run all unexecuted migrations in the configured directory
-php medas storage-manager:migrate
+php bin/medas storage-manager:migrate
 
 # Mark a specific migration file as executed without running it
-php medas storage-manager:mark-migrated migrations/Migration20260101AddUsersTable.php
+php bin/medas storage-manager:mark-migrated migrations/Migration20260101AddUsersTable.php
 ```
 
 Migration class names must be unique across the directory. Migrations are sorted alphabetically by class name before execution, so prefixing with a timestamp (`Migration20260522…`) ensures deterministic ordering.
