@@ -5,9 +5,20 @@ declare(strict_types=1);
 namespace Medas\StorageManager\ConsoleCommands;
 
 use Medas\ConfigOptions\OptionController;
-use Medas\Console\Commands\{BaseConsoleCommand, CommandInput, ConsoleCommandGroup};
-use Medas\Core\Attributes\Service;
-use Medas\StorageManager\{ConfigOptions\MigrationDirectory, Migrations\MigrationManager};
+use Medas\Console\{
+    Commands\BaseConsoleCommand,
+    Commands\CommandInput,
+    Commands\ConsoleCommandGroup,
+    Formats\SafeColor,
+    Printer,
+    Text
+};
+use Medas\Core\Attributes\{EventListener, Service};
+use Medas\StorageManager\{
+    ConfigOptions\MigrationDirectory,
+    Migrations\ExecutedMigrationEvent,
+    Migrations\MigrationManager
+};
 
 #[Service]
 readonly class MigrateCommand extends BaseConsoleCommand
@@ -17,6 +28,7 @@ readonly class MigrateCommand extends BaseConsoleCommand
         private MigrationDirectory $migrationDirectory,
         private MigrationManager   $migrationManager,
         private OptionController   $optionController,
+        private Printer            $consolePrinter,
     )
     {
     }
@@ -44,5 +56,14 @@ readonly class MigrateCommand extends BaseConsoleCommand
     public function process(CommandInput $input): void
     {
         $this->migrationManager->migrate($this->optionController->getValue($this->migrationDirectory));
+    }
+
+    #[EventListener]
+    public function handleExecution(ExecutedMigrationEvent $event): void
+    {
+        $this->consolePrinter->printLine(
+            new Text('executed migration file '),
+            new Text($event->filename, SafeColor::LightYellow)
+        );
     }
 }

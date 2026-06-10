@@ -101,6 +101,8 @@ readonly class MigrationManager
             }
 
             $this->registerExecution($migration, $store);
+
+            dispatch(new ExecutedMigrationEvent($fileName));
         }
     }
 
