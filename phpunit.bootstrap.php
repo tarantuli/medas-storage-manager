@@ -6,13 +6,13 @@ use Medas\ConfigManager\{ConfigManagerPackage};
 use Medas\ObjectInstantiator\ObjectInstantiator;
 use Medas\ObjectInstantiator\ObjectInstantiatorPackage;
 use Medas\StorageManagerTests\StorageManagerTestsPackage;
-use Medas\ServiceManager\{ServiceConfig, ServiceManager};
+use Medas\ServiceManager\{ServiceConfigBuilder, ServiceManager};
 use Medas\StorageManager\StorageManagerPackage;
 
 chdir(__DIR__);
 
-new ServiceManager(function (): ServiceConfig {
-    $config = new ServiceConfig(ObjectInstantiator::class);
+new ServiceManager(function (): ServiceConfigBuilder {
+    $config = new ServiceConfigBuilder(ObjectInstantiator::class);
 
     $config->addPackages([
         StorageManagerPackage::instance(),
