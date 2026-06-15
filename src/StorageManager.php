@@ -15,9 +15,16 @@ class StorageManager
     private Interfaces\Storage $default;
 
     /** @var Interfaces\StorageController[] */
-    private array $controllers = [];
+    private array $controllers;
 
     private array $controllerPerStorageName = [];
+
+    public function __construct(
+        ControllerRegistry $controllerRegistry,
+    )
+    {
+        $this->controllers = $controllerRegistry->all();
+    }
 
     /**
      * @throws Exceptions\NoControllerFoundForStorage
@@ -114,10 +121,5 @@ class StorageManager
         }
 
         return $this->controllerPerStorageName[$name];
-    }
-
-    public function registerController(Interfaces\StorageController $controller): void
-    {
-        $this->controllers[] = $controller;
     }
 }

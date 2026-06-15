@@ -175,10 +175,7 @@ readonly class RedisStorageController implements StorageController
     // ... implement the rest of the interface
 }
 
-// Register it:
-service(\Medas\StorageManager\StorageManager::class)->registerController(
-    service(RedisStorageController::class)
-);
+// The controller is discovered automatically by the StorageManager.
 ```
 
 ### Backend user context
