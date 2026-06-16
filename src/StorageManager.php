@@ -15,15 +15,14 @@ class StorageManager
     private Interfaces\Storage $default;
 
     /** @var Interfaces\StorageController[] */
-    private array $controllers;
+    private array|null $controllers = null;
 
     private array $controllerPerStorageName = [];
 
     public function __construct(
-        ControllerRegistry $controllerRegistry,
+        private readonly ControllerRegistry $controllerRegistry,
     )
     {
-        $this->controllers = $controllerRegistry->all();
     }
 
     /**
@@ -94,6 +93,10 @@ class StorageManager
             }
 
             $storage = $this->storages[$storage];
+        }
+
+        if ($this->controllers === null) {
+            $this->controllers = $this->controllerRegistry->all();
         }
 
         $name = $storage->name();
