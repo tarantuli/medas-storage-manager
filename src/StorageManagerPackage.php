@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\StorageManager;
 
 use Medas\Cache\CachePackage;
-use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\Core\{AsSingleton, BasePackage};
 use Medas\EntityManager\EntityManagerPackage;
 
@@ -17,7 +16,6 @@ class StorageManagerPackage extends BasePackage
     {
         return [
             CachePackage::instance(),
-            ConfigOptionsPackage::instance(),
             EntityManagerPackage::instance(),
         ];
     }

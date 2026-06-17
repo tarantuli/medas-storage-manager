@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\ConsoleCommands;
 
-use Medas\ConfigOptions\OptionController;
 use Medas\Console\{
     Commands\BaseConsoleCommand,
     Commands\CommandInput,
@@ -13,7 +12,7 @@ use Medas\Console\{
     Printer,
     Text
 };
-use Medas\Core\Attributes\{EventListener, Service};
+use Medas\Core\{Attributes\EventListener, Attributes\Service, Interfaces\ConfigOptionController};
 use Medas\StorageManager\{
     ConfigOptions\MigrationDirectory,
     Migrations\ExecutedMigrationEvent,
@@ -24,11 +23,11 @@ use Medas\StorageManager\{
 readonly class MigrateCommand extends BaseConsoleCommand
 {
     public function __construct(
-        private CommandGroup       $group,
-        private MigrationDirectory $migrationDirectory,
-        private MigrationManager   $migrationManager,
-        private OptionController   $optionController,
-        private Printer            $consolePrinter,
+        private CommandGroup           $group,
+        private ConfigOptionController $optionController,
+        private MigrationDirectory     $migrationDirectory,
+        private MigrationManager       $migrationManager,
+        private Printer                $consolePrinter,
     )
     {
     }
