@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, CachedImplementorList};
 
 #[Service]
 class StorageManager
@@ -13,16 +13,12 @@ class StorageManager
     private array $storages = [];
 
     private Interfaces\Storage $default;
-
-    /** @var Interfaces\StorageController[] */
-    private array|null $controllers = null;
-
+    private CachedImplementorList $controllers;
     private array $controllerPerStorageName = [];
 
-    public function __construct(
-        private readonly ControllerRegistry $controllerRegistry,
-    )
+    public function __construct()
     {
+        $this->controllers = new CachedImplementorList(Interfaces\StorageController::class);
     }
 
     /**
@@ -95,16 +91,12 @@ class StorageManager
             $storage = $this->storages[$storage];
         }
 
-        if ($this->controllers === null) {
-            $this->controllers = $this->controllerRegistry->all();
-        }
-
         $name = $storage->name();
 
         if (!array_key_exists($name, $this->controllerPerStorageName)) {
             $foundController = false;
 
-            foreach ($this->controllers as $controller) {
+            foreach ($this->controllers->get() as $controller) {
                 if (!$controller->handles($storage)) {
                     continue;
                 }
