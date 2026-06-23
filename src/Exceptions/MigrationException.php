@@ -8,13 +8,17 @@ use Medas\Core\Exceptions\BaseException;
 
 class MigrationException extends BaseException
 {
-    public function __construct(string $migration, string $error)
+    public function __construct(string $migration, string $error, array $executedMigrations)
     {
-        parent::__construct($migration, $error);
+        $executedList = $executedMigrations
+            ? '  - ' . implode("\n  - ", $executedMigrations)
+            : '  none';
+
+        parent::__construct($migration, $error, $executedList);
     }
 
     public function pattern(): string
     {
-        return 'error when executing migration %s: %s';
+        return "error when executing migration %s: %s\n\nexecuted migrations:\n%s";
     }
 }

@@ -61,8 +61,8 @@ readonly class MigrateCommand extends BaseConsoleCommand
     public function handleExecution(ExecutedMigrationEvent $event): void
     {
         $this->consolePrinter->printLine(
-            new Text('executed migration file '),
-            new Text($event->filename, SafeColor::LightYellow)
+            new Text('executed migration '),
+            new Text($event->migration::class, SafeColor::LightYellow)
         );
     }
 }

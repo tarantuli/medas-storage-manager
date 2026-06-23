@@ -7,7 +7,7 @@ namespace Medas\StorageManager\Migrations;
 readonly class ExecutedMigrationEvent
 {
     public function __construct(
-        public string $filename,
+        public Migration $migration,
     )
     {
     }

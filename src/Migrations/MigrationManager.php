@@ -4,49 +4,56 @@ declare(strict_types=1);
 
 namespace Medas\StorageManager\Migrations;
 
-use Composer\Autoload\ClassLoader;
 use Medas\Core\{Attributes\Service, Interfaces\FileLoader};
 use Medas\StorageManager\{
     Exceptions\MigrationAlreadyExecuted,
-    Exceptions\MigrationException,
     Exceptions\MigrationFileNotFound,
+    Exceptions\MigrationStoreDoesNotExist,
     Exceptions\NotAMigrationFile,
+    Interfaces\StorageController,
     Interfaces\Store,
     StorageManager,
-    UnitOfWork\UnitOfWork,
     UnitOfWork\UnitOfWorkExecutor
 };
 
 #[Service]
 readonly class MigrationManager
 {
+    private Store $store;
+    private StorageController $controller;
+
     public function __construct(
-        private FileLoader            $fileLoader,
-        private MigrationStoreManager $migrationStoreManager,
-        private StorageManager        $storageManager,
-        private UnitOfWorkExecutor    $unitOfWorkExecutor,
+        private FileLoader               $fileLoader,
+        private FileToMigrationConverter $fileToMigrationConverter,
+        private MigrationExecutor        $executor,
+        private UnitOfWorkExecutor       $unitOfWorkExecutor,
+        MigrationStoreManager            $migrationStoreManager,
+        StorageManager                   $storageManager,
     )
     {
+        $this->store = $migrationStoreManager->store();
+        $this->controller = $storageManager->controller();
     }
 
-    /** @return string[] */
-    public function processedMigrations(): array
+    public function migrate(string $directory): void
     {
-        $store = $this->migrationStoreManager->store();
-        $recordSet = $this->storageManager->controller()->recordFetchers()->filteredFetcher()
-            ->fetch($store);
+        $migrations = $this->executor->execute($directory, $this->processedMigrations());
 
-        $processed = [];
-
-        while ($record = $recordSet->fetchRecord()) {
-            $processed[] = $record->data()['migration'];
+        if (!$this->controller->hasStore($this->store)) {
+            throw new MigrationStoreDoesNotExist($migrations);
         }
 
-        return $processed;
+        foreach ($migrations as $migration) {
+            $this->registerExecution($migration);
+        }
     }
 
     public function markMigrated(string $filePath): void
     {
+        if (!$this->controller->hasStore($this->store)) {
+            throw new MigrationStoreDoesNotExist();
+        }
+
         // Resolve relative paths against the current working directory
         $resolved = realpath($filePath);
 
@@ -57,143 +64,47 @@ readonly class MigrationManager
         // Load the file so the class becomes available if it is not PSR-4 autoloaded
         require_once $resolved;
 
-        $migration = $this->migrationFromFile($resolved);
+        $migration = $this->fileToMigrationConverter->convert($resolved);
+
+        if (in_array($resolved, $this->processedMigrations(), true)) {
+            throw new MigrationAlreadyExecuted($migration::class);
+        }
 
         if ($migration === null) {
             throw new NotAMigrationFile($resolved);
         }
 
-        $store = $this->migrationStoreManager->store();
+        $this->registerExecution($migration);
+    }
 
-        if ($this->isExecuted($migration, $store)) {
-            throw new MigrationAlreadyExecuted($migration::class);
+    private function registerExecution(Migration $migration): void
+    {
+        $actions = $this->controller->actionBuilders()->insert()
+            ->build($this->store, ['migration' => $migration::class, 'migratedAt' => new \DateTime()]);
+
+        $this->controller->actionExecutor()->executeSet($actions);
+    }
+
+    /** 
+     * Returns an array of class names of migrations that have been processed.
+     * 
+     * @return string[] 
+     */
+    public function processedMigrations(): array
+    {
+        if (!$this->controller->hasStore($this->store)) {
+            return [];
         }
 
-        $this->registerExecution($migration, $store);
-    }
+        $recordSet = $this->controller->recordFetchers()->filteredFetcher()
+            ->fetch($this->store);
 
-    public function migrate(string $directory): void
-    {
-        $directory = realpath($directory);
+        $processed = [];
 
-        $this->fileLoader->load($directory);
-        $this->processDirectory($directory, $this->migrationStoreManager->store());
-    }
-
-    private function processDirectory(string $directory, Store $store): void
-    {
-        $migrations = $this->findMigrations($directory);
-
-        foreach ($migrations as $fileName => $migration) {
-            if ($this->isExecuted($migration, $store)) {
-                continue;
-            }
-
-            try {
-                $unitOfWork = new UnitOfWork();
-
-                $migration->migrate($unitOfWork);
-
-                $this->unitOfWorkExecutor->execute($unitOfWork);
-            }
-            catch (\Throwable $e) {
-                throw new MigrationException($fileName, $e->getMessage());
-            }
-
-            $this->registerExecution($migration, $store);
-
-            dispatch(new ExecutedMigrationEvent($fileName));
-        }
-    }
-
-    /** @return Migration[] */
-    private function findMigrations(string $directory): array
-    {
-        $migrations = [];
-
-        foreach ($this->phpFilesIn($directory) as $fileInfo) {
-            if (null === $migration = $this->migrationFromFile($fileInfo->getPathname())) {
-                continue;
-            }
-
-            $migrations[$migration::class] = $migration;
+        while ($record = $recordSet->fetchRecord()) {
+            $processed[] = $record->data()['migration'];
         }
 
-        ksort($migrations);
-
-        return $migrations;
-    }
-
-    /** @return \RecursiveIteratorIterator<\RecursiveDirectoryIterator> */
-    private function phpFilesIn(string $directory): \RecursiveIteratorIterator
-    {
-        return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(
-            $directory,
-            \FilesystemIterator::SKIP_DOTS
-        ));
-    }
-
-    private function migrationFromFile(string $filePath): Migration|null
-    {
-        if (!str_ends_with($filePath, '.php')) {
-            return null;
-        }
-
-        $className = $this->classNameFromFile($filePath);
-
-        if ($className === null || !class_exists($className)) {
-            return null;
-        }
-
-        $class = new \ReflectionClass($className);
-
-        if (!$class->implementsInterface(Migration::class)) {
-            return null;
-        }
-
-        return new $className();
-    }
-
-    private function classNameFromFile(string $filePath): string|null
-    {
-        foreach (spl_autoload_functions() as $loader) {
-            if (!is_array($loader) || !$loader[0] instanceof ClassLoader) {
-                continue;
-            }
-
-            foreach ($loader[0]->getPrefixesPsr4() as $namespace => $dirs) {
-                foreach ($dirs as $dir) {
-                    $dir = rtrim(realpath($dir), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-
-                    if (!str_starts_with($filePath, $dir)) {
-                        continue;
-                    }
-
-                    $relative = substr($filePath, strlen($dir));
-
-                    return $namespace
-                        . str_replace(DIRECTORY_SEPARATOR, '\\', substr($relative, 0, -4));
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private function isExecuted(Migration $migration, Store $store): bool
-    {
-        $recordSet = $this->storageManager->controller()->recordFetchers()->filteredFetcher()
-            ->fetch($store, ['migration' => $migration::class]);
-
-        return $recordSet->fetchRecord() !== null;
-    }
-
-    private function registerExecution(Migration $migration, Store $store): void
-    {
-        $storageController = $this->storageManager->controller();
-        $actions = $storageController->actionBuilders()->insert()
-            ->build($store, ['migration' => $migration::class, 'migratedAt' => new \DateTime()]);
-
-        $storageController->actionExecutor()->executeSet($actions);
+        return $processed;
     }
 }

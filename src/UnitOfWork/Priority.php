@@ -6,6 +6,9 @@ namespace Medas\StorageManager\UnitOfWork;
 
 enum Priority: int
 {
+    case CreateMigrationStore = 0;
+
+    //---
     case CreateStore = 1;
     case DeleteStoreRelations = 2;
     case AlterStore = 3;
