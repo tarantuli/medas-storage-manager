@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Medas\StorageManager;
 
 use Medas\Core\Attributes\Service;
+use Medas\EntityManager\MetaDataManager;
 
 #[Service]
 readonly class StoreController
 {
     public function __construct(
-        private StorageManager $storageManager,
+        private MetaDataManager $metaDataManager,
+        private StorageManager  $storageManager,
     )
     {
     }
@@ -87,5 +89,12 @@ readonly class StoreController
         }
 
         return $selector->lastRecordSet;
+    }
+
+    public function storeForEntity(string $entityClass): Interfaces\Store
+    {
+        $metaData = $this->metaDataManager->get($entityClass);
+
+        return $this->storageManager->controller($metaData->entity->storage)->store($metaData->entity->store);
     }
 }
