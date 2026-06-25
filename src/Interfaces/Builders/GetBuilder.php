@@ -8,6 +8,8 @@ use Medas\StorageManager\{Interfaces\Store, UnitOfWork\ActionSet};
 
 interface GetBuilder
 {
-    /** @param Store[] $stores */
+    /**
+     * @param Store[] $stores
+     */
     public function build(array $stores, array $filters): ActionSet;
 }
