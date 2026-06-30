@@ -13,7 +13,9 @@ use Medas\Core\{
     Interfaces\Type,
     Interfaces\Uuid,
     Interfaces\UuidProvider,
+    Period as PeriodInstance,
     Types\Boolean,
+    Types\Period,
     Types\Relation,
     Types\Uuid as UuidType
 };
@@ -40,6 +42,10 @@ readonly class ValueSerializer implements Serializer
 
         if ($value instanceof Uuid) {
             return $value->toBytes();
+        }
+
+        if ($value instanceof PeriodInstance) {
+            return $value->toString();
         }
 
         if ($value instanceof \DateTime) {
@@ -79,6 +85,10 @@ readonly class ValueSerializer implements Serializer
 
         if ($type instanceof Boolean) {
             return (bool) $value;
+        }
+
+        if ($type instanceof Period) {
+            return PeriodInstance::fromString($value);
         }
 
         if ($type instanceof Relation) {
