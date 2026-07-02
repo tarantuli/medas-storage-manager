@@ -48,7 +48,7 @@ readonly class ValueSerializer implements Serializer
             return $value->toString();
         }
 
-        if ($value instanceof \DateTime) {
+        if ($value instanceof \DateTime || $value instanceof \DateTimeImmutable) {
             $clone = clone $value;
 
             $clone->setTimezone($this->dateTimeZone);
