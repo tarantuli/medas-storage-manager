@@ -7,6 +7,7 @@ namespace Medas\StorageManager\Shared;
 use Medas\Core\{
     Attributes\EventListener,
     Attributes\Service,
+    Date,
     Interfaces\HasId,
     Interfaces\Serializer,
     Interfaces\ServiceManager,
@@ -15,6 +16,7 @@ use Medas\Core\{
     Interfaces\UuidProvider,
     Period as PeriodInstance,
     Types\Boolean,
+    Types\Date as DateType,
     Types\Period,
     Types\Relation,
     Types\Uuid as UuidType
@@ -56,6 +58,10 @@ readonly class ValueSerializer implements Serializer
             return $clone->format('Y-m-d H:i:s');
         }
 
+        if ($value instanceof Date) {
+            return sprintf('%04d-%02d-%02d', $value->year, $value->month, $value->day);
+        }
+
         if ($value instanceof \BackedEnum) {
             return $value->value;
         }
@@ -89,6 +95,12 @@ readonly class ValueSerializer implements Serializer
 
         if ($type instanceof Period) {
             return PeriodInstance::fromString($value);
+        }
+
+        if ($type instanceof DateType) {
+            [$year, $month, $day] = array_map('intval', explode('-', $value));
+
+            return new Date($year, $month, $day);
         }
 
         if ($type instanceof Relation) {
