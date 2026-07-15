@@ -13,10 +13,5 @@ use Medas\StorageManager\UnitOfWork\ActionSet;
  */
 interface SelectorActionBuilder
 {
-    public function build(
-        Selector $selector,
-        array    $arguments,
-        bool     $doCount = false,
-        bool     $ignoreSlice = false
-    ): ActionSet;
+    public function build(Selector $selector, array $arguments, bool $doCount = false): ActionSet;
 }
