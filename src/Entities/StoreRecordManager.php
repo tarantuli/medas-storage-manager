@@ -55,17 +55,16 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
         return new FetchResult(true, $records);
     }
 
-    public function fetchCount(Selector $selector, array $arguments = []): FetchResult
+    public function fetchCount(Selector $selector, array $arguments = [], bool $ignoreSlice = false): FetchResult
     {
-        // Todo: make a proper COUNT(*) implementation
         $entity = $selector->entity();
         $metaData = $this->metaDataManager->get($entity);
         $actionSet = $this->storageManager->controller($metaData->entity->storage)->actionBuilders()
-            ->selectorAction()->build($selector, $arguments);
+            ->selectorAction()->build($selector, $arguments, true, $ignoreSlice);
 
         $this->storageManager->controller($metaData->entity->storage)->actionExecutor()->executeSet($actionSet);
 
-        return new FetchResult(true, count($actionSet->lastRecordSet->fetchRecords()));
+        return new FetchResult(true, $actionSet->lastRecordSet->fetchRecord()->current()['count']);
     }
 
     #[EventListener]
