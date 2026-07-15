@@ -17,6 +17,6 @@ interface SelectorActionBuilder
         Selector $selector,
         array    $arguments,
         bool     $doCount = false,
-        bool     $ignorSlice = false
+        bool     $ignoreSlice = false
     ): ActionSet;
 }
