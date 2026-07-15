@@ -64,7 +64,7 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
 
         $this->storageManager->controller($metaData->entity->storage)->actionExecutor()->executeSet($actionSet);
 
-        return new FetchResult(true, $actionSet->lastRecordSet->fetchRecord()->current()['count']);
+        return new FetchResult(true, $actionSet->lastRecordSet->fetchRecord()['count']);
     }
 
     #[EventListener]
