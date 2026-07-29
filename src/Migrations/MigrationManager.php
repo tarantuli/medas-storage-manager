@@ -9,6 +9,7 @@ use Medas\StorageManager\{
     Exceptions\MigrationAlreadyExecuted,
     Exceptions\MigrationFileNotFound,
     Exceptions\MigrationStoreDoesNotExist,
+    Exceptions\NoDefaultStorageFound,
     Exceptions\NotAMigrationFile,
     Interfaces\StorageController,
     Interfaces\Store,
@@ -19,8 +20,8 @@ use Medas\StorageManager\{
 #[Service]
 readonly class MigrationManager
 {
-    private Store $store;
-    private StorageController $controller;
+    private Store|null $store;
+    private StorageController|null $controller;
 
     public function __construct(
         private FileLoader               $fileLoader,
@@ -31,8 +32,14 @@ readonly class MigrationManager
         StorageManager                   $storageManager,
     )
     {
-        $this->store = $migrationStoreManager->store();
-        $this->controller = $storageManager->controller();
+        try {
+            $this->store = $migrationStoreManager->store();
+            $this->controller = $storageManager->controller();
+        }
+        catch (NoDefaultStorageFound) {
+            $this->store = null;
+            $this->controller = null;
+        }
     }
 
     public function migrate(string $directory): void
