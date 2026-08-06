@@ -24,6 +24,7 @@
     "morphp/medas-console": "^4",
     "morphp/medas-core": "^4",
     "morphp/medas-entity-manager": "^3",
+    "morphp/medas-object-to-array-serializer": "^3",
     "php": "^8.4"
   },
   "require-dev": {

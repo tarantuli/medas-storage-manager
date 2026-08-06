@@ -7,6 +7,7 @@ namespace Medas\StorageManager;
 use Medas\Cache\CachePackage;
 use Medas\Core\{AsSingleton, BasePackage};
 use Medas\EntityManager\EntityManagerPackage;
+use Medas\ObjectToArraySerializer\ObjectToArraySerializerPackage;
 
 class StorageManagerPackage extends BasePackage
 {
@@ -17,6 +18,7 @@ class StorageManagerPackage extends BasePackage
         return [
             CachePackage::instance(),
             EntityManagerPackage::instance(),
+            ObjectToArraySerializerPackage::instance(),
         ];
     }
 

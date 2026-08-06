@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\StorageManager\Shared;
 
 use Medas\Core\{
+    Attributes\DataHolder as DataHolderAttribute,
     Attributes\EventListener,
     Attributes\Service,
     Date,
@@ -22,6 +23,7 @@ use Medas\Core\{
     Types\Uuid as UuidType
 };
 use Medas\EntityManager\Events\FindEntity;
+use Medas\ObjectToArraySerializer\ObjectToArraySerializer;
 
 #[Service]
 readonly class ValueSerializer implements Serializer
@@ -29,7 +31,8 @@ readonly class ValueSerializer implements Serializer
     private \DateTimeZone $dateTimeZone;
 
     public function __construct(
-        private ServiceManager $serviceManager,
+        private ObjectToArraySerializer $objectToArraySerializer,
+        private ServiceManager          $serviceManager,
     )
     {
         $this->dateTimeZone = new \DateTimeZone(date_default_timezone_get());
@@ -68,6 +71,10 @@ readonly class ValueSerializer implements Serializer
 
         if (is_bool($value)) {
             return (string) (int) $value;
+        }
+
+        if (is_object($value) && attribute(DataHolderAttribute::class, new \ReflectionClass($value::class))) {
+            return $this->objectToArraySerializer->serialize($value);
         }
 
         return $value;
