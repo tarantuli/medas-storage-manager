@@ -11,7 +11,7 @@ class MigrationException extends BaseException
     public function __construct(string $migration, string $error, array $executedMigrations)
     {
         $executedList = $executedMigrations
-            ? '  - ' . implode("\n  - ", $executedMigrations)
+            ? '  - ' . implode("\n  - ", array_map(get_class(...), $executedMigrations))
             : '  none';
 
         parent::__construct($migration, $error, $executedList);
