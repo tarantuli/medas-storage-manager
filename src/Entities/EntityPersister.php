@@ -186,6 +186,12 @@ readonly class EntityPersister
             throw new PropertyTypeShouldBeACollectionInstance($property);
         }
 
+        // An uninitialized collection was never loaded or set, so there's no
+        // baseline to diff against and nothing to sync - skip it
+        if (!$property->reflection->isInitialized($entity)) {
+            return;
+        }
+
         $value = $property->reflection->getValue($entity);
 
         $this->unitOfWorkManager->queueCollectionUpdate(
