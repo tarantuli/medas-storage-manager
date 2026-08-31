@@ -10,6 +10,7 @@ use Medas\Core\{
     Attributes\Service,
     Date,
     Interfaces\HasId,
+    Interfaces\HasStorageValue,
     Interfaces\Serializer,
     Interfaces\ServiceManager,
     Interfaces\Type,
@@ -17,6 +18,7 @@ use Medas\Core\{
     Interfaces\UuidProvider,
     Period as PeriodInstance,
     Types\Boolean,
+    Types\DataHolder as DataHolderType,
     Types\Date as DateType,
     Types\Period,
     Types\Relation,
@@ -73,6 +75,10 @@ readonly class ValueSerializer implements Serializer
             return (string) (int) $value;
         }
 
+        if ($value instanceof HasStorageValue) {
+            return $value->toStorageValue();
+        }
+
         if (is_object($value) && attribute(DataHolderAttribute::class, new \ReflectionClass($value::class))) {
             return $this->objectToArraySerializer->serialize($value);
         }
@@ -108,6 +114,10 @@ readonly class ValueSerializer implements Serializer
             [$year, $month, $day] = array_map('intval', explode('-', $value));
 
             return new Date($year, $month, $day);
+        }
+
+        if ($type instanceof DataHolderType && is_subclass_of($type->className, HasStorageValue::class)) {
+            return $type->className::fromStorageValue($value);
         }
 
         if ($type instanceof Relation) {
