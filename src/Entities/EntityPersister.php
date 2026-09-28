@@ -96,11 +96,20 @@ readonly class EntityPersister
             $valuesPerStore = array_merge_recursive($valuesPerStore, $values);
         }
 
+        // A dependent (child-store) row shares the entity's id. A database-generated id
+        // is not known until the id-store row is inserted, so a placeholder stands in for
+        // the last-insert id; an application-set id (e.g. a uuid assigned before flush) is
+        // already known and is copied across, so uuid-keyed inheritance never tries to
+        // serialise the placeholder object.
+        $dependentRecordId = $metaData->idProperty->isGeneratedValue
+            ? new LastInsertIdPlaceholder()
+            : $this->getIdValues($entity, $metaData)[$metaData->idProperty->name];
+
         foreach ($valuesPerStore as $store => $values) {
             $priority = null;
 
             if ($store !== $idFieldStore) {
-                $values[$metaData->idProperty->name] = new LastInsertIdPlaceholder();
+                $values[$metaData->idProperty->name] = $dependentRecordId;
                 $priority = Priority::CreateDependentRecord;
             }
 
