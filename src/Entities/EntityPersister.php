@@ -150,6 +150,8 @@ readonly class EntityPersister
             $changedValue = $changedValue->current;
         }
 
+        unset($changedValue);
+
         foreach ($metaData->properties as $property) {
             if ($property->isModificationTimestamp) {
                 $value = new \DateTime();
@@ -174,12 +176,24 @@ readonly class EntityPersister
 
         $idValues = $this->getIdValues($entity, $metaData);
 
-        $this->unitOfWorkManager->queueUpdate(
-            $unitOfWork,
-            $this->getStore($metaData),
-            $changedValues,
-            $idValues
-        );
+        // Class-table inheritance: each property is stored in its declaring class's store,
+        // so an update must be partitioned per store rather than sent to the concrete store.
+        $storeMap = $this->propertyStoreMapper->get($metaData);
+        $valuesPerStore = [];
+
+        foreach ($changedValues as $propertyName => $value) {
+            $store = $storeMap->storeForProperty($propertyName);
+            $valuesPerStore[$store][$propertyName] = $value;
+        }
+
+        foreach ($valuesPerStore as $store => $values) {
+            $this->unitOfWorkManager->queueUpdate(
+                $unitOfWork,
+                $this->storageManager->controller($metaData->entity->storage)->store($store),
+                $values,
+                $idValues
+            );
+        }
 
         $this->recordManager->updateRecord($metaData, $changedValues, $idValues);
     }
@@ -217,12 +231,28 @@ readonly class EntityPersister
         }
     }
 
+    private function getStore(MetaData $metaData): Store
+    {
+        return $this->storageManager->controller($metaData->entity->storage)->store($metaData->entity->store);
+    }
+
     public function prepareDelete(object $entity, UnitOfWork $unitOfWork): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
         $idValues = $this->getIdValues($entity, $metaData);
 
-        $this->unitOfWorkManager->queueDelete($unitOfWork, $this->getStore($metaData), $idValues);
+        // Class-table inheritance: delete the id-owning (base) store row and let the
+        // subclass foreign key (id -> base id, ON DELETE CASCADE) drop the dependent rows.
+        // For a non-inherited entity this resolves to the entity's own store.
+        $storeMap = $this->propertyStoreMapper->get($metaData);
+        $idFieldStore = $storeMap->storeForProperty($metaData->idProperty->name);
+
+        $this->unitOfWorkManager->queueDelete(
+            $unitOfWork,
+            $this->storageManager->controller($metaData->entity->storage)->store($idFieldStore),
+            $idValues
+        );
+
         $this->recordManager->removeRecord($metaData, $idValues);
     }
 
@@ -237,10 +267,5 @@ readonly class EntityPersister
         );
 
         return [$metaData->idProperty->name => $serializeValue];
-    }
-
-    private function getStore(MetaData $metaData): Store
-    {
-        return $this->storageManager->controller($metaData->entity->storage)->store($metaData->entity->store);
     }
 }
