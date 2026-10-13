@@ -8,10 +8,16 @@ use Medas\Core\Exceptions\BaseException;
 
 class MigrationStoreDoesNotExist extends BaseException
 {
+    /** @param object[] $executedMigrations */
     public function __construct(array $executedMigrations = [])
     {
         $executedList = $executedMigrations
-            ? '  - ' . implode("\n  - ", $executedMigrations)
+            ? '  - '
+                . implode(
+                    "\n  - ",
+                    array_map(fn(object $migration) => $migration::class, $executedMigrations
+                )
+            )
             : '  none';
 
         parent::__construct($executedList);

@@ -39,6 +39,11 @@
     "psr-4": {
       "Medas\\StorageManager\\": "src/"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-dev": "4.x-dev"
+    }
   }
 }
 

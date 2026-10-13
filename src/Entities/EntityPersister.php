@@ -102,22 +102,27 @@ readonly class EntityPersister
         // already known and is copied across, so uuid-keyed inheritance never tries to
         // serialise the placeholder object.
         $dependentRecordId = $metaData->idProperty->isGeneratedValue
-            ? new LastInsertIdPlaceholder()
+            ? new LastInsertIdPlaceholder($entity, $metaData->idProperty->reflection)
             : $this->getIdValues($entity, $metaData)[$metaData->idProperty->name];
 
         foreach ($valuesPerStore as $store => $values) {
             $priority = null;
+            $onComplete = $this->generatedValueSetter($metaData, $entity);
 
             if ($store !== $idFieldStore) {
                 $values[$metaData->idProperty->name] = $dependentRecordId;
                 $priority = Priority::CreateDependentRecord;
+
+                // The id comes from the id-store row. A dependent row generates none, so
+                // reading "the last generated id" after it would overwrite the right one.
+                $onComplete = null;
             }
 
             $this->unitOfWorkManager->queueCreate(
                 $unitOfWork,
                 $this->storageManager->controller($metaData->entity->storage)->store($store),
                 $values,
-                $this->generatedValueSetter($metaData, $entity),
+                $onComplete,
                 $priority,
             );
         }

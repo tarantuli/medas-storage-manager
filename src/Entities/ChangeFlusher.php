@@ -13,6 +13,7 @@ readonly class ChangeFlusher implements Flusher
 {
     public function __construct(
         private EntityPersister    $entityPersister,
+        private InsertionOrder     $insertionOrder,
         private UnitOfWorkExecutor $unitOfWorkExecutor,
     )
     {
@@ -22,7 +23,7 @@ readonly class ChangeFlusher implements Flusher
     {
         $unitOfWork = new UnitOfWork();
 
-        foreach ($changes->createdEntities() as $entity) {
+        foreach ($this->insertionOrder->sort($changes->createdEntities()) as $entity) {
             $this->entityPersister->prepareCreate($entity, $unitOfWork);
         }
 

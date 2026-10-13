@@ -2,7 +2,7 @@
 <phpunit bootstrap="phpunit.bootstrap.php">
     <testsuites>
         <testsuite name="Unit">
-            <directory>vendor/morphp/medas-storage-manager-tests/src/Unit</directory>
+            <directory>vendor/morphp/medas-storage-manager-tests/tests/Unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>
