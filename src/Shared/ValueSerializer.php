@@ -24,7 +24,7 @@ use Medas\Core\{
     Types\Relation,
     Types\Uuid as UuidType
 };
-use Medas\EntityManager\Events\FindEntity;
+use Medas\EntityManager\EntityManager;
 use Medas\ObjectToArraySerializer\ObjectToArraySerializer;
 
 #[Service]
@@ -33,6 +33,7 @@ readonly class ValueSerializer implements Serializer
     private \DateTimeZone $dateTimeZone;
 
     public function __construct(
+        private EntityManager           $entityManager,
         private ObjectToArraySerializer $objectToArraySerializer,
         private ServiceManager          $serviceManager,
     )
@@ -125,9 +126,7 @@ readonly class ValueSerializer implements Serializer
                 return $value;
             }
 
-            $event = dispatch(new FindEntity($type->entity, $value));
-
-            return $event->entity;
+            return $this->entityManager->reference($type->entity, $value);
         }
 
         return $value;
