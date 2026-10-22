@@ -23,7 +23,7 @@ class UnitOfWork
 
     public function addAction(Action $action): void
     {
-        $this->storages->attach($action->storage());
+        $this->storages->offsetSet($action->storage());
 
         $this->actions[] = $action;
         $this->isSorted = false;
