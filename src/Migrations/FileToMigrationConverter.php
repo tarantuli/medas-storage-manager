@@ -16,7 +16,10 @@ readonly class FileToMigrationConverter
             return null;
         }
 
-        $className = $this->classNameFromFile($filePath);
+        // The class the file declares; deriving it from a PSR-4 mapping can yield a name the
+        // file does not declare, and autoloading that name includes the file a second time.
+        // Files outside every PSR-4 directory (e.g. in a temporary directory) have no mapping.
+        $className = $this->declaredClassName($filePath) ?? $this->classNameFromFile($filePath);
 
         if ($className === null || !class_exists($className)) {
             return null;
@@ -31,8 +34,56 @@ readonly class FileToMigrationConverter
         return new $className();
     }
 
+    private function declaredClassName(string $filePath): string|null
+    {
+        $code = @file_get_contents($filePath);
+
+        if ($code === false) {
+            return null;
+        }
+
+        $namespace = '';
+        $expect = null;
+        $previous = null;
+
+        foreach (\PhpToken::tokenize($code) as $token) {
+            if ($token->isIgnorable()) {
+                continue;
+            }
+
+            if ($expect === T_NAMESPACE) {
+                if ($token->is([T_NAME_QUALIFIED, T_STRING])) {
+                    $namespace = $token->text . '\\';
+                }
+
+                $expect = null;
+            }
+            elseif ($expect === T_CLASS) {
+                return $token->is(T_STRING) ? $namespace . $token->text : null;
+            }
+
+            // Not "Foo::class" or "new class"
+            elseif ($token->is(T_NAMESPACE) || ($token->is(T_CLASS) && !$previous?->is([T_DOUBLE_COLON, T_NEW]))) {
+                $expect = $token->id;
+            }
+
+            $previous = $token;
+        }
+
+        return null;
+    }
+
+    /**
+     * Derives the class name from the PSR-4 mapping whose directory contains the file. When
+     * mappings are nested (e.g. "Tests\\" on tests/ and "Migrations\\" on tests/Migrations/),
+     * the most specific directory wins; any other mapping yields a class name the file does
+     * not declare, and autoloading that name includes the file a second time.
+     */
     private function classNameFromFile(string $filePath): string|null
     {
+        $className = null;
+        $matchedLength = -1;
+
         foreach (spl_autoload_functions() as $loader) {
             if (!is_array($loader) || !$loader[0] instanceof ClassLoader) {
                 continue;
@@ -40,20 +91,27 @@ readonly class FileToMigrationConverter
 
             foreach ($loader[0]->getPrefixesPsr4() as $namespace => $dirs) {
                 foreach ($dirs as $dir) {
-                    $dir = rtrim(realpath($dir), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                    $realDir = realpath($dir);
 
-                    if (!str_starts_with($filePath, $dir)) {
+                    if ($realDir === false) {
+                        continue;
+                    }
+
+                    $dir = rtrim($realDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+                    if (!str_starts_with($filePath, $dir) || strlen($dir) <= $matchedLength) {
                         continue;
                     }
 
                     $relative = substr($filePath, strlen($dir));
+                    $matchedLength = strlen($dir);
 
-                    return $namespace
+                    $className = $namespace
                         . str_replace(DIRECTORY_SEPARATOR, '\\', substr($relative, 0, -4));
                 }
             }
         }
 
-        return null;
+        return $className;
     }
 }

@@ -109,16 +109,16 @@
         },
         {
             "name": "morphp/medas-core",
-            "version": "v4.8.1",
+            "version": "v4.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "b09da1f852df699017b1404e6e7f528d82ae6ecb"
+                "reference": "d16853cc669c2720b3528f0c0ef47fa5d1ea9f9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/b09da1f852df699017b1404e6e7f528d82ae6ecb",
-                "reference": "b09da1f852df699017b1404e6e7f528d82ae6ecb",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/d16853cc669c2720b3528f0c0ef47fa5d1ea9f9a",
+                "reference": "d16853cc669c2720b3528f0c0ef47fa5d1ea9f9a",
                 "shasum": ""
             },
             "require": {
@@ -151,23 +151,23 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v4.8.1",
+                "source": "https://github.com/tarantuli/medas-core/tree/v4.8.2",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-10-22T07:15:36+00:00"
+            "time": "2026-10-26T09:56:52+00:00"
         },
         {
             "name": "morphp/medas-entity-manager",
-            "version": "v3.13.0",
+            "version": "v3.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-entity-manager.git",
-                "reference": "e75fa15f93ecb21f235ca0dc9cbb46de1721ea7e"
+                "reference": "92769088370ca2a4260b1ff6875874c48ef954f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/e75fa15f93ecb21f235ca0dc9cbb46de1721ea7e",
-                "reference": "e75fa15f93ecb21f235ca0dc9cbb46de1721ea7e",
+                "url": "https://api.github.com/repos/tarantuli/medas-entity-manager/zipball/92769088370ca2a4260b1ff6875874c48ef954f9",
+                "reference": "92769088370ca2a4260b1ff6875874c48ef954f9",
                 "shasum": ""
             },
             "require": {
@@ -207,10 +207,10 @@
                 "entities"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-entity-manager/tree/v3.13.0",
+                "source": "https://github.com/tarantuli/medas-entity-manager/tree/v3.14.1",
                 "issues": "https://github.com/tarantuli/medas-entity-manager/issues"
             },
-            "time": "2026-10-21T13:14:24+00:00"
+            "time": "2026-10-26T10:02:30+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -703,16 +703,16 @@
         },
         {
             "name": "morphp/medas-console-printer",
-            "version": "v5.1.1",
+            "version": "v5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-console-printer.git",
-                "reference": "eac0ed8142bc9441bae46134c00142664e7501ea"
+                "reference": "e25a1b5ff3995501446a20279aab5fe5ad954782"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-console-printer/zipball/eac0ed8142bc9441bae46134c00142664e7501ea",
-                "reference": "eac0ed8142bc9441bae46134c00142664e7501ea",
+                "url": "https://api.github.com/repos/tarantuli/medas-console-printer/zipball/e25a1b5ff3995501446a20279aab5fe5ad954782",
+                "reference": "e25a1b5ff3995501446a20279aab5fe5ad954782",
                 "shasum": ""
             },
             "require": {
@@ -749,10 +749,10 @@
                 "console"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-console-printer/tree/v5.1.1",
+                "source": "https://github.com/tarantuli/medas-console-printer/tree/v5.1.2",
                 "issues": "https://github.com/tarantuli/medas-console-printer/issues"
             },
-            "time": "2026-09-04T09:27:55+00:00"
+            "time": "2026-10-23T07:44:43+00:00"
         },
         {
             "name": "morphp/medas-events",
@@ -3386,16 +3386,16 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v5.7.0",
+            "version": "v5.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpdotenv/phpdotenv.git",
-                "reference": "301c07936b16d88628b126b01d082ba153cf4c40"
+                "reference": "96149103e62ac67e915f6d2ef59b72dee2e011e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpdotenv/phpdotenv/zipball/301c07936b16d88628b126b01d082ba153cf4c40",
-                "reference": "301c07936b16d88628b126b01d082ba153cf4c40",
+                "url": "https://api.github.com/repos/phpdotenv/phpdotenv/zipball/96149103e62ac67e915f6d2ef59b72dee2e011e0",
+                "reference": "96149103e62ac67e915f6d2ef59b72dee2e011e0",
                 "shasum": ""
             },
             "require": {
@@ -3422,7 +3422,7 @@
                     "forward-command": false
                 },
                 "branch-alias": {
-                    "dev-master": "5.6-dev"
+                    "dev-master": "5.8-dev"
                 }
             },
             "autoload": {
@@ -3453,8 +3453,8 @@
                 "environment"
             ],
             "support": {
-                "issues": "https://github.com/vlucas/phpdotenv/issues",
-                "source": "https://github.com/vlucas/phpdotenv/tree/v5.7.0"
+                "issues": "https://github.com/phpdotenv/phpdotenv/issues",
+                "source": "https://github.com/phpdotenv/phpdotenv/tree/v5.8.0"
             },
             "funding": [
                 {
@@ -3466,7 +3466,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-24T18:07:49+00:00"
+            "time": "2026-10-25T16:26:19+00:00"
         }
     ],
     "aliases": [],
