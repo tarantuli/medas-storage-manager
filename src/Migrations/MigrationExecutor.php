@@ -22,10 +22,22 @@ readonly class MigrationExecutor
     {
     }
 
-    public function execute(string $directory, array $alreadyExecutedMigrations): array
+    /**
+     * @param string[]                     $alreadyExecutedMigrations
+     * @param \Closure(Migration):void|null $onExecuted Called with each migration right after it has been executed
+     * @param \Closure(Migration):bool|null $skip       Tells whether a migration should be skipped anyway
+     *
+     * @return Migration[]
+     */
+    public function execute(
+        string        $directory,
+        array         $alreadyExecutedMigrations,
+        \Closure|null $onExecuted = null,
+        \Closure|null $skip = null,
+    ): array
     {
         $directory = realpath($directory);
-        $job = new Job($directory, $alreadyExecutedMigrations);
+        $job = new Job($directory, $alreadyExecutedMigrations, $onExecuted, $skip);
 
         $this->fileLoader->load($directory);
         $this->processDirectory($job);
@@ -42,6 +54,10 @@ readonly class MigrationExecutor
                 continue;
             }
 
+            if ($job->skip !== null && ($job->skip)($migration)) {
+                continue;
+            }
+
             try {
                 $unitOfWork = new UnitOfWork();
 
@@ -55,7 +71,11 @@ readonly class MigrationExecutor
 
             $job->executedMigrations[] = $migration;
 
-            dispatch(new DebugInformation('executied migration ' . $migration::class));
+            if ($job->onExecuted !== null) {
+                ($job->onExecuted)($migration);
+            }
+
+            dispatch(new DebugInformation('executed migration ' . $migration::class));
             dispatch(new ExecutedMigrationEvent($migration));
         }
     }

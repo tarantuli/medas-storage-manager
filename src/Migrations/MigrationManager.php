@@ -44,15 +44,40 @@ readonly class MigrationManager
 
     public function migrate(string $directory): void
     {
-        $migrations = $this->executor->execute($directory, $this->processedMigrations());
+        $unregistered = [];
 
-        if (!$this->controller->hasStore($this->store)) {
-            throw new MigrationStoreDoesNotExist($migrations);
-        }
+        // Each migration is registered as soon as it has run (and the store exists), so a
+        // later failing migration does not leave the executed ones unregistered
+        $this->executor->execute(
+            $directory,
+            $this->processedMigrations(),
+            function (Migration $migration) use (&$unregistered): void {
+                $unregistered[] = $migration;
 
-        foreach ($migrations as $migration) {
-            $this->registerExecution($migration);
+                if (!$this->controller->hasStore($this->store)) {
+                    return;
+                }
+
+                foreach ($unregistered as $executedMigration) {
+                    $this->registerExecution($executedMigration);
+                }
+
+                $unregistered = [];
+            }, // An existing store makes the migration creating it unnecessary, also when its
+            // execution was not registered
+            fn(Migration $migration): bool
+            => $this->isStoreMigration($migration::class) && $this->controller->hasStore($this->store));
+
+        if ($unregistered) {
+            throw new MigrationStoreDoesNotExist($unregistered);
         }
+    }
+
+    private function isStoreMigration(string $migrationClass): bool
+    {
+        $shortName = substr(strrchr('\\' . $migrationClass, '\\'), 1);
+
+        return $shortName === MigrationStoreManager::STORE_MIGRATION_CLASS_NAME;
     }
 
     public function markMigrated(string $filePath): void

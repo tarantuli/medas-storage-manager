@@ -10,6 +10,13 @@ use Medas\StorageManager\{ConfigOptions\MigrationsStoreName, Interfaces\Store, S
 #[Service]
 readonly class MigrationStoreManager
 {
+    /**
+     * The class name (without namespace) of the migration that creates the migrations store.
+     * It is generated into every migrations directory and only has to run while the store
+     * does not exist.
+     */
+    public const string STORE_MIGRATION_CLASS_NAME = 'Migration00000000000000000000';
+
     public function __construct(
         private StorageManager $storageManager,
 
