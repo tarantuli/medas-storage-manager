@@ -120,7 +120,7 @@ readonly class EntityPersister
 
             $this->unitOfWorkManager->queueCreate(
                 $unitOfWork,
-                $this->storageManager->controller($metaData->entity->storage)->store($store),
+                $this->storageManager->store($store, $metaData->entity->storage),
                 $values,
                 $onComplete,
                 $priority,
@@ -194,7 +194,7 @@ readonly class EntityPersister
         foreach ($valuesPerStore as $store => $values) {
             $this->unitOfWorkManager->queueUpdate(
                 $unitOfWork,
-                $this->storageManager->controller($metaData->entity->storage)->store($store),
+                $this->storageManager->store($store, $metaData->entity->storage),
                 $values,
                 $idValues
             );
@@ -238,7 +238,7 @@ readonly class EntityPersister
 
     private function getStore(MetaData $metaData): Store
     {
-        return $this->storageManager->controller($metaData->entity->storage)->store($metaData->entity->store);
+        return $this->storageManager->store($metaData->entity->store, $metaData->entity->storage);
     }
 
     public function prepareDelete(object $entity, UnitOfWork $unitOfWork): void
@@ -254,7 +254,7 @@ readonly class EntityPersister
 
         $this->unitOfWorkManager->queueDelete(
             $unitOfWork,
-            $this->storageManager->controller($metaData->entity->storage)->store($idFieldStore),
+            $this->storageManager->store($idFieldStore, $metaData->entity->storage),
             $idValues
         );
 

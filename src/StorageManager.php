@@ -74,6 +74,21 @@ class StorageManager
         return $storage;
     }
 
+    /**
+     * The store with this name in the storage with this name (the default storage for null).
+     * The storage is passed to the controller explicitly: one controller can serve several
+     * storages (all PDO databases share PdoStorageController), and without it the controller
+     * would take its own default storage.
+     *
+     * @throws Exceptions\NoControllerFoundForStorage
+     * @throws Exceptions\NoDefaultStorageFound
+     * @throws Exceptions\NoStorageWithNameFound
+     */
+    public function store(string $storeName, string|null $storageName = null): Interfaces\Store
+    {
+        return $this->controller($storageName)->store($storeName, $this->byName($storageName));
+    }
+
     public function controller(Interfaces\Storage|string|null $storage = null): Interfaces\StorageController
     {
         if ($storage === null) {

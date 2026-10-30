@@ -95,6 +95,6 @@ readonly class StoreController
     {
         $metaData = $this->metaDataManager->get($entityClass);
 
-        return $this->storageManager->controller($metaData->entity->storage)->store($metaData->entity->store);
+        return $this->storageManager->store($metaData->entity->store, $metaData->entity->storage);
     }
 }
