@@ -25,7 +25,13 @@ readonly class StoresFinder
     /** @return Store[] */
     public function find(MetaData $metaData): array
     {
-        return $this->cache->get($metaData->className, fn() => $this->gather($metaData));
+        // Keyed by the storage object as well: a storage can be replaced under the same name
+        // (StorageManager::add()), and its stores must then belong to the new one. The cached
+        // stores keep the old storage referenced, so its object id is not reused meanwhile.
+        $storage = $this->storageManager->byName($metaData->entity->storage);
+        $key = $metaData->className . '@' . spl_object_id($storage);
+
+        return $this->cache->get($key, fn() => $this->gather($metaData));
     }
 
     /** @return Store[] */
@@ -34,7 +40,7 @@ readonly class StoresFinder
         $stores = [];
 
         foreach ($this->propertyStoreMapper->get($metaData)->stores() as $storeName) {
-            $stores[] = $this->storageManager->controller($metaData->entity->storage)->store($storeName);
+            $stores[] = $this->storageManager->store($storeName, $metaData->entity->storage);
         }
 
         return $stores;

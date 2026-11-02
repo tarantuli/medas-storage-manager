@@ -23,11 +23,16 @@ abstract class StoreCollection
             $this->stores[$databaseName] = [];
         }
 
-        if (!isset($this->stores[$databaseName][$storeName])) {
-            $this->stores[$databaseName][$storeName] = $this->createStore($storage, $storeName);
+        $store = $this->stores[$databaseName][$storeName] ?? null;
+
+        // A storage can be replaced under the same name (StorageManager::add()): its
+        // stores are made anew, as a cached one would keep pointing at the old storage,
+        // and one unit of work would then hold the same storage twice.
+        if ($store === null || $store->storage() !== $storage) {
+            $store = $this->stores[$databaseName][$storeName] = $this->createStore($storage, $storeName);
         }
 
-        return $this->stores[$databaseName][$storeName];
+        return $store;
     }
 
     public function delete(Storage $storage, Store $store): void
