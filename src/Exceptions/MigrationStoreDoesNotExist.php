@@ -15,9 +15,8 @@ class MigrationStoreDoesNotExist extends BaseException
             ? '  - '
                 . implode(
                     "\n  - ",
-                    array_map(fn(object $migration) => $migration::class, $executedMigrations
+                    array_map(fn(object $migration) => $migration::class, $executedMigrations)
                 )
-            )
             : '  none';
 
         parent::__construct($executedList);

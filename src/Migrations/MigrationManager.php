@@ -63,7 +63,8 @@ readonly class MigrationManager
                 }
 
                 $unregistered = [];
-            }, // An existing store makes the migration creating it unnecessary, also when its
+            },
+            // An existing store makes the migration creating it unnecessary, also when its
             // execution was not registered
             fn(Migration $migration): bool
             => $this->isStoreMigration($migration::class) && $this->controller->hasStore($this->store));

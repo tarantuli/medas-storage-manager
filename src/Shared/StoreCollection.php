@@ -29,7 +29,10 @@ abstract class StoreCollection
         // stores are made anew, as a cached one would keep pointing at the old storage,
         // and one unit of work would then hold the same storage twice.
         if ($store === null || $store->storage() !== $storage) {
-            $store = $this->stores[$databaseName][$storeName] = $this->createStore($storage, $storeName);
+            $store = $this->stores[$databaseName][$storeName] = $this->createStore(
+                $storage,
+                $storeName
+            );
         }
 
         return $store;
