@@ -12,9 +12,10 @@ use Medas\EntityManager\Entities\{
     ValueFetchers\SelectorRecordsFetcher
 };
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
+use Medas\EntityManager\Exceptions\DerivedValueNameIsAProperty;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Selector\Selector;
+use Medas\EntityManager\Selector\{DerivedValues\DerivedValue, Selector};
 use Medas\StorageManager\{Interfaces\Record, Interfaces\Store, SelectorFetcher, StorageManager};
 
 #[Service]
@@ -37,9 +38,20 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
     public function fetch(Selector $selector, array $arguments = []): FetchResult
     {
         $metaData = $this->metaDataManager->get($selector->entity());
-        $records = $this->selectorfetcher->fetch($selector, $arguments);
+        $derivedValues = $selector->definition()->derivedValues;
 
-        foreach ($records as &$record) {
+        foreach ($derivedValues as $derivedValue) {
+            if ($metaData->property($derivedValue->name, ignoreUnknownProperties: true) !== null) {
+                throw new DerivedValueNameIsAProperty($metaData->className, $derivedValue->name);
+            }
+        }
+
+        $records = $this->selectorfetcher->fetch($selector, $arguments);
+        $derived = [];
+
+        foreach ($records as $i => &$record) {
+            // Taken out before the record is cached: it is the entity's, the derived values are this query's
+            $derived[$i] = $this->takeDerivedValues($metaData, $derivedValues, $record);
             $idValue = $this->idValue->get($record, $metaData);
 
             $record = $this->unserializeAndCache(
@@ -50,7 +62,29 @@ readonly class StoreRecordManager implements SelectorRecordsFetcher
             );
         }
 
-        return new FetchResult(true, $records);
+        return new FetchResult(true, $records, $derived);
+    }
+
+    /**
+     * @param DerivedValue[] $derivedValues
+     *
+     * @return array<string, mixed>
+     */
+    private function takeDerivedValues(MetaData $metaData, array $derivedValues, Record $record): array
+    {
+        $values = [];
+
+        foreach ($derivedValues as $derivedValue) {
+            $values[$derivedValue->name] = $this->dataSerializer->unserializeDerivedValue(
+                $metaData,
+                $record[$derivedValue->name],
+                $derivedValue->type
+            );
+
+            unset($record[$derivedValue->name]);
+        }
+
+        return $values;
     }
 
     public function fetchCount(Selector $selector, array $arguments = []): FetchResult

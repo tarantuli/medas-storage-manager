@@ -9,6 +9,9 @@ use Medas\Core\{
     Interfaces\PropertyHandler,
     Interfaces\Serializer,
     Interfaces\ServiceManager,
+    Interfaces\Type,
+    Types\FloatingPoint,
+    Types\Integer,
     Types\Relation
 };
 use Medas\EntityManager\{Exceptions\PropertyDoesNotExist, MetaData, MetaDataManager};
@@ -69,6 +72,33 @@ readonly class DataSerializer
         }
 
         return $value;
+    }
+
+    /**
+     * A derived value as the storage returned it, in the PHP type its declaration names.
+     * For a property, the hydrator casts what the serializer leaves as stored (a number
+     * the driver hands over as text, an enum's backing value); a derived value is never
+     * hydrated, so it is cast here.
+     */
+    public function unserializeDerivedValue(MetaData $metaData, mixed $value, Type $type): mixed
+    {
+        $value = $this->getStorageSerializer($metaData)->unserialize($value, $type);
+
+        return match (true) {
+            $value === null => null,
+            $type instanceof Integer => (int) $value,
+            $type instanceof FloatingPoint => (float) $value,
+            $type instanceof Relation && enum_exists($type->entity) => $this->enumCase($type->entity, $value),
+            default => $value,
+        };
+    }
+
+    /** @param class-string<\BackedEnum> $enum */
+    private function enumCase(string $enum, mixed $value): \BackedEnum
+    {
+        $isIntBacked = new \ReflectionEnum($enum)->getBackingType()?->getName() === 'int';
+
+        return $enum::from($isIntBacked ? (int) $value : (string) $value);
     }
 
     public function serializeArray(MetaData $metaData, array &$data): void
